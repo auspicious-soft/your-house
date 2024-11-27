@@ -1,0 +1,47 @@
+import type { Metadata } from "next";
+import "./clientstyles.css";
+import SideNav from "@/app/customer/components/SideNav";
+import localFont from "next/font/local";
+import MobileHeader from "@/app/customer/components/MobileHeader";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  // const session = await auth()
+  // if (!session) {
+  //   redirect('/login')
+  // }
+  // else if ((session as any)?.user?.role === 'client') {
+    return (
+      <html lang="en">
+        <body>
+          <div className="flex h-screen flex-col lg:flex-row lg:overflow-hidden">
+            <div className="flex-none hidden h-[100vh] lg:block">
+              <SideNav />
+            </div>
+            <div className="w-full lg:hidden">
+              <MobileHeader />
+            </div>
+            <main className="flex-grow p-[15px] md:overflow-y-auto lg:p-[50px]">
+              {children}
+            </main>
+          </div>
+        </body>
+      </html>
+    );
+  }
+  // else {
+  //   return (
+  //     <div className="p-3 bg-black h-screen text-white">
+  //     You are not authorized to view this page go to login -<Link href={'/login'} className="p-3 text-black bg-white">
+  //         Login
+  //       </Link>
+  //   </div>
+  //   );
+  // }
+//}
