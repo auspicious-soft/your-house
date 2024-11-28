@@ -90,6 +90,7 @@ button:disabled {
   justify-content: space-between;
   display: flex;
   flex-direction: column;
+  z-index: 9;
 }
 .navList li a {
     display: flex;
@@ -191,11 +192,30 @@ th, td {
   width: calc(100% + 80px);
   background: #E9EDF3;
 }
-
-
+.css-1ll44ll-MuiOutlinedInput-notchedOutline {
+  border-radius: 6px;
+  border: 1px solid #E9EDF3;
+  color: #000 !important;
+}
+.css-1xgnz6y-MuiStack-root>.MuiTextField-root, .css-1xgnz6y-MuiStack-root>.MuiPickersTextField-root {
+  min-width: 170px;
+  max-width: 170px; 
+}
+.css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
+  color: #3C3F88 !important;
+}
+.css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
+  color: #3C3F88 !important;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.box-shadow{
+box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);
+}
 @media (min-width: 989px) {
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
   h2 {
     font-size: 26px;
     line-height: 38px;
@@ -208,16 +228,16 @@ th, td {
     position: fixed;
     left: -110%;
     transition: 0.3s ease;
-    top: 66px;
-    height: calc(100vh - 66px);
-  }
+    top: 60px;
+    height: calc(100vh - 60px);
+}
   .sideNav.collapsed ul.navList {
     width: 100%;
     margin: 15px auto 0;
   }
   .sideNav.collapsed {
     width: 300px;
-    padding: 20px 20px 20px 20px;
+    padding: 20px 0px 20px 20px;
     left: 0;
   }
   .nav-menu {
@@ -255,6 +275,9 @@ th, td {
   top: 22px;
   font-size: 20px;
 }
+.main-heading {
+  font-size: 24px;
+}
 }
 @media (max-width: 767px) {
   .container {
@@ -262,7 +285,22 @@ th, td {
     padding-left: 15px;
 }
 .section-title {
-  font-size: 24px;
-  line-height: 38px;
+  font-size: 20px;
+  line-height: 30px;
+  margin: 0 0 15px;
+}
+.table-common { 
+  border-radius: 10px;
+}
+.table-common table thead tr th, th, td {
+  font-size: 14px;
+}
+.css-1xgnz6y-MuiStack-root>.MuiTextField-root, .css-1xgnz6y-MuiStack-root>.MuiPickersTextField-root {
+  min-width: 100%;
+  max-width: 100%;
+}
+.progress-step  svg {
+  width: 40px;
+  height: 40px;
 }
 }

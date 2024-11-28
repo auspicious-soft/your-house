@@ -92,27 +92,46 @@ const Page = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-[1fr_309px] gap-5">
-        <div className="bg-white rounded-[30px] ">
-          <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[30px] px-10  ">
+      <div className="grid grid-cols-[1fr] md:grid-cols-[1fr_309px] gap-5">
+        <div className="bg-white rounded-[30px] box-shadow ">
+          <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10"> 
             <h2 className="main-heading">Project Name</h2>
             <button className="!rounded-[3px] !h-[37px] button !px-4 ">
               <AddIcon className="w-4 h-4" /> Edit Name
             </button>
           </div>
-          <div className="py-5 px-10  border-b border-[#E9EDF3] ">
-            <div className="flex">
-              <label className="block">
-                Starting Date
+          <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
+            <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px] md:mb-[40px]">
+              <div className="">
+                <label className="block text-[#8B8E98] text-[14px] ">
+                  Starting Date
+                </label>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker", "DatePicker"]}>
+                  <DemoContainer
+                    components={["DatePicker", "DatePicker", "DatePicker"]}
+                  >
                     <DatePicker
                       //   label={'"year", "month" and "day"'}
                       views={["year", "month", "day"]}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
-              </label>
+              </div>
+              <div className="">
+                <label className="block text-[#8B8E98] text-[14px] ">
+                  Starting Date
+                </label>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["DatePicker", "DatePicker", "DatePicker"]}
+                  >
+                    <DatePicker
+                      //   label={'"year", "month" and "day"'}
+                      views={["year", "month", "day"]}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
             </div>
             <div className="progress-container">
               <h2 className="section-title">Progress</h2>
@@ -132,7 +151,7 @@ const Page = () => {
                         <ProgressIcon />
                       )}
                     </div>
-                    <span className="text-[#43527B] text-sm font-sfproDisplaymedium  ">
+                    <span className="text-[#43527B] text-[12px] md:text-sm font-sfproDisplaymedium  ">
                       {step.label}
                     </span>
                   </button>
@@ -141,15 +160,15 @@ const Page = () => {
               {/* Line percent={progress} trailColor='#D9D9D9' trailWidth={0.3} strokeColor='#F44771' strokeWidth={0.3} /> */}
               <Line
                 percent={progress}
-                strokeWidth={2}
+                strokeWidth={1.2}
                 strokeColor="#FF16A2"
                 className="rounded-xl"
                 trailWidth={2}
                 trailColor="#e4e4e4"
-              />
+              /> 
             </div>
           </div>
-          <div className="py-[30px] px-10">
+          <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
               <div className="flex gap-2.5">
                 {["Overview", "Notes"].map((tab) => (
@@ -173,50 +192,22 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className="right-grid bg-white rounded-[30px] ">
+        <div className="right-grid bg-white rounded-[30px] box-shadow">
           <div className="border-b border-[#E9EDF3] pb-5 pt-9 ">
             <div className="custom relative w-[120px] h-[120px] mx-auto mb-5">
-              <input
-                className="absolute top-0 left-0 h-full w-full opacity-0 p-0 cursor-pointer"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-              {imagePreview ? (
-                <div className="relative h-full">
+              <div className="grid place-items-center h-full w-full">
+                <div>  
                   <Image
-                    src={imagePreview}
-                    alt="Preview"
+                    src={imgNew}
+                    alt="upload"
                     width={120}
                     height={120}
-                    className="rounded-full h-full object-cover"
+                    className="rounded-full"
                   />
-                  <button
-                    type="button"
-                    onClick={triggerFileInputClick}
-                    className="absolute bottom-0 right-0"
-                  >
-                    <EditImageIcon />
-                  </button>
                 </div>
-              ) : (
-                <div className="grid place-items-center h-full w-full">
-                  <div>
-                    <Image
-                      src={imgNew}
-                      alt="upload"
-                      width={120}
-                      height={120}
-                      className="rounded-full"
-                    />
-                    <p className="absolute bottom-0 right-0 pointer-events-none">
-                      <EditImageIcon />
-                    </p>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
-            <h2 className="section-title !m-0 text-center">Name</h2>
+            <h2 className="section-title !m-0 text-center">Morgan Melendez</h2>
           </div>
           <div className="px-[30px] py-5 ">
             <div className="flex gap-[15px] mb-4  ">

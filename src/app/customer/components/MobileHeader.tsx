@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import NavLogo from "@/assets/images/logo.png";
-import { CustomerActiveIcon, CustomerIcon, DashboardActiveIcon, DashboardIcon, ProjectActiveIcon, ProjectIcon } from "@/utils/svgicons";
+import { CustomerActiveIcon, CustomerIcon, DashboardActiveIcon, DashboardIcon, HamburgerIcon, ProjectActiveIcon, ProjectIcon } from "@/utils/svgicons";
+import NotifactionBar from "@/app/admin/components/NotifactionBar";
 
 const MobileHeader = () => {
   const router = useRouter();
@@ -27,16 +28,19 @@ const MobileHeader = () => {
 
   return (
     <>
-      <div className="header min-h-[46px] justify-between gap-[10px] py-[10px] px-[15px] bg-white">
+      <div className="header min-h-[46px] flex justify-between gap-[10px] py-[15px] px-[15px] bg-white">
 
         <div className="logoContainer">
           <Link href="/customer/dashboard">
-          <Image src={NavLogo} alt="animate" className="mx-auto max-w-[172px]"/>
+          <Image src={NavLogo} alt="animate" className="mx-auto max-w-[130px]"/>
           </Link>
         </div>
+        <div className="flex items-center gap-3 md:gap-5">
+        <NotifactionBar />
         <button onClick={toggleSidebar} className="hamburgerButton">
-          dss
+          <HamburgerIcon />
         </button>
+        </div>
       </div>
       <div className={`sideNav ${isCollapsed ? 'collapsed' : ''} h-[100%] overflo-custom`}>
         <div className="">

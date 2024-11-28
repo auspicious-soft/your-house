@@ -45,7 +45,7 @@ const OnGoingProjects: React.FC = () => {
 
   return (
     <div>
-    <div className="table-common overflo-custom mt-[20px]">
+    <div className="table-common overflo-custom mt-[20px] box-shadow">
       <table>
         <thead>
           <tr>

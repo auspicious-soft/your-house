@@ -74,10 +74,10 @@ const Home = () => {
         </div>
         <div className="md:col-span-1">
           <div onClick={()=>openNewProject()}
-            className="bg-[#1657FF] min-h-[120px] rounded-[20px] py-[20px] px-[25px] flex justify-between gap-3 md:gap-3 "
+            className="bg-[#1657FF] min-h-[120px]  md:min-h-[100%] rounded-[10px] md:rounded-[20px] py-[20px] px-[25px] flex justify-between gap-3 md:gap-3 "
           >
-            <div className="">
-              <p className="leading-normal font-sfproDisplaybold text-[20px] text-[#fff] ">
+            <div className="flex flex-col  gap-3 md:gap-3">
+              <p className="leading-normal font-sfproDisplaybold text-[18px] md:text-[20px] text-[#fff] ">
                 Create a New Project
               </p>
               <p className="text-[#fff] text-[14px] max-w-[180px]">
@@ -91,7 +91,7 @@ const Home = () => {
 
       <section className="mt-10">
       <h2 className="section-title">Working Progress</h2>
-      <div className="bg-white rounded-[30px] p-[30px] ">
+      <div className="bg-white rounded-[10px]  md:rounded-[30px]  py-[30px] px-[15px] md:p-[30px]">
         <h3 className="text-lg text-[#353E6C] font-sfproDisplaysemibold mb-[26px] ">{Projects.length} Ongoing Projects</h3>
           {Projects.map((data)=>(
             <ProjectsProgress

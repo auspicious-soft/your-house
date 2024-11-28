@@ -53,12 +53,12 @@ const Page = () => {
   return (
     <>
       <div>
-        <div className='flex items-center justify-between mb-5 '>
-          <div className="tabs flex flex-wrap gap-[5px] lg:gap-[20px]">
+        <div className='flex  justify-between mb-5 gap-3 flex-col-reverse md:flex-row md:items-center '>
+          <div className="tabs flex flex-wrap gap-[5px] lg:gap-[5px]">
             {['On-going Projects', 'Completed Projects'].map((tab) => (
               <button
                 key={tab}
-                className={`tab-button ${activeTab === tab ? 'active' : '  rounded-[28px] bg-[#96A3C6] text-white'} bg-[#1657FF] text-white rounded-[28px]  mt-0 text-[14px] py-[5px] px-[16px] lg:px-[32px] lg:py-[8px] `}
+                className={`tab-button ${activeTab === tab ? 'active' : '  rounded-[28px] bg-[#96A3C6] text-white'} bg-[#1657FF] text-white rounded-[28px]  mt-0 text-[14px] px-[16px] py-[10px] `}
                 onClick={() => setActiveTab(tab)}
               >
                 {tab}
