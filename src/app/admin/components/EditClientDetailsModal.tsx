@@ -25,14 +25,14 @@ const EditClientDetailsModal = ({
     return (
         <Modal 
         isOpen={isOpen}
-        onRequestClose={onclose} 
+        onRequestClose={onClose} 
         contentLabel="Add New Entry"
         className="modal max-w-[810px] mx-auto rounded-[20px] w-full  max-h-[90vh] overflow-auto overflo-custom "
         overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
         ariaHideApp={false} >
           <div className="bg-white rounded-lg p-8 relative">
           <button
-            onClick={onclose}
+            onClick={onClose}
             className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
           >
             ✖️
