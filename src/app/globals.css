@@ -166,7 +166,7 @@ th, td {
   background-image: url(../assets/images/card-bg.png);
   background-repeat: no-repeat;
   background-position: right center;
-  background-size: contain;
+  background-size: contain;  
 }
 .fomm-wrapper label {
   color: #707070;
