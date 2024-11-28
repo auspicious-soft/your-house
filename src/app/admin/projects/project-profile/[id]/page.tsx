@@ -90,7 +90,7 @@ const Page = () => {
     }
   };
 
-  return (
+  return ( 
     <div>
       <div className="grid grid-cols-[1fr] md:grid-cols-[1fr_309px] gap-5">
         <div className="bg-white rounded-[30px] box-shadow ">
