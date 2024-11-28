@@ -172,9 +172,12 @@ th, td {
   color: #707070;
   font-size: 14px;
   line-height: normal;
-  margin: 0 0 3px;
+  margin: 0 0 5px;
 }
-.fomm-wrapper input {
+textarea {
+  height: 75px;
+}
+.fomm-wrapper input, .fomm-wrapper select, .fomm-wrapper textarea {
   border-radius: 10px;
   border: 1px solid #CDE3F1;
   background: #FFF;
@@ -206,9 +209,9 @@ th, td {
 }
 .css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
   color: #3C3F88 !important;
-  padding-left: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-left: 10px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important; 
 }
 .box-shadow{
 box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);

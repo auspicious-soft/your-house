@@ -70,17 +70,22 @@ const Page = () => {
   };
   return (
     <>
-      <div className=" bg-white rounded-t-[30px] w-full p-10 ">
+      <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
        <form onSubmit={handleSubmit} className="fomm-wrapper">
           <h2 className="section-title">About Project</h2>
-          <div className="grid md:flex flex-wrap gap-5 mb-[33px] pb-[33px] relative progress-line">
+          <div className="grid md:flex flex-wrap gap-5 mb-[20px] md:mb-[33px] pb-[33px] relative progress-line">
            <div className="w-full">
               <label className="block">Title</label>
               <input type="text" name="title" value={formData.title} placeholder="Add Title" onChange={handleInputChange} required/>
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">Assign Customer</label>
-              <input type="text" name="assignCustomer" value={formData.assignCustomer} onChange={handleInputChange} placeholder="Select Customer" required/>
+              <select name="Select Customer" id="Customer">
+                <option value="Select Customer">Select Customer</option>
+                <option value="Select Customer1">Select Customer1</option>
+                <option value="Select Customer3">Select Customer2</option>
+                <option value="Select Customer3">Select Customer3</option>
+              </select>
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">Start Date</label>
@@ -91,23 +96,29 @@ const Page = () => {
               <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange} placeholder="emailaddress@mail.com" required/>
             </div>
             <div className="w-full">
-              <label className="block">Description</label>
-              <input type="text" name="description" value={formData.description} onChange={handleInputChange} placeholder="Add Description" required/>
+              <label className="block">Description</label> 
+              <textarea placeholder="Description"></textarea>
             </div>
            </div>
            <h2 className="section-title">Project Progress</h2>
            <div className="grid md:flex flex-wrap gap-5 ">
            <div className="md:w-[calc(50%-10px)]">
               <label className="block">Attachments</label>
-              <input type="text" name="attachments" value={formData.attachments} onChange={handleInputChange} placeholder="Attachments" required/>
+               <input type="file" id="myfile" name="myfile" />
             </div>
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">Status</label>
-              <input type="text" name="status" value={formData.status} onChange={handleInputChange} placeholder="Construction" required/>
+              <select name="Status" id="Customer">
+                <option value="Select Customer">Status</option>
+                <option value="Foundation">Foundation</option>
+                <option value="Construction">Construction</option>
+                <option value="Interior Work">Interior Work</option>
+                <option value="Completed">Completed</option> 
+              </select>
             </div>
             <div className="w-full">
               <label className="block">Add Notes</label>
-              <input type="text" name="addNotes" value={formData.addNotes} onChange={handleInputChange} placeholder="Your text here" required/>
+              <textarea placeholder="Add Notes"></textarea>
             </div>
            </div>
          <div className='mt-5 '>

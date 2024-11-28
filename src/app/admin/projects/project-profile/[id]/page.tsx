@@ -93,7 +93,7 @@ const Page = () => {
   return ( 
     <div>
       <div className="grid grid-cols-[1fr] md:grid-cols-[1fr_309px] gap-5">
-        <div className="bg-white rounded-[30px] box-shadow ">
+        <div className="bg-white rounded-[10px] md:rounded-[30px] box-shadow ">
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10"> 
             <h2 className="main-heading">Project Name</h2>
             <button className="!rounded-[3px] !h-[37px] button !px-4 ">
@@ -192,7 +192,7 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className="right-grid bg-white rounded-[30px] box-shadow">
+        <div className="right-grid bg-white rounded-[10px] md:rounded-[30px] box-shadow">
           <div className="border-b border-[#E9EDF3] pb-5 pt-9 ">
             <div className="custom relative w-[120px] h-[120px] mx-auto mb-5">
               <div className="grid place-items-center h-full w-full">
