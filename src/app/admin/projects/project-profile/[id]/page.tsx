@@ -98,7 +98,7 @@ const Page = () => {
             <h2 className="main-heading">Project Name</h2>
             <button className="!rounded-[3px] !h-[37px] button !px-4 ">
               <AddIcon className="w-4 h-4" /> Edit Name
-            </button>
+            </button> 
           </div>
           <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
             <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px] md:mb-[40px]">
