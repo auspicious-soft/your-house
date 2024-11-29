@@ -34,7 +34,6 @@ const Page = () => {
  
   return ( 
     <div>
-      <h2 className="section-title text-[#3C3F88]">Client Details</h2>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
             <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />           

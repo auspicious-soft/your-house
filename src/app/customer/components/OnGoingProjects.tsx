@@ -15,7 +15,7 @@ interface BillingData {
   billingAmount: string;
 }
 
-const AssociatedProjects: React.FC = () => {
+const OnGoingProjects: React.FC = () => {
   const router = useRouter();
   // Dummy data
   const data: BillingData[] = [
@@ -102,4 +102,4 @@ const AssociatedProjects: React.FC = () => {
     </div>
   );
 };
-export default AssociatedProjects;
+export default OnGoingProjects;

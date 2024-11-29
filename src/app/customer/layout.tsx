@@ -6,6 +6,7 @@ import MobileHeader from "@/app/customer/components/MobileHeader";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Header from "./components/Header";
 
 export default async function RootLayout({
   children,
@@ -19,20 +20,23 @@ export default async function RootLayout({
   // else if ((session as any)?.user?.role === 'client') {
     return (
       <html lang="en">
-        <body>
-          <div className="flex h-screen flex-col lg:flex-row lg:overflow-hidden">
-            <div className="flex-none hidden h-[100vh] lg:block">
-              <SideNav />
-            </div>
-            <div className="w-full lg:hidden">
-              <MobileHeader />
-            </div>
-            <main className="flex-grow p-[15px] md:overflow-y-auto lg:p-[50px]">
-              {children}
-            </main>
+      <body>
+        <div className=" w-full lg:h-screen  lg:flex-row lg:overflow-hidden">
+          <div className="flex-none hidden h-[100vh] lg:block float-left w-[270px]">
+            <SideNav />
           </div>
-        </body>
-      </html>
+          <div className="w-full lg:hidden">
+            <MobileHeader />
+          </div>
+        <div className="float-left w-full lg:w-[calc(100%-270px)] ">
+          <Header />
+          <main className="p-[15px] lg:h-[calc(100vh-116px)]  pb-10 overflo-custom md:overflow-y-auto lg:pb-10 lg:px-[40px]">
+            {children}
+          </main>
+     </div>
+        </div>
+      </body>
+    </html>
     );
   }
   // else {

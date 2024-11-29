@@ -1,30 +1,26 @@
 "use client"
 import { DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
-import Image, {StaticImageData} from 'next/image';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import imgs from '@/assets/images/avatar.png'
-import { useRouter } from 'next/navigation';
 
 interface BillingData {
   id: string;
-  img: string | StaticImageData ;
+  apptDate: string;
   renewalDate: string;
   chatWithClinician: string;
   videoChat: string;
   billingAmount: string;
 }
 
-const AssociatedProjects: React.FC = () => {
-  const router = useRouter();
+const CompletedProjects: React.FC = () => {
   // Dummy data
   const data: BillingData[] = [
-    { id: '123', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '124', img: imgs, renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '125', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
-    { id: '126', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '127', img: imgs, renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '128', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
+    { id: '#123', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#124', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#125', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
+    { id: '#126', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#127', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#128', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
 
   ];
 
@@ -37,11 +33,6 @@ const AssociatedProjects: React.FC = () => {
   };
 
   const paginatedData = data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
-
-   const EditProjectData =(id: string) => {
-    router.push(`/customer/projects/project-profile/${id}`);
-   }
-
 
   return (
     <div>
@@ -61,14 +52,14 @@ const AssociatedProjects: React.FC = () => {
           {
           paginatedData.map((row, index) => (
             <tr key={index}>
-              <td>{row.id} </td>
-              <td><Image src={row.img} alt='fgfdg' width={50} height={50}/> </td>
+              <td>{row.id}</td>
+              <td>{row.apptDate}</td>
               <td>{row.renewalDate}</td>
               <td>{row.chatWithClinician}</td>
               <td>{row.videoChat}</td>
               <td>
                 <div className='flex items-center gap-[6px] '>
-                  <button onClick={()=>EditProjectData(row.id)}><EditIcon /> </button>
+                  <button><EditIcon /> </button>
                   <button><DeleteIcon/> </button>
                 </div>
               </td>
@@ -102,4 +93,4 @@ const AssociatedProjects: React.FC = () => {
     </div>
   );
 };
-export default AssociatedProjects;
+export default CompletedProjects;

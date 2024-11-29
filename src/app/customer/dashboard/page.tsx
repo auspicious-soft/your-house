@@ -1,65 +1,87 @@
-'use client'
-import DashboardCard from "@/app/customer/components/DashboardCard";
+"use client";
+import DashboardCard from "@/app/admin/components/DashboardCard";
+import projectImg from '@/assets/images/cardImg1.png'
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 import useSWR from "swr";
-
+import ReactLoading from "react-loading";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
-  const [query, setQuery] = useState('page=1&limit=10')
-  const session = useSession()
-  // const { data, isLoading } = useSWR(`/client/appointment/${session?.data?.user?.id}?${query}`, getClientAppointments)
-  // const appointmentsData = data?.data
-  // const apData = appointmentsData?.data
+  const session = useSession();
+  const router = useRouter();
+  const { data, error, isLoading } = useSWR( 
+    `/admin/dashboard?id=${session?.data?.user?.id}`
+  );
+  const finalData: any = data?.data;
+  const OverviewData = [
+    {
+      id: "1",
+      title: "Ongoing Projects",
+      value: 18,
+      bgColor: "#F44771",
+    },
+    {
+      id: "2",
+      title: "Completed Projects",
+      value: 18,
+      bgColor: "#FF9A3E",
+    },
+  ];
+  const Projects =[
+    {
+      id: '1',
+      title: "Project 1",
+      progress: 50,
+      imgSrc: projectImg,
+    },
+    {
+      id: '2',
+      title: "Project 2",
+      progress: 76,
+      imgSrc: projectImg,
+    },
+  ]
 
-  // const PreviousAppointment = apData?.filter((item: any) =>  item?.status !== 'Pending' &&(item?.updatedAt < new Date().toISOString()))
-  // .sort((a: any, b: any) => new Date(b.updatedAt).getDate() - new Date(a.updatedAt).getDate()) || [];
+  const openNewProject = () => {
+    router.push(`/admin/new-project`);
+  };
 
-  // const NextAppointment = apData?.filter((item: any) => item?.status === 'Pending')
-  // .sort((a: any, b: any) => new Date(a.updatedAt).getDate() - new Date(b.updatedAt).getDate()) || [];
-
-  // const nextAppointment = NextAppointment.length > 0 ? {
-  //   date: new Date(NextAppointment[0]?.appointmentDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }),
-  //   chat: NextAppointment[0]?.message ? 'Yes' : 'No',
-  //   videoChat: NextAppointment[0]?.video ? 'Yes' : 'No',
-  // } : {
-  //   date: 'No upcoming appointment',
-  //   chat: null,
-  //   videoChat: null,
-  // };
-
-  // const previousAppointment = PreviousAppointment.length > 0 ? {
-  //   date: new Date(PreviousAppointment[0]?.appointmentDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }),
-  //   chat: PreviousAppointment[0]?.message,
-  //   videoChat: PreviousAppointment[0]?.video,
-  // } : {
-  //   date: 'No past appointment',
-  //   chat: null,
-  //   videoChat: null,
-  // };
-
-  // const previousBilled = {
-  //   amount: '$25.36',
-  //   balance: '$50.36',
-  // }
   return (
     <>
-      <h1 className="font-antic text-[#283C63] text-[30px] leading-[1.2em] mb-[25px] lg:text-[40px] lg:mb-[50px]">
-      Dashboard {session?.data?.user?.name} !
-      </h1>
-      <div className="banner-client rounded-[10px]">
-        <h2 className="text-[#fff] py-[50px] px-[15px] lg:py-[78px] lg:px-[110px]">
-          Welcome to  The <br />
-          Black Therapy Network
-        </h2>
+      <h2 className="section-title">Monthly Overview</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-[15px] md:gap-[22px]">
+        <div className="md:col-span-2 grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[15px] md:gap-[22px]">
+          {OverviewData.map((card) => (
+            <DashboardCard
+              key={card.id}
+              title={card.title}
+              value={
+                card.value ?? (
+                  <ReactLoading
+                    type={"spin"}
+                    color={"#26395e"}
+                    height={"20px"}
+                    width={"20px"}
+                  />
+                )
+              }
+              bgColor={card.bgColor}
+            />
+          ))}
+        </div>
+        <div className="md:col-span-1">
+        </div>
       </div>
-      {/* <DashboardCard
-        nextAppointment={nextAppointment}
-        previousAppointment={previousAppointment}
-        previousBilled={previousBilled}
-      /> */}
+
+      <section className="mt-10">
+      <h2 className="section-title">Working Progress</h2>
+      <div className="bg-white rounded-[10px]  md:rounded-[30px]  py-[30px] px-[15px] md:p-[30px]">
+        
+
+      </div>
+
+      </section>
     </>
   );
 };
-export default Home
-
+export default Home;

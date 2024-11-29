@@ -45,26 +45,26 @@ const MobileHeader = () => {
       <div className={`sideNav ${isCollapsed ? 'collapsed' : ''} h-[100%] overflo-custom`}>
         <div className="">
 
-          <ul className="navList">
-          <li className={isActive('/admin/dashboard')}>
-            <Link href="/admin/dashboard">
-              {isActive('/admin/dashboard') ? <DashboardActiveIcon /> : <DashboardIcon />}
+        <ul className="navList">
+          <li className={isActive('/customer/dashboard')}>
+            <Link href="/customer/dashboard">
+              {isActive('/customer/dashboard') ? <DashboardActiveIcon /> : <DashboardIcon />}
               Dashboard
             </Link>
           </li>
-          <li className={isActive('/admin/projects')}>
-            <Link href="/admin/projects"> 
-            {isActive('/admin/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
+          <li className={isActive('/customer/projects')}>
+            <Link href="/customer/projects"> 
+            {isActive('/customer/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
               Projects
             </Link>
           </li>
-          <li className={isActive('/admin/customers')}>
-            <Link href="/admin/customers">
-             {isActive('/admin/customers') ? <CustomerActiveIcon /> : <CustomerIcon />}
-              Customers
+          <li className={isActive('/customer/myprofile')}>
+            <Link href="/customer/myprofile">
+             {isActive('/customer/myprofile') ? <CustomerActiveIcon /> : <CustomerIcon />}
+             My Profile
             </Link>
           </li>
-          </ul>
+        </ul>
         </div>
       </div>
     </>
