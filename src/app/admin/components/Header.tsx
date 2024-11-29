@@ -29,7 +29,7 @@ const Header: React.FC = () => {
     <header className="flex justify-between items-center p-[15px]  lg:p-[40px] ">
      
       <div className="flex items-center justify-between w-full">
-        <h1 className="main-heading">{currentPageName}</h1>
+        <h1 className="main-heading">{currentPageName}</h1>  
         <div className="hidden lg:block"><NotifactionBar /> </div>
       </div>
     </header>

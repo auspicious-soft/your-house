@@ -15,7 +15,7 @@ interface BillingData {
   billingAmount: string;
 }
 
-const Page: React.FC = () => {
+const AssociatedProjects: React.FC = () => {
   const router = useRouter();
   // Dummy data
   const data: BillingData[] = [
@@ -23,7 +23,9 @@ const Page: React.FC = () => {
     { id: '124', img: imgs, renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
     { id: '125', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
     { id: '126', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
- 
+    { id: '127', img: imgs, renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '128', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
+
   ];
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -39,10 +41,7 @@ const Page: React.FC = () => {
    const EditProjectData =(id: string) => {
     router.push(`/admin/projects/project-profile/${id}`);
    }
-   const openProfile = (id:string) => { 
-    router.push(`/admin/customers/profile/${id}`);
-  };
-  
+
 
   return (
     <div>
@@ -50,11 +49,11 @@ const Page: React.FC = () => {
       <table>
         <thead>
           <tr>
+            <th>Project ID</th>
             <th>Image</th>
-            <th>Name of the client</th>
-            <th>Email Address</th>
-            <th>Phone Number</th>
-            <th>Home Address</th>
+            <th>Name of the project</th>
+            <th>Starting Date</th>
+            <th>Estimated End Date</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -62,14 +61,14 @@ const Page: React.FC = () => {
           {
           paginatedData.map((row, index) => (
             <tr key={index}>
-              <td><Image src={row.img} alt='fgfdg' width={50} height={50}/> </td>
               <td>{row.id} </td>
+              <td><Image src={row.img} alt='fgfdg' width={50} height={50}/> </td>
               <td>{row.renewalDate}</td>
               <td>{row.chatWithClinician}</td>
               <td>{row.videoChat}</td>
               <td>
                 <div className='flex items-center gap-[6px] '>
-                  <button onClick={()=>openProfile(row.id)}><EditIcon /> </button>
+                  <button onClick={()=>EditProjectData(row.id)}><EditIcon /> </button>
                   <button><DeleteIcon/> </button>
                 </div>
               </td>
@@ -103,5 +102,4 @@ const Page: React.FC = () => {
     </div>
   );
 };
-
-export default Page;
+export default AssociatedProjects;

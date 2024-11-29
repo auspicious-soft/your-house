@@ -5,6 +5,7 @@ import imgNew from "@/assets/images/img13.png";
 import Modal from 'react-modal'
 import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
+import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
 
 
 const Page = () => {
@@ -33,13 +34,13 @@ const Page = () => {
 
   return (
     <div>
-      <h2 className="section-title">Client Details</h2>
-      <div className=" bg-white rounded-[30px] w-full p-10 ">
-        <div className="mb-10 flex justify-between ">
-            <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[200px] aspect-square rounded-full  " />           
+      <h2 className="section-title text-[#3C3F88]">Client Details</h2>
+      <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
+        <div className="mb-10 flex gap-[20px] justify-between ">
+            <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />           
         <div> 
           <button  onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] "> 
-          <EditButtonIcon/> Upload New File
+          <EditButtonIcon/> Edit Details
         </button></div>
         </div>
         <div className="fomm-wrapper grid md:flex flex-wrap gap-5 ">
@@ -171,6 +172,10 @@ const Page = () => {
         </div>
       </div>
       </Modal> */} 
+      <section className="mt-10">
+        <h2 className="section-title">Associated Projects</h2>
+        <AssociatedProjects />
+      </section>
     </div>
   );
 };

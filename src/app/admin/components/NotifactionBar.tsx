@@ -1,19 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import { NotificationIcon, SearchIcon } from "@/utils/svgicons";
 import avatar from "@/assets/images/avatar.png";
 
 export default function NotifactionBar() {
   return (
     <div>
        <div className="flex items-center gap-3 md:gap-5 relative">
-        <div><SearchIcon/> </div>
-        <button><NotificationIcon/> </button>
-          <div className="cursor-pointer">
+          <div className="cursor-pointer"> 
             <Image
               src={avatar}
-              alt="User Pr
+              alt="User Pr 
               
               ofile"
               width={30}
