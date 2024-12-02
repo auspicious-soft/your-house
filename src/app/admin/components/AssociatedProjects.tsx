@@ -39,7 +39,7 @@ const AssociatedProjects: React.FC = () => {
   const paginatedData = data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
 
    const EditProjectData =(id: string) => {
-    router.push(`/customer/projects/project-profile/${id}`);
+    router.push(`/admin/projects/project-profile/${id}`);
    }
 
 

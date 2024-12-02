@@ -63,7 +63,6 @@ const Page = () => {
   };
 
   useEffect(() => {
-    // Any additional logic based on activeTab can go here if needed
   }, [activeTab]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,15 +89,15 @@ const Page = () => {
     }
   };
 
-  return ( 
+  return (
     <div>
-      <div className="grid grid-cols-[1fr] md:grid-cols-[1fr_309px] gap-5">
+      <div className="grid grid-cols-[1fr] md:grid-cols-[2fr_1fr] lg:grid-cols-[1fr_309px] gap-5">
         <div className="bg-white rounded-[10px] md:rounded-[30px] box-shadow ">
-          <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10"> 
+          <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10">
             <h2 className="main-heading">Project Name</h2>
             <button className="!rounded-[3px] !h-[37px] button !px-4 ">
               <AddIcon className="w-4 h-4" /> Edit Name
-            </button> 
+            </button>
           </div>
           <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
             <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px] md:mb-[40px]">
@@ -119,16 +118,13 @@ const Page = () => {
               </div>
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
-                  Starting Date
+                  Expected End Date
                 </label>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
                     components={["DatePicker", "DatePicker", "DatePicker"]}
                   >
-                    <DatePicker
-                      //   label={'"year", "month" and "day"'}
-                      views={["year", "month", "day"]}
-                    />
+                    <DatePicker views={["year", "month", "day"]} />
                   </DemoContainer>
                 </LocalizationProvider>
               </div>
@@ -151,13 +147,18 @@ const Page = () => {
                         <ProgressIcon />
                       )}
                     </div>
-                    <span className="text-[#43527B] text-[12px] md:text-sm font-sfproDisplaymedium  ">
+                    <span
+                      className={`text-sm font-sfproDisplaymedium ${
+                        progress >= step.value
+                          ? "text-[#43527B]"
+                          : "text-[#8B8E98]"
+                      }`}
+                    >
                       {step.label}
                     </span>
                   </button>
                 ))}
               </div>
-              {/* Line percent={progress} trailColor='#D9D9D9' trailWidth={0.3} strokeColor='#F44771' strokeWidth={0.3} /> */}
               <Line
                 percent={progress}
                 strokeWidth={1.2}
@@ -165,7 +166,7 @@ const Page = () => {
                 className="rounded-xl"
                 trailWidth={2}
                 trailColor="#e4e4e4"
-              /> 
+              />
             </div>
           </div>
           <div className="py-[30px] px-[15px] md:px-10">
@@ -196,7 +197,7 @@ const Page = () => {
           <div className="border-b border-[#E9EDF3] pb-5 pt-9 ">
             <div className="custom relative w-[120px] h-[120px] mx-auto mb-5">
               <div className="grid place-items-center h-full w-full">
-                <div>  
+                <div>
                   <Image
                     src={imgNew}
                     alt="upload"

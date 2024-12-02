@@ -4,8 +4,8 @@ import SideNav from "@/app/admin/components/SideNav";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import MobileHeader from "../customer/components/MobileHeader";
 import Header from "./components/Header";
+import AdminMobileHeader from "./components/AdminMobileHeader";
 
 export default async function RootLayout({
   children,
@@ -27,7 +27,7 @@ export default async function RootLayout({
               <SideNav />
             </div>
             <div className="w-full lg:hidden">
-              <MobileHeader />
+           <AdminMobileHeader/>
             </div>
           <div className="float-left w-full lg:w-[calc(100%-270px)] ">
             <Header />

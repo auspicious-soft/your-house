@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image"; // Import Image for Next.js
 import { EditImageIcon } from "@/utils/svgicons";
-
+import prev from "@/assets/images/img13.png"
 const EditClientDetailsModal = ({
   isOpen,
   onClose,
@@ -44,29 +44,33 @@ const EditClientDetailsModal = ({
       fileInput.click();
     }
   };
+  const handleSubmit = () => {
+    console.log();
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Edit Client Details"
-      className="modal max-w-[810px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
+      className="modal max-w-[1081px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
       overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
       ariaHideApp={false}
     >
       <div className="bg-white rounded-lg p-8 relative">
+        <div className="flex items-center justify-between mb-10 ">
+        <h2 className="main-heading">Edit Client Details</h2>
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-        >
-          ✖️
+          className="bg-[#3B3F88] text-white p-1 px-2 rounded-3xl  "
+          >✖
         </button>
-        <h3 className="text-xl mb-4 font-semibold">Edit Client Details</h3>
-        <div className=" fomm-wrapper space-y-4">
+        </div>
+        <div className=" fomm-wrapper">
           {/* Image Upload Section */}
-          <div className="custom relative w-[120px] h-[120px] mx-auto mb-5">
+          <div className="custom relative w-[200px] h-[200px] mb-5">
             <input
-              className="absolute top-0 left-0 h-full w-full opacity-0 p-0 cursor-pointer"
+              className="absolute top-0 left-0 h-full w-full opacity-0 !p-0 cursor-pointer"
               type="file"
               accept="image/*"
               onChange={handleImageChange}
@@ -76,8 +80,8 @@ const EditClientDetailsModal = ({
                 <Image
                   src={imagePreview}
                   alt="Preview"
-                  width={120}
-                  height={120}
+                  width={200}
+                  height={200}
                   className="rounded-full h-full object-cover"
                 />
                 <button
@@ -92,20 +96,20 @@ const EditClientDetailsModal = ({
               <div className="grid place-items-center h-full w-full bg-[#f1f1f1] rounded-full">
                 <div>
                   <Image
-                    src="/default-image.png" // Replace with actual default image path
+                    src={prev}
                     alt="upload"
-                    width={120}
-                    height={120}
-                    className="rounded-full"
+                    width={200}
+                    height={200}
+                    className="rounded-full max-h-[200px] "
                   />
-                  <p className="absolute bottom-0 right-0 pointer-events-none">
+                  <p className="absolute bottom-[10px] right-4 pointer-events-none">
                     <EditImageIcon />
                   </p>
                 </div>
               </div>
             )}
           </div>
-
+            <form onSubmit={handleSubmit} className="grid md:flex flex-wrap gap-5">
           {/* Form Fields */}
           <div className="w-full">
           <label className="block">
@@ -119,7 +123,7 @@ const EditClientDetailsModal = ({
               className="w-full p-2 border rounded"
             />
             </div>
-            <div className="w-full">
+            <div className="md:w-[calc(33.33%-14px)]">
           <label className="block">
             Phone Number
           </label>
@@ -131,7 +135,7 @@ const EditClientDetailsModal = ({
               className="w-full p-2 border rounded"
             />
             </div>
-            <div className="w-full">
+            <div className="md:w-[calc(33.33%-14px)]">
           <label className="block">
             Email Address
           </label>
@@ -143,7 +147,7 @@ const EditClientDetailsModal = ({
               className="w-full p-2 border rounded"
             />
             </div>
-            <div className="w-full">
+            <div className="md:w-[calc(33.33%-14px)]">
           <label className="block">
             Home Address
           </label>
@@ -155,14 +159,14 @@ const EditClientDetailsModal = ({
               className="w-full p-2 border rounded"
             />
             </div>
-        </div>
-        <div className="flex justify-end gap-4 mt-6">
+        <div className="w-full ">
           <button
-            onClick={handleSave}
-            className="w-full  button !h-[44px] rounded-lg "
-          >
-            Save
+            onClick={handleSave} type="submit"
+            className="w-full button !h-[44px] rounded-lg "
+            >Save Details
           </button>
+        </div>
+        </form>
         </div>
       </div>
     </Modal>

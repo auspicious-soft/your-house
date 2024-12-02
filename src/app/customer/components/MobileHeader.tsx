@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 import { useState } from "react";
 import { usePathname } from 'next/navigation';
 import Link from "next/link";
@@ -14,7 +14,7 @@ const MobileHeader = () => {
 
   const handleLogout = async () => {
     await signOut({ redirect: false })
-    router.push('/');
+    router.push('/'); 
   };
 
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -25,6 +25,11 @@ const MobileHeader = () => {
     setIsCollapsed(!isCollapsed);
   };
   const isActive = (path: string) => pathname === path ? 'active' : '';
+
+
+  const handleLinkClick = (path: string) => {
+    setIsCollapsed(false); 
+  };
 
   return (
     <>
@@ -47,19 +52,19 @@ const MobileHeader = () => {
 
         <ul className="navList">
           <li className={isActive('/customer/dashboard')}>
-            <Link href="/customer/dashboard">
+            <Link href="/customer/dashboard" onClick={() => handleLinkClick("/customer/dashboard")}>
               {isActive('/customer/dashboard') ? <DashboardActiveIcon /> : <DashboardIcon />}
               Dashboard
             </Link>
           </li>
           <li className={isActive('/customer/projects')}>
-            <Link href="/customer/projects"> 
+            <Link href="/customer/projects" onClick={() => handleLinkClick("/customer/projects")}> 
             {isActive('/customer/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
               Projects
             </Link>
           </li>
           <li className={isActive('/customer/myprofile')}>
-            <Link href="/customer/myprofile">
+            <Link href="/customer/myprofile" onClick={() => handleLinkClick("/customer/myprofile")}>
              {isActive('/customer/myprofile') ? <CustomerActiveIcon /> : <CustomerIcon />}
              My Profile
             </Link>

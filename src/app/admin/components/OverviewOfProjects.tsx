@@ -9,24 +9,24 @@ interface FileItem {
     uploadedBy: string;
     time: string;
   }
+  export const fileItems: FileItem[] = [
+       {
+         name: 'Lorem Ipsum Name of the file.pdf',
+         uploadedBy: 'Neil Metender',
+         time: '11:23 AM',
+       },
+       {
+         name: 'Lorem Ipsum Name of the file.pdf',
+         uploadedBy: 'Neil Metender',
+         time: '11:24 AM',
+       },
+       {
+         name: 'Lorem Ipsum Name of the file.pdf',
+         uploadedBy: 'Neil Metender',
+         time: '11:24 AM',
+       },
+     ];
 const OverviewOfProjects: React.FC = () => {
-    const fileItems: FileItem[] = [
-        {
-          name: 'Lorem Ipsum Name of the file.pdf',
-          uploadedBy: 'Neil Metender',
-          time: '11:23 AM',
-        },
-        {
-          name: 'Lorem Ipsum Name of the file.pdf',
-          uploadedBy: 'Neil Metender',
-          time: '11:24 AM',
-        },
-        {
-          name: 'Lorem Ipsum Name of the file.pdf',
-          uploadedBy: 'Neil Metender',
-          time: '11:24 AM',
-        },
-      ];
     return (
         <div className=''>
         {fileItems.map((file, index) => (

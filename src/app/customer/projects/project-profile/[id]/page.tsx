@@ -5,45 +5,87 @@ import OnGoingProjects from "@/app/admin/components/OnGoingProjects";
 import OverviewOfProjects from "@/app/admin/components/OverviewOfProjects";
 import {
   AddIcon,
-  CallIcon,
-  EditImageIcon,
-  EditProfile,
-  MailIcon,
-  MapIcon,
+  DownloadIcon,
+  NotesIcon,
   ProgressIcon,
 } from "@/utils/svgicons";
 import Image from "next/image";
 import { Line } from "rc-progress";
 import React, { useEffect, useState } from "react";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-//import DatePicker from "react-date-picker";
-
 import imgNew from "@/assets/images/img13.png";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import pdfImg from '@/assets/images/PDF.png';
 
+interface FileItem {
+  name: string;
+  uploadedBy: string;
+  time: string;
+}
 const Page = () => {
-  const [date, setDate] = useState<Date | null>(new Date());
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [activeTab, setActiveTab] = useState("Overview");
 
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(50);
   const steps = [
     { id: 1, label: "Foundation", value: 25 },
     { id: 2, label: "Construction", value: 50 },
     { id: 3, label: "Interior Work", value: 75 },
     { id: 4, label: "Completed", value: 100 },
   ];
-
+  const fileItems: FileItem[] = [
+    {
+      name: 'Lorem Ipsum Name of the file.pdf',
+      uploadedBy: 'Neil Metender',
+      time: '11:23 AM',
+    },
+    {
+      name: 'Lorem Ipsum Name of the file.pdf',
+      uploadedBy: 'Neil Metender',
+      time: '11:24 AM',
+    },
+    {
+      name: 'Lorem Ipsum Name of the file.pdf',
+      uploadedBy: 'Neil Metender',
+      time: '11:24 AM',
+    },
+  ];
+  const NotesData = [
+    {
+      note: 'Lorem Ipsum Name of the file.pdf',
+     },
+     {
+        note: 'Lorem Ipsum Name of the file.pdf',
+    },
+    {
+        note: 'Lorem Ipsum Name of the file.pdf',
+    },
+  ];
   const renderTabContent = () => {
     switch (activeTab) {
       case "Overview":
         return (
           <div>
-            <OverviewOfProjects />
+           {fileItems.map((file, index) => (
+        <div key={index} className="flex justify-between items-center mb-5">
+          <div className='flex items-center gap-3 '>
+            <div><Image src={pdfImg} alt='' /> </div>
+          <div>
+            <p className="text-[#43527B] text-sm  ">{file.name}</p>
+            <p className="text-[#8B8E98] text-xs mt-1  ">
+              Uploaded by {file.uploadedBy} <span className='ml-5'>Time: {file.time}</span>
+            </p>
           </div>
+          </div>
+         <div className="flex gap-[6px]  ">
+         <button>
+            <DownloadIcon />
+          </button>
+         </div>
+        </div>
+      ))}
+        </div>
         );
       case "Status":
         return (
@@ -54,7 +96,13 @@ const Page = () => {
       case "Notes":
         return (
           <div>
-            <Notes />{" "}
+            {NotesData.map((data, index) => (
+             <div key={index} className="grid grid-cols-[auto_1fr_auto] gap-3  mb-[10px] ">
+                <span><NotesIcon /> </span>
+                <p className='text-[#8B8E98]  '>{data.note} </p>
+              
+            </div>
+            ))}
           </div>
         );
       default:
@@ -66,29 +114,6 @@ const Page = () => {
     // Any additional logic based on activeTab can go here if needed
   }, [activeTab]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setImagePreview(result);
-        // setFormData((prevData) => ({
-        //   ...prevData,
-        //   image: result,
-        // }));
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
-
-  const triggerFileInputClick = () => {
-    const fileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
-    }
-  };
 
   return ( 
     <div>
@@ -106,31 +131,13 @@ const Page = () => {
                 <label className="block text-[#8B8E98] text-[14px] ">
                   Starting Date
                 </label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer
-                    components={["DatePicker", "DatePicker", "DatePicker"]}
-                  >
-                    <DatePicker
-                      //   label={'"year", "month" and "day"'}
-                      views={["year", "month", "day"]}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+               <p className="text-base text-[#3C3F88] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">26/11/ 2024</p>
               </div>
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
-                  Starting Date
+                Expected End Date
                 </label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer
-                    components={["DatePicker", "DatePicker", "DatePicker"]}
-                  >
-                    <DatePicker
-                      //   label={'"year", "month" and "day"'}
-                      views={["year", "month", "day"]}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                <p className="text-base text-[#3C3F88] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">26/11/ 2024</p>
               </div>
             </div>
             <div className="progress-container">
@@ -139,7 +146,7 @@ const Page = () => {
                 {steps.map((step) => (
                   <button
                     key={step.id}
-                    onClick={() => setProgress(step.value)}
+                    // onClick={() => setProgress(step.value)}
                     className={`progress-step ${
                       progress >= step.value ? "active" : ""
                     }`}
@@ -157,7 +164,6 @@ const Page = () => {
                   </button>
                 ))}
               </div>
-              {/* Line percent={progress} trailColor='#D9D9D9' trailWidth={0.3} strokeColor='#F44771' strokeWidth={0.3} /> */}
               <Line
                 percent={progress}
                 strokeWidth={1.2}

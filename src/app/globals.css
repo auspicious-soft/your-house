@@ -216,6 +216,31 @@ textarea {
 .box-shadow{
 box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);
 }
+.delete-modal-bg::before, .delete-modal-bg::after {
+  content: "";
+  position: absolute;
+  width: 337px;
+  height: 337px;
+  border-radius: 100%;
+  z-index: -1;
+}
+.delete-modal-bg::after {
+  bottom: -149px;
+  right: -106px;
+  background: #FFF5FB;
+
+}
+.delete-modal-bg::before {
+  top: -77px;
+  left: -100px;
+  background: #EEF3FF;
+}
+.project-card:nth-child(even) .progress-step svg circle{
+  fill: #fff;
+}
+.project-card:nth-child(odd) .progress-step svg circle {
+fill: #F3F6FF;
+}
 @media (min-width: 989px) {
 }
 @media screen and (max-width: 1023px) {
@@ -288,7 +313,7 @@ box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);
     padding-left: 15px;
 }
 .section-title {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 30px;
   margin: 0 0 15px;
 }
@@ -306,4 +331,10 @@ box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);
   width: 40px;
   height: 40px;
 }
+th, td {
+  padding: 10px 15px;
+}
+
+
+
 }

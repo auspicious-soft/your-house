@@ -1,18 +1,22 @@
 "use client";
 import DashboardCard from "@/app/admin/components/DashboardCard";
-import projectImg from '@/assets/images/cardImg1.png'
+import projectImg from "@/assets/images/cardImg1.png";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import ReactLoading from "react-loading";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { ProgressIcon } from "@/utils/svgicons";
+import { Line } from "rc-progress";
 
 const Home = () => {
   const session = useSession();
   const router = useRouter();
-  const { data, error, isLoading } = useSWR( 
+  const { data, error, isLoading } = useSWR(
     `/admin/dashboard?id=${session?.data?.user?.id}`
   );
   const finalData: any = data?.data;
+
   const OverviewData = [
     {
       id: "1",
@@ -27,20 +31,37 @@ const Home = () => {
       bgColor: "#FF9A3E",
     },
   ];
-  const Projects =[
+
+  const steps = [
+    { id: 1, label: "Foundation" },
+    { id: 2, label: "Construction" },
+    { id: 3, label: "Interior Work" },
+    { id: 4, label: "Completed" },
+  ];
+  const projects = [
     {
-      id: '1',
-      title: "Project 1",
-      progress: 50,
-      imgSrc: projectImg,
+      id: 1,
+      name: "Summer Houses 1",
+      image: projectImg,
+      progress: 46,
+      completedSteps: 2,
     },
     {
-      id: '2',
-      title: "Project 2",
-      progress: 76,
-      imgSrc: projectImg,
+      id: 2,
+      name: "Summer Houses 2",
+      image: projectImg,
+      progress: 46,
+      completedSteps: 2,
     },
-  ]
+    {
+      id: 3,
+      name: "Summer Houses 2",
+      image: projectImg,
+      progress: 80,
+      completedSteps: 3,
+    },
+    // Add more projects as needed
+  ];
 
   const openNewProject = () => {
     router.push(`/admin/new-project`);
@@ -69,17 +90,73 @@ const Home = () => {
             />
           ))}
         </div>
-        <div className="md:col-span-1">
-        </div>
+        <div className="md:col-span-1"></div>
       </div>
 
       <section className="mt-10">
-      <h2 className="section-title">Working Progress</h2>
-      <div className="bg-white rounded-[10px]  md:rounded-[30px]  py-[30px] px-[15px] md:p-[30px]">
-        
+        <h2 className="section-title">Working Progress</h2>
+        <div className="bg-white rounded-[10px]  md:rounded-[30px] ">
+          <div className="progress-container">
+            <h2 className="section-title pt-[30px] px-[30px] ">
+              {projects.length} Ongoing Projects
+            </h2>
 
-      </div>
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                className="project-card py-5 px-[30px] even:bg-[#F3F6FF] "
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src={project.image}
+                      alt={project.name}
+                      height={40}
+                      width={40}
+                      className="max-w-10 max-h-10 object-cover rounded-full"
+                    />
+                    <span className="text-[#353E6C] ">{project.name}</span>
+                  </div>
+                  <div className="bg-[#FF16A2] text-white px-4 py-[7px] rounded-[5px] text-base">
+                    {project.progress}%
+                  </div>
+                </div>
 
+                <div className="progress-steps grid grid-cols-4 items-center ">
+                  {steps.map((step) => (
+                    <div key={step.id} className="progress-step text-center">
+                      <div className="checked flex justify-center mb-2.5">
+                        {project.completedSteps >= step.id ? (
+                          <ProgressIcon className="fill-[#FF16A2]" />
+                        ) : (
+                          <ProgressIcon className="fill-[#E4E4E4]" />
+                        )}
+                      </div>
+                      <span
+                        className={`text-sm font-sfproDisplaymedium ${
+                          project.completedSteps >= step.id
+                            ? "text-[#43527B]"
+                            : "text-[#8B8E98]"
+                        }`}
+                      >
+                        {step.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <Line
+                  percent={project.progress}
+                  strokeWidth={0.8}
+                  strokeColor="#FF16A2"
+                  className="rounded-xl mt-3"
+                  trailWidth={1}
+                  trailColor="#E4E4E4"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </>
   );

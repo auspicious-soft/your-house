@@ -8,9 +8,9 @@ import { toast } from "sonner";
 import router from "next/router";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import OnGoingProjects from "../components/OnGoingProjects";
-import CompletedProjects from "../components/CompletedProjects";
+import ClientCompletedProjects from "../components/ClientCompletedProjects";
 import { AddIcon } from "@/utils/svgicons";
+import ClientOnGoingProjects from "../components/ClientOnGoingProjects";
 const Page = () => {
   const [openModal, setOpenModal] = useState(false);
   const session = useSession();
@@ -38,9 +38,9 @@ const Page = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'On-going Projects':
-        return <div><OnGoingProjects/> </div>;
+        return <div><ClientOnGoingProjects/> </div>;
       case 'Completed Projects':
-        return <div><CompletedProjects /> </div>;
+        return <div><ClientCompletedProjects /> </div>;
      default:
         return null;
     }

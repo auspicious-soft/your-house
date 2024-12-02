@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import imgs from '@/assets/images/avatar.png'
 import { useRouter } from 'next/navigation';
+import DeleteDataModal from './DeleteDataModal';
 
 interface BillingData {
   id: string;
@@ -17,6 +18,9 @@ interface BillingData {
 
 const OnGoingProjects: React.FC = () => {
   const router = useRouter();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+
   // Dummy data
   const data: BillingData[] = [
     { id: '123', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
@@ -69,7 +73,7 @@ const OnGoingProjects: React.FC = () => {
               <td>
                 <div className='flex items-center gap-[6px] '>
                   <button onClick={()=>EditProjectData(row.id)}><EditIcon /> </button>
-                  <button><DeleteIcon/> </button>
+                  <button  onClick={() => setIsDeleteModalOpen(true)}><DeleteIcon/> </button>
                 </div>
               </td>
             </tr>
@@ -98,7 +102,10 @@ const OnGoingProjects: React.FC = () => {
           disabledClassName={'opacity-50 cursor-not-allowed'}
         />
       </div>
-      
+      <DeleteDataModal
+      isOpen={isDeleteModalOpen}
+      onClose={() =>setIsDeleteModalOpen(false)}
+      />
     </div>
   );
 };
