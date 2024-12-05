@@ -7,14 +7,15 @@ import { cookies } from "next/headers"
 export const loginAction = async (payload: any) => {
     try {
         const res: any = await loginService(payload)
+        
         if (res && res?.data?.success) {
             await signIn('credentials', {
                 email: payload.email,
                 name: res?.data?.data.firstName + ' ' + res?.data?.data.lastName,
                 _id: res?.data?.data?._id,
                 role: res?.data?.data?.role,
-                onboardingCompleted: res?.data?.data?.onboardingCompleted,
-                status: res?.data?.data?.onboardingApplication?.status,
+                // onboardingCompleted: res?.data?.data?.onboardingCompleted,
+                // status: res?.data?.data?.onboardingApplication?.status,
                 redirect: false,
             })
         }

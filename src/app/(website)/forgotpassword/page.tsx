@@ -1,16 +1,44 @@
 "use client";
-import React, {useState} from "react";
+import React, {useState, useTransition} from "react";
 import Link from "next/link";
 import InputField from "@/app/(website)/components/InputField";
 import Image from "next/image";
 import LoginImage from "../components/LoginImage";
 import Logo from '@/assets/images/logo.png';
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { forgotPasswordService } from "@/services/client/client-service";
 
 const Page: React.FC = () => {
-const [password, setPassword] = useState("");
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [isPending, startTransition] = useTransition()
+  const handleChange = (e: any) => {
+    setEmail(e.target.value)
+  }
 
-    return (
-        <>
+const handleSubmit = (e: any) => {
+  e.preventDefault()
+  startTransition(async () => {
+    try {
+      const response = await forgotPasswordService({ email })
+      if (response.status === 200) {
+        toast.success('Email sent successfully to you with otp')
+        router.push('/otp')
+      }
+      else {
+        toast.error("Something went wrong")
+      }
+    }
+    catch (err: any) {
+      if (err.status == 404) toast.error('Email not found')
+      else toast.error('Something went wrong')
+    }
+  })
+}
+
+  return (
+    <>
     <div className="bg-[#D4DFF4] pt-5 md:pt-0">
       <div className="grid md:grid-cols-2 gap-8 md:gap-3 lg:gap-0 items-center  ">
         <div className="bg-white h-full rounded-[30px] m-5 md:m-0  ">
@@ -20,17 +48,19 @@ const [password, setPassword] = useState("");
           </p>
           <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">Forgot Password?</h2>
         <div className="login rounded-[20px] bg-white">
-        <div className="">
+        <form>
           <InputField
           label="Phone Number / Email Address"
             type="email"
-            value={password}
+            value={email}
             placeholder="Phone Number/Email Address"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChange}
           />
-        <Link href="/resetpassword" className="login-button w-full mt-[50px]">Confirm</Link>
+           <button disabled={isPending} onClick={handleSubmit} type="submit" className="login-button w-full mt-[50px]">
+           Confirm</button>
+        {/* <Link href="/resetpassword" className="login-button w-full mt-[50px]">Confirm</Link> */}
        
-          </div>
+          </form>
         </div>
        </div>
           </div>

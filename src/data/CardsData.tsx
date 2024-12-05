@@ -1,8 +1,8 @@
 // src/app/data/cardsData.js
 
-import cardImg1 from '../assets/images/cardImg1.png';
-import cardImg2 from '../assets/images/cardImg2.png';
-import cardImg3 from '../assets/images/cardImg3.png';
+import cardImg1 from '@/assets/images/cardImg1.png';
+import cardImg2 from '@/assets/images/cardImg2.png';
+import cardImg3 from '@/assets/images/cardImg3.png';
 const cardsData = [
     {
         id: 1,

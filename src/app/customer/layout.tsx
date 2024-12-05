@@ -6,18 +6,18 @@ import MobileHeader from "@/app/customer/components/MobileHeader";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import Header from "./components/Header";
+import Header from "@/app/customer/components/Header";
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // const session = await auth()
-  // if (!session) {
-  //   redirect('/login')
-  // }
-  // else if ((session as any)?.user?.role === 'client') {
+  const session = await auth()
+  if (!session) {
+    redirect('/')
+  }
+  else if ((session as any)?.user?.role === 'user') {
     return (
       <html lang="en">
       <body>
@@ -39,13 +39,13 @@ export default async function RootLayout({
     </html>
     );
   }
-  // else {
-  //   return (
-  //     <div className="p-3 bg-black h-screen text-white">
-  //     You are not authorized to view this page go to login -<Link href={'/login'} className="p-3 text-black bg-white">
-  //         Login
-  //       </Link>
-  //   </div>
-  //   );
-  // }
-//}
+  else {
+    return (
+      <div className="p-3 bg-black h-screen text-white">
+      You are not authorized to view this page go to login -<Link href={'/'} className="p-3 text-black bg-white">
+          Login
+        </Link>
+    </div>
+    );
+  }
+}

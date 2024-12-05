@@ -12,13 +12,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const session = await auth()
-  // const notUserOrAdmin = ['therapist', 'client']
+  const session = await auth()
+  const notUserOrAdmin = ['user']
+  // ['therapist', 'client']
 
-  // if (!session) {
-  //   redirect("/login")
-  // }
-  // else if (!notUserOrAdmin.includes((session as any)?.user?.role)) {
+  if (!session) {
+    redirect("/")
+  }
+  else if (!notUserOrAdmin.includes((session as any)?.user?.role)) {
     return (
       <html lang="en">
         <body>
@@ -39,14 +40,14 @@ export default async function RootLayout({
         </body>
       </html>
     );
-  // } else {
-  //   return (
-  //     <div className="p-3 bg-black h-screen text-white">
-  //       You are not authorized to view this page click
-  //       <Link href={'/login'} className="p-3 text-black bg-white">
-  //         Login
-  //       </Link>
-  //     </div>
-  //   );
-  // }
+  } else {
+    return (
+      <div className="p-3 bg-black h-screen text-white">
+        You are not authorized to view this page click
+        <Link href="/" className="p-3 text-black bg-white">
+          Login
+        </Link>
+      </div>
+    );
+  }
 }

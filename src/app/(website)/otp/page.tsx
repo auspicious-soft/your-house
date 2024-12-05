@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import LoginImage from "../components/LoginImage";
 import Logo from '@/assets/images/logo.png';
+import { sendOtpService } from "@/services/client/client-service";
 
 //import { sendOtpService } from "@/services/user-service";
 
@@ -36,10 +37,11 @@ export default function Page() {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text');
     const pastedNumbers = pastedData.replace(/\D/g, '').slice(0, 6).split('');
+    
 
     const newOtpValues = [...otpValues];
     pastedNumbers.forEach((num, index) => {
-      if (index < 4) newOtpValues[index] = num;
+      if (index < 6) newOtpValues[index] = num;
     });
     setOtpValues(newOtpValues);
 
@@ -50,26 +52,26 @@ export default function Page() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    // e.preventDefault();
-    // const completeOtp = otpValues.join('');
-    // startTransition(async () => {
-    //   try {
-    //     const response = await sendOtpService({ otp: completeOtp })
-    //     if (response.status === 200) {
-    //       toast.success('Email sent successfully to you with otp')
-    //       router.push(`/newpassword?otp=${completeOtp}`)
-    //     }
-    //     else {
-    //       toast.error("Something went wrong")
-    //     }
-    //   }
-    //   catch (err: any) {
-    //     if (err.status == 404 || err.status == 400) {
-    //      alert('Invalid otp or expired')
-    //     }
-    //     else toast.error('Something went wrong')
-    //   }
-    // })
+    e.preventDefault();
+    const completeOtp = otpValues.join('');
+    startTransition(async () => {
+      try {
+        const response = await sendOtpService({ otp: completeOtp })
+        if (response.status === 200) {
+          toast.success('Email sent successfully to you with otp')
+          router.push(`/resetpassword?otp=${completeOtp}`)
+        }
+        else {
+          toast.error("Something went wrong")
+        }
+      }
+      catch (err: any) {
+        if (err.status == 404 || err.status == 400) {
+         alert('Invalid otp or expired')
+        }
+        else toast.error('Something went wrong')
+      }
+    })
   };
 
   return (

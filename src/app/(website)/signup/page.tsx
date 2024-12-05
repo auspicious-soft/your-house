@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Logo from '@/assets/images/logo.png';
 import LoginImage from "../components/LoginImage";
+import { userSignupData } from "@/services/client/client-service";
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -19,19 +20,27 @@ const Page: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPending, startTransition] = useTransition()
+  const [formData, setFormData] = useState<any>({
+    fullName: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+  })
+
+  
   const handleSignup = async () => {
-    // startTransition(async () => {
-    //   try {
-    //     const response = await signUpTherapistService({ firstName, lastName, phoneNumber, email, password })
-    //     if(response?.data?.success) {
-    //       toast.success("Signup Successful")
-    //       router.push('/accountcreated')
-    //     }
-    //   } catch (error: any) {
-    //     const err = error?.response?.data
-    //     toast.error(Array.isArray(err?.message) ? err?.message[0].message : err.message)
-    //   }
-    // })
+    startTransition(async () => {
+      try {
+        const response = await userSignupData({ fullName, phoneNumber, email, password })
+        if(response?.data?.success) {
+          toast.success("Signup Successful")
+          router.push('/')
+        }
+      } catch (error: any) {
+        const err = error?.response?.data
+        toast.error(Array.isArray(err?.message) ? err?.message[0].message : err.message)
+      }
+    })
   }
   return (
     <>
