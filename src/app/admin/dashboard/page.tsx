@@ -8,25 +8,27 @@ import { AddIcon } from "@/utils/svgicons";
 import RecentProjects from "../components/RecentProjects";
 import ProjectsProgress from "../components/ProjectsProgress";
 import { useRouter } from "next/navigation";
+import { getDashboardStats } from "@/services/admin/admin-service";
+import { useState } from "react";
 
 const Home = () => {
   const session = useSession();
   const router = useRouter();
-  const { data, error, isLoading } = useSWR(
-    `/admin/dashboard?id=${session?.data?.user?.id}`
-  );
-  const finalData: any = data?.data;
+  const [query, setQuery] = useState('');
+  const { data, error, isLoading, mutate } = useSWR(`/admin/dashboard`, getDashboardStats);
+  const dashboardData = data?.data?.data;
+  console.log('finalData:', dashboardData);
   const OverviewData = [
     {
       id: "1",
       title: "Ongoing Projects",
-      value: 18,
+      value: dashboardData?.ongoingProjectCount,
       bgColor: "#F44771",
     },
     {
       id: "2",
       title: "Completed Projects",
-      value: 18,
+      value: dashboardData?.completedProjectCount,
       bgColor: "#FF9A3E",
     },
   ];
@@ -92,13 +94,13 @@ const Home = () => {
       <section className="mt-10">
       <h2 className="section-title">Working Progress</h2>
       <div className="bg-white rounded-[10px]  md:rounded-[30px]  py-[30px] px-[15px] md:p-[30px]">
-        <h3 className="text-lg text-[#353E6C] font-sfproDisplaysemibold mb-[26px] ">{Projects.length} Ongoing Projects</h3>
-          {Projects.map((data)=>(
+        <h3 className="text-lg text-[#353E6C] font-sfproDisplaysemibold mb-[26px] ">{dashboardData?.workingProjectDetails.length} Ongoing Projects</h3>
+          {dashboardData?.workingProjectDetails.map((data: any)=>(
             <ProjectsProgress
-            key={data.id}
-            title={data.title}
-            progress={data.progress}
-            imgSrc={data.imgSrc}
+            key={data?._id}
+            title={data?.projectName}
+            progress={data?.status}
+            imgSrc={data?.df}
             />
           ))}
 
@@ -108,7 +110,7 @@ const Home = () => {
 
       <section className="mt-10">
         <h2 className="section-title">Recent Projects</h2>
-        <RecentProjects />
+        <RecentProjects setQuery={setQuery} recentProjects={dashboardData?.recentProjectDetails} error={error} isLoading={isLoading} mutate={mutate} />
       </section>
     </>
   );

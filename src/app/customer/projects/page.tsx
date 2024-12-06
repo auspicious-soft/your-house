@@ -1,5 +1,4 @@
 "use client";
-import { FaHandsHelping } from "react-icons/fa";
 import { useState, useEffect, useTransition } from 'react';
 import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
@@ -11,36 +10,22 @@ import Link from "next/link";
 import ClientCompletedProjects from "../components/ClientCompletedProjects";
 import { AddIcon } from "@/utils/svgicons";
 import ClientOnGoingProjects from "../components/ClientOnGoingProjects";
+import { getClientsAllProjects } from '@/services/client/client-service';
 const Page = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const session = useSession();
-  const router= useRouter();
+
   const [activeTab, setActiveTab] = useState('On-going Projects');
-  const [shouldFetchAppointments, setShouldFetchAppointments] = useState(false);
-  const [query, setQuery] = useState('page=1&limit=10');
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    if (activeTab === 'On-going Projects' || activeTab === 'Completed Projects') {
-      setQuery(`appointmentType=${activeTab === 'On-going Projects' ? 'past' : 'upcoming'}&page=1&limit=10`);
-      setShouldFetchAppointments(true);
-    } else {
-      setShouldFetchAppointments(false);
-    }
-  }, [activeTab]);
-
-  const rowsPerPage = 5;
-  //appointmentsData?.data?.limit ?? 0;
-
-  const handlePageClick = (selectedItem: { selected: number }) => {
-    setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
-  }
+  const [query, setQuery] = useState('');
+  const {data, error, isLoading, mutate} = useSWR(`/user/projects?state=${activeTab === 'On-going Projects' ? "ongoing" : 'completed'}`, getClientsAllProjects)
+  const projectsData = data?.data;
+  console.log('projectsData:', projectsData);
+ 
+  
   const renderTabContent = () => {
     switch (activeTab) {
       case 'On-going Projects':
-        return <div><ClientOnGoingProjects/> </div>;
+        return <div><ClientOnGoingProjects setQuery={setQuery}  projectsData={projectsData} error={error} isLoading={isLoading}  mutate={mutate}/> </div>;
       case 'Completed Projects':
-        return <div><ClientCompletedProjects /> </div>;
+        return <div><ClientCompletedProjects setQuery={setQuery}  projectsData={projectsData} error={error} isLoading={isLoading}  mutate={mutate}/> </div>;
      default:
         return null;
     }

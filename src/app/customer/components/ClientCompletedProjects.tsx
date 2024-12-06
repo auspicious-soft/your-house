@@ -4,19 +4,18 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 
-interface BillingData {
-  id: string;
-  apptDate: string;
-  renewalDate: string;
-  chatWithClinician: string;
-  videoChat: string;
-  billingAmount: string;
+interface CompletedProps {
+  projectsData: any;
+  mutate: any;
+  isLoading: boolean;
+  setQuery: any;
+  error: any;
 }
 
-const ClientCompletedProjects: React.FC = () => {
+const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate, isLoading, setQuery, error}) => {
   const router = useRouter();
   // Dummy data
-  const data: BillingData[] = [
+  const data = [
     { id: '#123', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
     { id: '#124', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
     { id: '#125', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },

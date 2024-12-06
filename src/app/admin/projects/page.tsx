@@ -11,36 +11,20 @@ import Link from "next/link";
 import OnGoingProjects from "../components/OnGoingProjects";
 import CompletedProjects from "../components/CompletedProjects";
 import { AddIcon } from "@/utils/svgicons";
+import { getAllProjects } from "@/services/admin/admin-service";
 const Page = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const session = useSession();
-  const router= useRouter();
   const [activeTab, setActiveTab] = useState('On-going Projects');
-  const [shouldFetchAppointments, setShouldFetchAppointments] = useState(false);
   const [query, setQuery] = useState('page=1&limit=10');
-  const [isPending, startTransition] = useTransition();
+  const {data, error, isLoading, mutate} = useSWR(`/admin/projects?state=${activeTab === 'On-going Projects' ? "completed" : 'ongoing'}&${query}`, getAllProjects)
+  const projectsData = data?.data;
+  console.log('projectsData:', projectsData);
 
-  useEffect(() => {
-    if (activeTab === 'On-going Projects' || activeTab === 'Completed Projects') {
-      setQuery(`appointmentType=${activeTab === 'On-going Projects' ? 'past' : 'upcoming'}&page=1&limit=10`);
-      setShouldFetchAppointments(true);
-    } else {
-      setShouldFetchAppointments(false);
-    }
-  }, [activeTab]);
-
-  const rowsPerPage = 5;
-  //appointmentsData?.data?.limit ?? 0;
-
-  const handlePageClick = (selectedItem: { selected: number }) => {
-    setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
-  }
   const renderTabContent = () => {
     switch (activeTab) {
       case 'On-going Projects':
-        return <div><OnGoingProjects/> </div>;
+        return <div className="ongoingggg"><OnGoingProjects setQuery={setQuery}  projectsData={projectsData} error={error} isLoading={isLoading}  mutate={mutate}  /> </div>;
       case 'Completed Projects':
-        return <div><CompletedProjects /> </div>;
+        return <div className="completeeee"><CompletedProjects setQuery={setQuery} projectsData={projectsData} error={error} isLoading={isLoading}  mutate={mutate}/> </div>;
      default:
         return null;
     }

@@ -6,28 +6,26 @@ import ReactPaginate from 'react-paginate';
 import imgs from '@/assets/images/avatar.png'
 import { useRouter } from 'next/navigation';
 
-interface BillingData {
-  id: string;
-  img: string | StaticImageData ;
-  renewalDate: string;
-  chatWithClinician: string;
-  videoChat: string;
-  billingAmount: string;
+interface OnGoingProps {
+  projectsData: any;
+  mutate: any;
+  isLoading: boolean;
+  setQuery: any;
+  error: any;
 }
 
-const ClientOnGoingProjects: React.FC = () => {
+const ClientOnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoading, setQuery, error}) => {
   const router = useRouter();
-  // Dummy data
-  const data: BillingData[] = [
-    { id: '123', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '124', img: imgs, renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '125', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
-    { id: '126', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '127', img: imgs, renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '128', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
+ 
+  const data = [
+    { id: '#123', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#124', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#125', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
+    { id: '#126', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#127', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
+    { id: '#128', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
 
   ];
-
   const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 2;
 
@@ -62,7 +60,7 @@ const ClientOnGoingProjects: React.FC = () => {
           paginatedData.map((row, index) => (
             <tr key={index}>
               <td>{row.id} </td>
-              <td><Image src={row.img} alt='fgfdg' width={50} height={50}/> </td>
+              <td><Image src={imgs} alt='fgfdg' width={50} height={50}/> </td>
               <td>{row.renewalDate}</td>
               <td>{row.chatWithClinician}</td>
               <td>{row.videoChat}</td>

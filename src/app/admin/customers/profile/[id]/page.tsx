@@ -1,22 +1,45 @@
 "use client";
 import Image from "next/image";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import imgNew from "@/assets/images/img13.png";
 import Modal from 'react-modal'
 import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
 import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
+import { useParams } from "next/navigation";
+import { getSingleUser } from "@/services/admin/admin-service";
+import useSWR from "swr";
 
 
 const Page = () => {
+  const {id} = useParams();
+  const [query, setQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {data, error, mutate, isLoading} = useSWR(`/admin/users/${id}`, getSingleUser)
+  const customerData = data?.data?.data;
+  console.log('customerData:', customerData);
+  const associatedProjects = customerData?.projects
 
   const [formData, setFormData] = useState<any>({
-    fullName: "",
+     fullName: "",
     phoneNumber: "",
     email: "",
     address: "",
+    profilePic: "",
   });
+
+  useEffect(() => {
+    if (customerData?.user) {
+      setFormData({
+        fullName: customerData.user.fullName || "",
+        phoneNumber: customerData.user.phoneNumber || "",
+        email: customerData.user.email || "",
+        address: customerData.user.address || "",
+        profilePic: customerData.user.profilePic || "",
+      });
+    }
+  }, [customerData]);
+  
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -24,9 +47,11 @@ const Page = () => {
     const { name, value } = e.target as HTMLInputElement & { files: FileList };
     setFormData({
       ...formData,
-      [name]: name === "phoneNumber" ? Number(value) : value, // Convert phoneNumber to number
+      [name]: name === "phoneNumber" ? value : value, 
     });
   };
+
+
   const handleSave = () => {
     setIsModalOpen(false);
   };
@@ -36,6 +61,7 @@ const Page = () => {
       <h2 className="section-title text-[#3C3F88]">Client Details</h2>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
+          {/* src={formData.profilePic || imgNew}  */}
             <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />           
         <div> 
           <button  onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] "> 
@@ -51,7 +77,7 @@ const Page = () => {
               value={formData.fullName}
               placeholder="Full Name"
               onChange={handleInputChange}
-              required
+              readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
@@ -62,7 +88,7 @@ const Page = () => {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               placeholder="Phone Number"
-              required
+              readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
@@ -73,7 +99,7 @@ const Page = () => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="fullname@mail.com"
-              required
+              readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
@@ -84,7 +110,7 @@ const Page = () => {
               value={formData.address}
               onChange={handleInputChange}
               placeholder="emailaddress@mail.com"
-              required
+              readOnly
             />
           </div>
         </div>
@@ -97,10 +123,9 @@ const Page = () => {
         handleInputChange={handleInputChange}
         handleSave={handleSave}
       />
-
       <section className="mt-10">
         <h2 className="section-title">Associated Projects</h2>
-        <AssociatedProjects />
+        <AssociatedProjects setQuery={setQuery} mutate={mutate} data={associatedProjects} />
       </section>
     </div>
   );

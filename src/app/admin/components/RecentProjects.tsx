@@ -1,38 +1,65 @@
 "use client"
 import { DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import DeleteDataModal from './DeleteDataModal';
+import { toast } from 'sonner';
+import { deleteProject } from '@/services/admin/admin-service';
+import ReactLoading from 'react-loading';
 
-interface BillingData {
-  id: string;
-  apptDate: string;
-  renewalDate: string;
-  chatWithClinician: string;
-  videoChat: string;
-  billingAmount: string;
+interface recentProjectsProps {
+  recentProjects: any;
+  mutate: any;
+  isLoading: boolean;
+  error: any;
+  setQuery: any;
 }
 
-const BillingDetails: React.FC = () => {
-  // Dummy data
-  const data: BillingData[] = [
-    { id: '#123', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#124', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#125', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
-    { id: '#126', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#127', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#128', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
+const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, isLoading, error, setQuery}) => {
+  console.log('recentProjects:', recentProjects);
+  const total = recentProjects?.total ?? 0
+  // const total = projectsData?.total ?? 0;
+  console.log('total:', total);
+  const router= useRouter();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState('');
 
-  ];
-
-  const [currentPage, setCurrentPage] = useState(0);
-  const rowsPerPage = 2;
-
-  // Pagination handler
+  const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
-    setCurrentPage(selectedItem.selected);
-  };
+    setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
+  }
+  // const rowsPerPage = 10;
 
-  const paginatedData = data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
+  // const handlePageClick = (selectedItem: { selected: number }) => {
+  //   setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
+  // }
+  //const paginatedData = data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
+
+  const openDeleteModal = (id: string) => {
+    setIsDeleteModalOpen(true);
+    setSelectedId(id);
+  };
+  const handleDelete = async () => {
+    console.log("fgdgfhd");
+    try {
+      const response = await deleteProject(`/admin/project/${selectedId}`); 
+      if (response.status === 200) {
+        toast.success("Client deleted successfully");
+        setIsDeleteModalOpen(false);
+        mutate()
+      } else {
+        toast.error("Failed to delete Client");
+      }
+    } catch (error) {
+      console.error("Error deleting Client", error);
+      toast.error("An error occurred while deleting the Client");
+    }
+  }
+  const EditProjectData =(id: string) => {
+    router.push(`/admin/projects/project-profile/${id}`);
+   }
+
 
   return (
     <div>
@@ -49,23 +76,39 @@ const BillingDetails: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {
-          paginatedData.map((row, index) => (
-            <tr key={index}>
-              <td>{row.id}</td>
-              <td>{row.apptDate}</td>
-              <td>{row.renewalDate}</td>
-              <td>{row.chatWithClinician}</td>
-              <td>{row.videoChat}</td>
+        {isLoading ? (
+              <tr>
+                <td colSpan={5} className="">
+                  Loading...
+                </td>
+              </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan={5} className="text-center text-red-500 ">
+                  Error loading Clinician data.
+                </td>
+              </tr>
+            ) : recentProjects?.length > 0 ? (
+          recentProjects?.map((row: any) => (
+            <tr key={row?._id}>
+              <td>{row?._id}</td>
+              <td>{row?.projectimageLink}</td>
+              <td>{row?.projectName}</td>
+              <td>{row?.projectstartDate}</td>
+              <td>{row?.projectendDate}</td>
               <td>
                 <div className='flex items-center gap-[6px] '>
-                  <button><EditIcon /> </button>
-                  <button><DeleteIcon/> </button>
+                  <button onClick={()=>EditProjectData(row?._id)}><EditIcon /> </button>
+                  <button onClick={() => openDeleteModal(row?._id)}><DeleteIcon/> </button>
                 </div>
               </td>
             </tr>
-          ))
-          }
+         ))
+        ) : (
+          <tr>
+            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#1657FF'} height={'20px'} width={'20px'} /> : <p className='text-center'>No data found</p>}</td>
+          </tr>
+        )}
         </tbody>
       </table>
       </div>
@@ -75,7 +118,7 @@ const BillingDetails: React.FC = () => {
           nextLabel={<NextLabel/>}
           breakLabel={'...'}
           breakClassName={'break-me'}
-          pageCount={Math.ceil(data.length / rowsPerPage)}
+          pageCount={Math.ceil(total / rowsPerPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
@@ -89,8 +132,14 @@ const BillingDetails: React.FC = () => {
           disabledClassName={'opacity-50 cursor-not-allowed'}
         />
       </div>
-      
+       <DeleteDataModal
+      isOpen={isDeleteModalOpen}
+      onClose={() =>setIsDeleteModalOpen(false)}
+      title='Are you sure you want to delete this project?'
+      handleDelete={handleDelete}
+      />
     </div>
   );
 };
-export default BillingDetails;
+
+export default RecentProjects;

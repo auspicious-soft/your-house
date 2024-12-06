@@ -71,42 +71,35 @@ const Page: React.FC = () => {
 const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
   
-    // Regular expressions for email and Danish phone number
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     // const phoneRegex = /^\+45\s?\d{2}(\s?\d{2}){3}$/;
-    const phoneRegex = /^\+91\s?\d{10}$/;
-    // Determine login field type (email or phone)
+    const phoneRegex = /^\d{8}$/;
     let loginFieldType = '';
     if (emailRegex.test(username)) {
-      loginFieldType = 'email';
+      loginFieldType = 'username';
     } else if (phoneRegex.test(username)) {
-      loginFieldType = 'phone';
+      loginFieldType = 'username';
     } else {
       toast.error('Please enter a valid email or Danish phone number (+45).');
       return;
     }
   
-    // Check for a valid password
     if (!password) {
       toast.error('Password is required.');
       return;
     }
-  
     try {
       startTransition(async () => {
-        // Call the login action with the appropriate field (email or phone)
         const response = await loginAction({ [loginFieldType]: username, password });
   
-        // Handle successful login response
         if (response?.success) {
           toast.success('Logged in successfully');
-          if (response?.data?.role === 'user') {
+          if (response?.data?.user?.role === 'user') {
             window.location.href = '/customer/dashboard';
           } else {
             window.location.href = '/admin/dashboard';
           }
         } else {
-          // Handle error messages returned from the server
           toast.error(
             Array.isArray(response?.message)
               ? response?.message[0].message
@@ -115,7 +108,7 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
         }
       });
     } catch (error) {
-      console.error('Login error:', error); // Log any unexpected errors for debugging
+      console.error('Login error:', error);
       toast.error('Something went wrong! Please try again.');
     }
   };
@@ -140,9 +133,9 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
                 <form onSubmit={handleSubmit}>
                   <InputField
                     type="text"
-                    label="Enter Email or Phone Number"
+                    label="Email Address / Phone"
                     value={username}
-                    placeholder="Email Address"
+                    placeholder="Email Address / Phone"
                     onChange={(e) => serUsername(e.target.value)}
                   />
                   <InputField

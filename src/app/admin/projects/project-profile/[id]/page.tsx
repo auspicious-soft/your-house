@@ -22,8 +22,17 @@ import imgNew from "@/assets/images/img13.png";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useParams } from "next/navigation";
+import useSWR from "swr";
+import { getSingleProject } from "@/services/admin/admin-service";
 
 const Page = () => {
+  const {id} = useParams();
+  const {data, error, mutate} = useSWR(`/admin/project/${id}`, getSingleProject);
+  const project = data?.data?.data?.project;
+  console.log('project:', project);
+  const userData = data?.data?.data?.user;
+
   const [date, setDate] = useState<Date | null>(new Date());
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -94,7 +103,7 @@ const Page = () => {
       <div className="grid grid-cols-[1fr] md:grid-cols-[2fr_1fr] lg:grid-cols-[1fr_309px] gap-5">
         <div className="bg-white rounded-[10px] md:rounded-[30px] box-shadow ">
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10">
-            <h2 className="main-heading">Project Name</h2>
+            <h2 className="main-heading">{project?.projectName}</h2>
             <button className="!rounded-[3px] !h-[37px] button !px-4 ">
               <AddIcon className="w-4 h-4" /> Edit Name
             </button>
@@ -110,8 +119,9 @@ const Page = () => {
                     components={["DatePicker", "DatePicker", "DatePicker"]}
                   >
                     <DatePicker
+                   // value={project?.projectstartDate}
                       //   label={'"year", "month" and "day"'}
-                      views={["year", "month", "day"]}
+                    views={["year", "month", "day"]}
                     />
                   </DemoContainer>
                 </LocalizationProvider>

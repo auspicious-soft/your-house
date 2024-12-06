@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link"; 
 import LoginImage from '@/app/(website)/components/LoginImage';
 import Logo from '@/assets/images/logo.png';
-import { resetUserPassword } from '@/services/client/client-service';
 import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { resetUserPassword } from '@/services/admin/admin-service';
 
 function PasswordForm() {
   const router = useRouter();
