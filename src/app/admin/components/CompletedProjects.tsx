@@ -37,7 +37,6 @@ const handlePageClick = (selectedItem: { selected: number }) => {
     setSelectedId(id);
   };
   const handleDelete = async () => {
-    console.log("fgdgfhd");
     try {
       const response = await deleteProject(`/admin/project/${selectedId}`); 
       if (response.status === 200) {

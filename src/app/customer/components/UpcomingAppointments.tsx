@@ -11,7 +11,6 @@ const UpcomingAppointments = (props:any) => {
   const upcomingData = data?.data;
   const { isLoading } = props
   const total = data?.total ?? 0;
-  console.log('total:', total);
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)

@@ -2,7 +2,11 @@
 import { DeleteIcon, EditIcon, NextLabel, PreviousLabel, ViewIcon } from '@/utils/svgicons';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import Image, {StaticImageData} from 'next/image';
 import ReactPaginate from 'react-paginate';
+import ReactLoading from 'react-loading';
+import imgs from '@/assets/images/avatar.png'
+
 
 interface CompletedProps {
   projectsData: any;
@@ -13,32 +17,18 @@ interface CompletedProps {
 }
 
 const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate, isLoading, setQuery, error}) => {
+  const projects = projectsData?.data;
+  const total = projectsData?.total ?? 0;
   const router = useRouter();
-  // Dummy data
-  const data = [
-    { id: '#123', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#124', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#125', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
-    { id: '#126', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#127', apptDate: '26 July 2023', renewalDate: 'Renew Subscription', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
-    { id: '#128', apptDate: '26 July 2023', renewalDate: '04 Jan 2025', chatWithClinician: 'No', videoChat: 'No', billingAmount: '$25.00' },
+ 
 
-  ];
-
-  const [currentPage, setCurrentPage] = useState(0);
-  const rowsPerPage = 2;
-
-  // Pagination handler
+  const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
-    setCurrentPage(selectedItem.selected);
-  };
-
-  const paginatedData = data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
-
+    setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
+  }
   const EditProjectData =(id: string) => {
     router.push(`/customer/projects/project-profile/${id}`);
-   }
-
+  }
   return (
     <div>
     <div className="table-common overflo-custom mt-[20px] box-shadow">
@@ -54,22 +44,34 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
           </tr>
         </thead>
         <tbody>
-          {
-          paginatedData.map((row, index) => (
-            <tr key={index}>
-              <td>{row.id}</td>
-              <td>{row.apptDate}</td>
-              <td>{row.renewalDate}</td>
-              <td>{row.chatWithClinician}</td>
-              <td>{row.videoChat}</td>
-              <td>
-                <div>
-                <button onClick={()=>EditProjectData(row.id)}><ViewIcon/> </button>
-                </div>
-              </td>
+        {isLoading ? (
+              <tr>
+                <td colSpan={5} className="">
+                  Loading...
+                </td>
+              </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan={5} className="text-center text-red-500 ">
+                  Error loading data.
+                </td>
+              </tr>
+            ) : projects?.length > 0 ? (
+              projects?.map((row: any) => (
+            <tr key={row?._id}>
+              <td>{row?._id} </td>
+              <td><Image src={imgs} alt='fgfdg' width={50} height={50}/> </td>
+              <td>{row?.projectName}</td>
+              <td>{row?.projectstartDate}</td>
+              <td>{row?.projectendDate}</td>
+              <td><button onClick={()=>EditProjectData(row?._id)}><EditIcon /> </button></td>
             </tr>
           ))
-          }
+        ) : (
+          <tr>
+            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>No data found</p>}</td>
+          </tr>
+        )}
         </tbody>
       </table>
       </div>
@@ -79,7 +81,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
           nextLabel={<NextLabel/>}
           breakLabel={'...'}
           breakClassName={'break-me'}
-          pageCount={Math.ceil(data.length / rowsPerPage)}
+          pageCount={Math.ceil(total / rowsPerPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}

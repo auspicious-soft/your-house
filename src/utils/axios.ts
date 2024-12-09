@@ -9,14 +9,14 @@ export const axiosInstance = axios.create({
     }
 })
 
-const createAuthInstance = async () => {
+const createAuthInstance = async (adminRole?: boolean = false) => {
     try {
         const token = await getTokenCustom();
         return axios.create({
             baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`,
             headers: {
                 Authorization: `Bearer ${token}`,
-                'role' : 'admin',
+                ...(adminRole && {'role' : 'admin'}), 
                 'Content-Type': 'application/json'
             },
         })
@@ -26,6 +26,6 @@ const createAuthInstance = async () => {
     }
 };
 
-export const getAxiosInstance = async () => {
-    return await createAuthInstance()
-};
+export const getAxiosInstance = async (adminRole?: boolean) => {
+    return await createAuthInstance(adminRole)
+}

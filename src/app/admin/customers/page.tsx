@@ -18,7 +18,6 @@ const Page: React.FC = () => {
   const {data, error, mutate, isLoading} = useSWR(`/admin/users`, getAllUsers)
   const usersData = data?.data?.data;
   const total = usersData?.total ?? 0;
-   console.log('usersData:', usersData);
    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
    const [selectedId, setSelectedId] = useState('');
 

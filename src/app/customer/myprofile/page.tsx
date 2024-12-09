@@ -7,12 +7,13 @@ import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
 import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
 import ClientProfileProjects from "../components/ClientProfileProjects";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const session = useSession();
   const [formData, setFormData] = useState<any>({
-    fullName: "",
+    fullName: "", 
     phoneNumber: "",
     email: "",
     address: "",

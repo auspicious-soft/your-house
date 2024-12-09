@@ -1,56 +1,56 @@
-import NextAuth, { CredentialsSignin } from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-
+import NextAuth, { CredentialsSignin } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        email: { label: "Email", type: "email" },
+        // email: { label: "Email", type: "email" },
+        username: { label: "username", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials:any) => {
-        if (credentials.email) {
+      authorize: async (credentials: any) => {
+        if (credentials.username) {
           return {
-            email: credentials.email,
-            name: credentials.name,
+            username: credentials.username,
+            fullName: credentials.fullName,
             id: credentials._id,
             role: credentials.role,
-            onboardingCompleted: credentials.onboardingCompleted,
-            status: credentials.status
-          }
-        }
-        else {
-          throw new CredentialsSignin({ cause: 'Invalid credentials' })
+            profilePic: credentials.profilePic,
+          };
+        } else {
+          throw new CredentialsSignin({ cause: "Invalid credentials" });
         }
       },
     }),
   ],
   callbacks: {
-    jwt({ token, user}) {
+    jwt({ token, user, account, session, profile }) {
       if (user) {
-        token.id = user.id
-        token.role = (user as any).role
-        token.onboardingCompleted = (user as any).onboardingCompleted
-        token.status = (user as any).status
+        token.id = user.id;
+        token.username = (user as any).username;
+        token.fullName = (user as any).fullName;
+        token.picture = (user as any).profilePic;
+        token.role = (user as any).role;
       }
-      return token
+      return token;
     },
     session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
-        (session as any).user.role = token.role as string
-        (session as any).user.onboardingCompleted = token.onboardingCompleted as boolean
-        (session as any).user.status = token.status as string
+        session.user.id = token.id as string;
+        (session as any).user.fullName = token.fullName;
+        (session as any).user.username = token.username;
+        session.user.image = token.picture;
+        (session as any).user.role = token.role;
       }
-      return session
+      return session;
     },
   },
   pages: {
-    signIn: '/'
+    signIn: "/",
   },
   session: {
-    strategy: 'jwt'
+    strategy: "jwt",
   },
-  trustHost: true
-})
+  trustHost: true,
+});

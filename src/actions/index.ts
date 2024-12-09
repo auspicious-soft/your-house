@@ -11,12 +11,10 @@ export const loginAction = async (payload: any) => {
         if (res && res?.data?.success) {
             await signIn('credentials', {
                 username: payload.username,
-                 email: payload.email,
-                name: res?.data?.data.firstName + ' ' + res?.data?.data.lastName,
-                _id: res?.data?.data?._id,
+                fullName: res?.data?.data?.user?.fullName,
+                _id: res?.data?.data?.user?._id,
                 role: res?.data?.data?.user?.role,
-                // onboardingCompleted: res?.data?.data?.onboardingCompleted,
-                // status: res?.data?.data?.onboardingApplication?.status,
+                profilePic: res?.data?.data?.user?.profilePic,
                 redirect: false,
             })
         }

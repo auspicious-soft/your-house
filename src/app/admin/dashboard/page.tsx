@@ -17,7 +17,6 @@ const Home = () => {
   const [query, setQuery] = useState('');
   const { data, error, isLoading, mutate } = useSWR(`/admin/dashboard`, getDashboardStats);
   const dashboardData = data?.data?.data;
-  console.log('finalData:', dashboardData);
   const OverviewData = [
     {
       id: "1",
@@ -32,20 +31,6 @@ const Home = () => {
       bgColor: "#FF9A3E",
     },
   ];
-  const Projects =[
-    {
-      id: '1',
-      title: "Project 1",
-      progress: 50,
-      imgSrc: projectImg,
-    },
-    {
-      id: '2',
-      title: "Project 2",
-      progress: 76,
-      imgSrc: projectImg,
-    },
-  ]
 
   const openNewProject = () => {
     router.push(`/admin/new-project`);
@@ -99,7 +84,7 @@ const Home = () => {
             <ProjectsProgress
             key={data?._id}
             title={data?.projectName}
-            progress={data?.status}
+            progress={data?.status*25}
             imgSrc={data?.df}
             />
           ))}

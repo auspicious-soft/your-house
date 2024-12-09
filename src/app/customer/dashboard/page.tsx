@@ -8,26 +8,26 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ProgressIcon } from "@/utils/svgicons";
 import { Line } from "rc-progress";
+import { getDashboardData } from "@/services/client/client-service";
 
 const Home = () => {
   const session = useSession();
   const router = useRouter();
-  const { data, error, isLoading } = useSWR(
-    `/admin/dashboard?id=${session?.data?.user?.id}`
-  );
-  const finalData: any = data?.data;
+  const { data, error, isLoading } = useSWR(`/user/dashboard`, getDashboardData);
+  const finalData: any = data?.data?.data;
+  console.log('finalData:', finalData);
 
   const OverviewData = [
     {
       id: "1",
       title: "Ongoing Projects",
-      value: 18,
+      value: finalData?.ongoingProjectCount,
       bgColor: "#F44771",
     },
     {
       id: "2",
       title: "Completed Projects",
-      value: 18,
+      value: finalData?.completedProjectCount,
       bgColor: "#FF9A3E",
     },
   ];

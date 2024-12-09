@@ -30,7 +30,7 @@ const Page = () => {
   const {id} = useParams();
   const {data, error, mutate} = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data?.project;
-  console.log('project:', project);
+  console.log('projectttttt:', project);
   const userData = data?.data?.data?.user;
 
   const [date, setDate] = useState<Date | null>(new Date());

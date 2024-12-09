@@ -9,3 +9,7 @@ export const getClientsAllProjects  = async (route: string) => {
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.get(route)
 }
+export const getDashboardData = async (route: string) => {
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get(route)
+}

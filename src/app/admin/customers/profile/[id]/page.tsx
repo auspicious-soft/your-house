@@ -17,9 +17,8 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {data, error, mutate, isLoading} = useSWR(`/admin/users/${id}`, getSingleUser)
   const customerData = data?.data?.data;
-  console.log('customerData:', customerData);
   const associatedProjects = customerData?.projects
-
+ 
   const [formData, setFormData] = useState<any>({
      fullName: "",
     phoneNumber: "",

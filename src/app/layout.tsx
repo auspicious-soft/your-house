@@ -46,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProvider>
-          <Toaster richColors />
+        <Toaster richColors />
         <body className={`${SFProDisplay.variable} ${SFProDisplaySemibold.variable} ${SFProDisplayMedium.variable} ${SFProDisplayBold.variable} ${SFProDisplayThin.variable}`}>
           {children}
         </body>

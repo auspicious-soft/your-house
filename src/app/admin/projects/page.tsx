@@ -5,7 +5,6 @@ import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
 import Modal from 'react-modal';
 import { toast } from "sonner";
-import router from "next/router";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import OnGoingProjects from "../components/OnGoingProjects";
@@ -17,7 +16,7 @@ const Page = () => {
   const [query, setQuery] = useState('page=1&limit=10');
   const {data, error, isLoading, mutate} = useSWR(`/admin/projects?state=${activeTab === 'On-going Projects' ? "completed" : 'ongoing'}&${query}`, getAllProjects)
   const projectsData = data?.data;
-  console.log('projectsData:', projectsData);
+  const router = useRouter();
 
   const renderTabContent = () => {
     switch (activeTab) {

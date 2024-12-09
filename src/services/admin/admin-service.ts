@@ -8,11 +8,11 @@ export const resetUserPassword = async (payload: any) => await axiosInstance.pat
 
 
 export const getDashboardStats = async (route: string) => {
-    const axiosInstance = await getAxiosInstance()
+    const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
 export const deleteProject = async (route: string) => {
-    const axiosInstance = await getAxiosInstance()
+    const axiosInstance = await getAxiosInstance() 
     return axiosInstance.delete(route)
 }
 export const getSingleProject = async (route: string) => {
@@ -35,8 +35,7 @@ export const getSingleUser = async (route: string) => {
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.get(route)
 }
-
-// export const updateAlerts = async (route: string, payload: any) => {
-//     const axiosInstance = await getAxiosInstance();
-//     return axiosInstance.patch(route, payload);
-// };
+export const addNewProject = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance();
+    return axiosInstance.post(route, payload);
+};

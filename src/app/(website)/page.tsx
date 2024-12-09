@@ -21,9 +21,9 @@ const Page: React.FC = () => {
   useEffect(() => {
     if (session) {
       if ((session as any)?.user?.role === "user") {
-        router.push("/customer/dashboard");
+        window.location.href = "/customer/dashboard"
       } else {
-        router.push("/admin/dashboard");
+        window.location.href = "/admin/dashboard"
       }
     }
   }, [router, session]);

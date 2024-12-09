@@ -17,10 +17,8 @@ interface recentProjectsProps {
 }
 
 const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, isLoading, error, setQuery}) => {
-  console.log('recentProjects:', recentProjects);
+
   const total = recentProjects?.total ?? 0
-  // const total = projectsData?.total ?? 0;
-  console.log('total:', total);
   const router= useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
@@ -41,7 +39,6 @@ const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, 
     setSelectedId(id);
   };
   const handleDelete = async () => {
-    console.log("fgdgfhd");
     try {
       const response = await deleteProject(`/admin/project/${selectedId}`); 
       if (response.status === 200) {

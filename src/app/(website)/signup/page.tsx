@@ -1,10 +1,8 @@
 "use client";
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
-import ReactPlayer from "react-player";
 import InputField from "@/app/(website)/components/InputField";
 import Image from "next/image";
-import animate from "@/assets/images/loginslide.png"
 import { toast } from "sonner";
 //import { signUpTherapistService } from "@/services/therapist/therapist-service.";
 import { useRouter } from "next/navigation";
