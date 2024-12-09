@@ -19,14 +19,16 @@ interface OnGoingProps {
 const ClientOnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoading, setQuery, error}) => {
   const projects = projectsData?.data;
   const total = projectsData?.total ?? 0;
-  const router = useRouter();
- 
+  const router = useRouter(); 
 
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
   }
-  
+  const EditProjectData =(id: string) => {
+    router.push(`/customer/projects/project-profile/${id}`);
+  }
+
   return (
     <div>
     <div className="table-common overflo-custom mt-[20px] box-shadow">
@@ -62,6 +64,7 @@ const ClientOnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, is
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>
+              <td><button onClick={()=>EditProjectData(row?._id)}><EditIcon /> </button></td>
             </tr>
           ))
         ) : (

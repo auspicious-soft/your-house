@@ -1,14 +1,15 @@
 "use client";
 import Image from "next/image";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, startTransition, useEffect, useState } from "react";
 import imgNew from "@/assets/images/img13.png";
 import Modal from 'react-modal'
 import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
 import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
 import { useParams } from "next/navigation";
-import { getSingleUser } from "@/services/admin/admin-service";
+import { getSingleUser, updateSingleUser } from "@/services/admin/admin-service";
 import useSWR from "swr";
+import { toast } from "sonner";
 
 
 const Page = () => {
@@ -50,11 +51,29 @@ const Page = () => {
     });
   };
 
-
-  const handleSave = () => {
-    setIsModalOpen(false);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    startTransition(async () => {
+      try {
+        const response = await updateSingleUser( `/admin/users/${id}`,formData); 
+        console.log('formData:', formData);
+        if (response?.status === 200) {
+        setIsModalOpen(false);
+        mutate()
+          //setNotification("User Added Successfully");
+           toast.success("User details updated successfully");
+          
+        } else {
+          toast.error("Failed to add User Data");
+        }
+      } catch (error) {
+        console.error("Error adding User Data:", error);
+        toast.error("An error occurred while adding the User Data");
+      }
+    });
+    
   };
- 
   return ( 
     <div>
       <h2 className="section-title text-[#3C3F88]">Client Details</h2>
@@ -120,7 +139,8 @@ const Page = () => {
         onClose={() => setIsModalOpen(false)}
         formData={formData}
         handleInputChange={handleInputChange}
-        handleSave={handleSave}
+        handleSubmit={handleSubmit}
+        mutate={mutate}
       />
       <section className="mt-10">
         <h2 className="section-title">Associated Projects</h2>

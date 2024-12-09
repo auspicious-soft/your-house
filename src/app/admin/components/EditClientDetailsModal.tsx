@@ -1,27 +1,35 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import Modal from "react-modal";
 import Image from "next/image"; // Import Image for Next.js
 import { EditImageIcon } from "@/utils/svgicons";
 import prev from "@/assets/images/img13.png"
+import { toast } from "sonner";
+import { updateUserInfo } from "@/services/client/client-service";
+import { mutate } from "swr";
 const EditClientDetailsModal = ({
   isOpen,
   onClose,
   formData,
+  mutate,
   handleInputChange,
-  handleSave,
+  id,
+  handleSubmit,
 }: {
   isOpen: boolean;
+  id?: string;
+  mutate: any;
   onClose: () => void;
   formData: {
     fullName: string;
     phoneNumber: string | number;
     email: string;
     address: string;
+    profilePic: string;
   };
   handleInputChange: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
-  handleSave: () => void;
+  handleSubmit: () => void;
 }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -44,9 +52,9 @@ const EditClientDetailsModal = ({
       fileInput.click();
     }
   };
-  const handleSubmit = () => {
-    console.log();
-  };
+
+  
+
 
   return (
     <Modal
@@ -161,9 +169,9 @@ const EditClientDetailsModal = ({
             </div>
         <div className="w-full ">
           <button
-            onClick={handleSave} type="submit"
+             type="submit"
             className="w-full button !h-[44px] rounded-lg "
-            >Save Details
+            > Save Details
           </button>
         </div>
         </form>

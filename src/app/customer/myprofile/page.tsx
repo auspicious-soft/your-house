@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
 import imgNew from "@/assets/images/img13.png";
 import Modal from "react-modal";
 import { EditButtonIcon } from "@/utils/svgicons";
@@ -8,50 +8,81 @@ import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModa
 import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
 import ClientProfileProjects from "../components/ClientProfileProjects";
 import { useSession } from "next-auth/react";
+import useSWR from "swr";
+import { getUserInfo, updateUserInfo } from "@/services/client/client-service";
+import { toast } from "sonner";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const session = useSession();
+  const [isPending, startTransition] = useTransition();
+  const {data, error, mutate, isLoading} = useSWR(`/user/${session?.data?.user?.id}`, getUserInfo)
+  const customerData = data?.data?.data?.user;
   const [formData, setFormData] = useState<any>({
-    fullName: "", 
-    phoneNumber: "",
-    email: "",
-    address: "",
-  });
+    fullName: "",
+   phoneNumber: "",
+   email: "",
+   address: "",
+   profilePic: "",
+ });
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target as HTMLInputElement & { files: FileList };
+ useEffect(() => {
+  if (customerData) {
     setFormData({
-      ...formData,
-      [name]: name === "phoneNumber" ? Number(value) : value, // Convert phoneNumber to number
+      fullName: customerData.fullName || "",
+      phoneNumber: customerData.phoneNumber || "",
+      email: customerData.email || "",
+      address: customerData.address || "",
+      profilePic: customerData.profilePic || "",
     });
-  };
-  const handleSave = () => {
-    // Handle save logic
-    setIsModalOpen(false);
-  };
+  }
+}, [customerData]);
+
+
+const handleInputChange = (
+  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target as HTMLInputElement & { files: FileList };
+  setFormData({
+    ...formData,
+    [name]: name === "phoneNumber" ? value : value, 
+  });
+};
+
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  startTransition(async () => {
+    try {
+      const response = await updateUserInfo( `/user/${session?.data?.user?.id}`,formData); 
+      console.log('formData:', formData);
+      if (response?.status === 200) {
+      setIsModalOpen(false);
+      mutate()
+        //setNotification("User Added Successfully");
+         toast.success("User details updated successfully");
+        
+      } else {
+        toast.error("Failed to add User Data");
+      }
+    } catch (error) {
+      console.error("Error adding User Data:", error);
+      toast.error("An error occurred while adding the User Data");
+    }
+  });
+  
+};
 
   return (
     <div>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
-          <Image
-            src={imgNew}
-            alt="hjfg"
-            height={200}
-            width={200}
-            className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  "
-          />
-          <div>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="w-full !rounded-[3px] button !h-[40px] "
-            >
-              <EditButtonIcon /> Edit Details
-            </button>
-          </div>
+          {/* src={formData.profilePic || imgNew}  */}
+            <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />           
+        <div> 
+          <button  onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] "> 
+          <EditButtonIcon/> Edit Details
+        </button></div>
         </div>
         <div className="fomm-wrapper grid md:flex flex-wrap gap-5 ">
           <div className="w-full">
@@ -62,7 +93,7 @@ const Page = () => {
               value={formData.fullName}
               placeholder="Full Name"
               onChange={handleInputChange}
-              required
+              readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
@@ -73,7 +104,7 @@ const Page = () => {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               placeholder="Phone Number"
-              required
+              readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
@@ -84,7 +115,7 @@ const Page = () => {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="fullname@mail.com"
-              required
+              readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
@@ -95,7 +126,7 @@ const Page = () => {
               value={formData.address}
               onChange={handleInputChange}
               placeholder="emailaddress@mail.com"
-              required
+              readOnly
             />
           </div>
         </div>
@@ -106,15 +137,18 @@ const Page = () => {
         onClose={() => setIsModalOpen(false)}
         formData={formData}
         handleInputChange={handleInputChange}
-        handleSave={handleSave}
+        handleSubmit={handleSubmit}
+        id={session?.data?.user?.id}
+        mutate={mutate}
       />
 
-      <section className="mt-10">
+      {/* <section className="mt-10">
         <h2 className="section-title">My Projects</h2>
         <ClientProfileProjects />
-      </section>
+      </section> */}
     </div>
   );
 };
 
 export default Page;
+

@@ -12,30 +12,35 @@ export const getDashboardStats = async (route: string) => {
     return axiosInstance.get(route)
 }
 export const deleteProject = async (route: string) => {
-    const axiosInstance = await getAxiosInstance() 
+    const axiosInstance = await getAxiosInstance(true) 
     return axiosInstance.delete(route)
 }
 export const getSingleProject = async (route: string) => {
-    const axiosInstance = await getAxiosInstance()
+    const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
 export const getAllProjects = async (route: string) => {
-    const axiosInstance = await getAxiosInstance()
+    const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
 export const getAllUsers = async (route: string) => {
-    const axiosInstance = await getAxiosInstance()
+    const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
 export const deleteUsers = async (route: string) => {
-    const axiosInstance = await getAxiosInstance()
+    const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.delete(route)
 }
 export const getSingleUser = async (route: string) => {
-    const axiosInstance = await getAxiosInstance()
+    const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
+export const updateSingleUser = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.patch(route, payload)
+}
+
 export const addNewProject = async (route: string, payload: any) => {
-    const axiosInstance = await getAxiosInstance();
+    const axiosInstance = await getAxiosInstance(true);
     return axiosInstance.post(route, payload);
 };
