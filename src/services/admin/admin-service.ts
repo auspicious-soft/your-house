@@ -20,6 +20,14 @@ export const getSingleProject = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
+export const getNotesData = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.get(route)
+}
+export const deleteNotesData = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.delete(route)
+}
 export const updateSingleProjectData = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.patch(route, payload)

@@ -4,6 +4,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import localFont from 'next/font/local'
 import type { Metadata } from "next";
+import Providers from './(website)/components/ProgressBarProvider';
 
 const SFProDisplay = localFont({
   src: '../assets/fonts/SfProDisplayRegular.otf', //400
@@ -46,9 +47,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProvider>
+
         <Toaster richColors />
         <body className={`${SFProDisplay.variable} ${SFProDisplaySemibold.variable} ${SFProDisplayMedium.variable} ${SFProDisplayBold.variable} ${SFProDisplayThin.variable}`}>
+         <Providers>
           {children}
+         </Providers>
         </body>
       </SessionProvider>
     </html>

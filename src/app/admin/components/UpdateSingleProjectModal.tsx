@@ -134,16 +134,16 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
             projectstartDate: formData.projectstartDate,
             projectendDate: formData.projectendDate,
             description: formData.description,
-            attachments: formData.attachments.length > 0 
-              ? formData.attachments 
-              : ["https://example.com/attachments.zip"], // Default attachment if none
-            status: formData.status,
+            // attachments: formData.attachments.length > 0 
+            //   ? formData.attachments 
+            //   : ["https://example.com/attachments.zip"], // Default attachment if none
+            // status: formData.status,
             // notes: formData.notes 
             //   ? formData.notes.split(",").map(note => note.trim()).filter(note => note) 
             //   : [], 
-            // associates: associates.length > 0 
-            //   ? associates.map((associate: any) => associate.value) 
-            //   : [], 
+            associates: associates.length > 0 
+              ? associates.map((associate: any) => associate.value) 
+              : [], 
           };
   
         const response = await updateSingleProjectData(`/admin/project/${id}`, payload);
@@ -151,7 +151,7 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
         console.log('response:', response);
         
         if (response?.status === 200) {
-          setNotification("Project Added Successfully");
+          //setNotification("Project Added Successfully");
           mutate(); 
           onClose();
         } else {
@@ -178,7 +178,7 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
           <h2 className="section-projectName">About Project</h2>
-          <div className="grid md:flex flex-wrap gap-5 mb-[20px] md:mb-[33px] pb-[33px] relative progress-line">
+          <div className="grid md:flex flex-wrap gap-5 pb-[33px] relative ">
             <div className="md:w-[calc(66.66%-8px)]">
               <label className="block">Title</label>
               <input
@@ -201,7 +201,7 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
                 required
               />
             </div>
-            <div className="md:w-[calc(50%-10px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">Start Date</label>
               <input
                 type="date"
@@ -212,7 +212,7 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
                 required
               />
             </div>
-            <div className="md:w-[calc(50%-10px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">Expected End Date</label>
               <input
                 type="date"
@@ -222,6 +222,20 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
                 placeholder=""
                 required
               />
+            </div>
+            <div className="md:w-[calc(33.33%-14px)]">
+              <label className="block">Status</label>
+              <select 
+            name="status" 
+            value={formData.status} 
+            onChange={handleInputChange}
+          >
+            <option value="">Select Status</option>
+            <option value="1">Foundation</option>
+            <option value="2">Construction</option>
+            <option value="3">Interior Work</option>
+            <option value="4">Completed</option>
+          </select>
             </div>
             <div className="md:w-[calc(50%-14px)]">
               <label className="block">Assign Customer</label>
@@ -250,36 +264,6 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
                 value={formData.description}
                 onChange={handleInputChange}
                 placeholder="Description"
-              ></textarea>
-            </div>
-          </div>
-          <h2 className="section-projectName">Project Progress</h2>
-          <div className="grid md:flex flex-wrap gap-5 ">
-            <div className="md:w-[calc(50%-10px)]">
-              <label className="block">Attachments</label>
-              <input type="file" id="myfile" name="myfile" />
-            </div>
-            <div className="md:w-[calc(50%-10px)]">
-              <label className="block">Status</label>
-              <select 
-            name="status" 
-            value={formData.status} 
-            onChange={handleInputChange}
-          >
-            <option value="">Select Status</option>
-            <option value="1">Foundation</option>
-            <option value="2">Construction</option>
-            <option value="3">Interior Work</option>
-            <option value="4">Completed</option>
-          </select>
-            </div>
-            <div className="w-full">
-              <label className="block">Add Notes</label>
-              <textarea
-                name="notes"
-                value={formData.notes}
-                onChange={handleInputChange}
-                placeholder="Add Notes"
               ></textarea>
             </div>
           </div>

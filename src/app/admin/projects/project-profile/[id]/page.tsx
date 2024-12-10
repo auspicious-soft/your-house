@@ -82,7 +82,7 @@ const Page = () => {
       case "Notes":
         return (
           <div>
-            <Notes note={project?.notes} />
+            <Notes id={id} />
           </div>
         );
       default:
@@ -100,7 +100,7 @@ const Page = () => {
       <div className="grid grid-cols-[1fr] md:grid-cols-[2fr_1fr] lg:grid-cols-[1fr_309px] gap-5">
         <div className="bg-white rounded-[10px] md:rounded-[30px] box-shadow ">
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10">
-            <h2 className="main-heading">{project?.projectName}</h2>
+            <h2 className="main-heading capitalize">{project?.projectName}</h2>
             <button  onClick={() => setIsModalOpen(true)} className="!rounded-[3px] !h-[37px] button !px-4 ">
               <AddIcon className="w-4 h-4" /> Edit Project Details
             </button>
