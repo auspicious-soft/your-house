@@ -11,6 +11,7 @@ export const getDashboardStats = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
+
 export const deleteProject = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true) 
     return axiosInstance.delete(route)
@@ -18,6 +19,10 @@ export const deleteProject = async (route: string) => {
 export const getSingleProject = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
+}
+export const updateSingleProjectData = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.patch(route, payload)
 }
 export const getAllProjects = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)

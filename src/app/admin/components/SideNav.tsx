@@ -46,13 +46,14 @@ const SideNav = () => {
               Dashboard
             </Link>
           </li>
-          <li className={isActive('/admin/projects')}>
+          <li className={`${isActive('/admin/projects')} ${pathname.startsWith('/admin/projects/project-profile') ? 'active' : '' }`}>
             <Link href="/admin/projects"> 
             {isActive('/admin/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
               Projects
             </Link>
           </li>
-          <li className={isActive('/admin/customers')}>
+          <li className={`${isActive('/admin/customers')} ${pathname.startsWith('/admin/customers/profile') ? 'active' : ''}`}>
+          {/* {isActive('/admin/customers')}> */}
             <Link href="/admin/customers">
              {isActive('/admin/customers') ? <CustomerActiveIcon /> : <CustomerIcon />}
               Customers

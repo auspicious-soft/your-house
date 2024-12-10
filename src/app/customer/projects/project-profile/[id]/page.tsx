@@ -90,7 +90,7 @@ const Page = () => {
       case "Status":
         return (
           <div>
-            <CompletedProjects />
+            {/* <CompletedProjects /> */}
           </div>
         );
       case "Notes":

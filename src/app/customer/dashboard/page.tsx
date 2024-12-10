@@ -15,8 +15,8 @@ const Home = () => {
   const router = useRouter();
   const { data, error, isLoading } = useSWR(`/user/dashboard`, getDashboardData);
   const finalData: any = data?.data?.data;
-  console.log('finalData:', finalData);
-
+  console.log('finalDataaaaaaaaa:', finalData);
+ const onGoingProjects = finalData?.workingProjectDetails;
   const OverviewData = [
     {
       id: "1",
@@ -63,10 +63,6 @@ const Home = () => {
     // Add more projects as needed
   ];
 
-  const openNewProject = () => {
-    router.push(`/admin/new-project`);
-  };
-
   return (
     <>
       <h2 className="section-title">Monthly Overview</h2>
@@ -98,27 +94,27 @@ const Home = () => {
         <div className="bg-white rounded-[10px]  md:rounded-[30px] ">
           <div className="progress-container">
             <h2 className="section-title pt-[30px] px-[30px] ">
-              {projects.length} Ongoing Projects
+              {onGoingProjects?.length} Ongoing Projects
             </h2>
 
-            {projects.map((project) => (
+            {onGoingProjects?.map((row: any) => (
               <div
-                key={project.id}
+                key={row?._id}
                 className="project-card py-5 px-[30px] even:bg-[#F3F6FF] "
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <Image
-                      src={project.image}
-                      alt={project.name}
+                      src={row?.image}
+                      alt={row?.name}
                       height={40}
                       width={40}
                       className="max-w-10 max-h-10 object-cover rounded-full"
                     />
-                    <span className="text-[#353E6C] ">{project.name}</span>
+                    <span className="text-[#353E6C] ">{row?.projectName}</span>
                   </div>
                   <div className="bg-[#FF16A2] text-white px-4 py-[7px] rounded-[5px] text-base">
-                    {project.progress}%
+                    {row?.status*25}%
                   </div>
                 </div>
 
@@ -126,7 +122,7 @@ const Home = () => {
                   {steps.map((step) => (
                     <div key={step.id} className="progress-step text-center">
                       <div className="checked flex justify-center mb-2.5">
-                        {project.completedSteps >= step.id ? (
+                        {row?.status >= step.id ? (
                           <ProgressIcon className="fill-[#FF16A2]" />
                         ) : (
                           <ProgressIcon className="fill-[#E4E4E4]" />
@@ -134,7 +130,7 @@ const Home = () => {
                       </div>
                       <span
                         className={`text-sm font-sfproDisplaymedium ${
-                          project.completedSteps >= step.id
+                          row?.completedSteps >= step.id
                             ? "text-[#43527B]"
                             : "text-[#8B8E98]"
                         }`}
@@ -146,7 +142,7 @@ const Home = () => {
                 </div>
 
                 <Line
-                  percent={project.progress}
+                  percent={row?.status*25}
                   strokeWidth={0.8}
                   strokeColor="#FF16A2"
                   className="rounded-xl mt-3"

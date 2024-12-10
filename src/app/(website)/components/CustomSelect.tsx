@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import Select, { StylesConfig, OptionsOrGroups, GroupBase, ActionMeta, MultiValue, SingleValue } from "react-select";
 

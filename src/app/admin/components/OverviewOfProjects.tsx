@@ -1,49 +1,33 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import pdfImg from '@/assets/images/PDF.png';
 import { DeleteIcon, DownloadIcon, EditButtonIcon, EditIcon } from '@/utils/svgicons';
 
 
-interface FileItem {
-    name: string;
-    uploadedBy: string;
-    time: string;
-  }
-  export const fileItems: FileItem[] = [
-       {
-         name: 'Lorem Ipsum Name of the file.pdf',
-         uploadedBy: 'Neil Metender',
-         time: '11:23 AM',
-       },
-       {
-         name: 'Lorem Ipsum Name of the file.pdf',
-         uploadedBy: 'Neil Metender',
-         time: '11:24 AM',
-       },
-       {
-         name: 'Lorem Ipsum Name of the file.pdf',
-         uploadedBy: 'Neil Metender',
-         time: '11:24 AM',
-       },
-     ];
-const OverviewOfProjects: React.FC = () => {
+interface OverViewProps {
+  overView: any;
+  } 
+const OverviewOfProjects: React.FC<OverViewProps> = ({overView}) => {
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+
+
     return (
         <div className=''>
-        {fileItems.map((file, index) => (
+        {overView?.map((index: any) => (
         <div key={index} className="flex justify-between items-center mb-5">
           <div className='flex items-center gap-3 '>
             <div><Image src={pdfImg} alt='' /> </div>
           <div>
-            <p className="text-[#43527B] text-sm  ">{file.name}</p>
+            <p className="text-[#43527B] text-sm  ">{index?.filePath}</p>
             <p className="text-[#8B8E98] text-xs mt-1  ">
-              Uploaded by {file.uploadedBy} <span className='ml-5'>Time: {file.time}</span>
+              Uploaded by {index?.uploadedBy?.fullName} <span className='ml-5'>Time: </span>
             </p>
           </div>
           </div>
          <div className="flex gap-[6px]  ">
-         <button>
-            <DownloadIcon />
-          </button>
+          <a href={index?.filePath} target='blank'><DownloadIcon /></a>
           <button><DeleteIcon /> </button>
          </div>
         </div>

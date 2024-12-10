@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
     }
 })
 
-const createAuthInstance = async (adminRole?: boolean = false) => {
+const createAuthInstance = async (adminRole: boolean = false) => {
     try {
         const token = await getTokenCustom();
         return axios.create({

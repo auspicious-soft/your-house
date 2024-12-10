@@ -1,27 +1,39 @@
 "use client";
-import React, { ChangeEvent, FormEvent, useState, useTransition } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
 import Image from "next/image";
 import success from "@/assets/images/succes.png";
 import Notification from "../components/Notification";
 import { toast } from "sonner";
 import { AddIcon } from "@/utils/svgicons";
 import CustomSelect from "@/app/(website)/components/CustomSelect";
-import { addNewProject } from "@/services/admin/admin-service";
+import { addNewProject, updateSingleProjectData } from "@/services/admin/admin-service";
 import useClients from "@/utils/useClients";
+import Modal from "react-modal";
 
-const option = [
-  { label: "Associate 1", value: "Associate 1" },
-  { label: "Associate 2", value: "Associate 2" },
-  { label: "Associate 3", value: "Associate 3" },
-  { label: "Associate 4", value: "Associate 4" },
-  { label: "Associate 5", value: "Associate 5" },
-  { label: "Associate 6", value: "Associate 6" },
-  { label: "Associate 7", value: "Associate 7" },
-  { label: "Associate 8", value: "Associate 8" },
-  { label: "Associate 9", value: "Associate 9" },
-  { label: "Associate 10", value: "Associate 10" },
+
+export const option = [
+    { label: "Associate 1", value: "Associate 1" },
+    { label: "Associate 2", value: "Associate 2" },
+    { label: "Associate 3", value: "Associate 3" },
+    { label: "Associate 4", value: "Associate 4" },
+    { label: "Associate 5", value: "Associate 5" },
+    { label: "Associate 6", value: "Associate 6" },
+    { label: "Associate 7", value: "Associate 7" },
+    { label: "Associate 8", value: "Associate 8" },
+    { label: "Associate 9", value: "Associate 9" },
+    { label: "Associate 10", value: "Associate 10" },
 ];
-const Page = () => {
+
+interface UpdateProps {
+  isOpen: boolean;
+  id?: any;
+  data: any;
+  mutate?: any;
+  onClose: () => void;
+  
+}
+const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, data, mutate}) => {
+    console.log('data:', data);
   const [notification, setNotification] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
@@ -40,6 +52,39 @@ const Page = () => {
     notes: [],
   });
 
+  useEffect(() => {
+    if (data) {
+      // Prepare initial form data from the prop
+      setFormData({
+        projectName: data.projectName || "",
+        projectimageLink: data.projectimageLink || "",
+        projectstartDate: data.projectstartDate || "",
+        projectendDate: data.projectendDate || "",
+        description: data.description || "",
+        attachments: data.attachments?.map((att: any) => att.filePath) || [],
+        status: data.status || "",
+        notes: data.notes || [],
+      });
+
+      // Set selected user if user data exists
+      if (data.userId) {
+        setSelectedUser({
+          id: data.userId._id,
+          label: data.userId.fullName,
+          value: data.userId._id
+        });
+      }
+
+      // Set associates if they exist
+      if (data.associates && data.associates.length > 0) {
+        const selectedAssociates = data.associates.map((assoc: string) => ({
+          label: assoc,
+          value: assoc
+        }));
+        setAssociates(selectedAssociates);
+      }
+    }
+  }, [data]);
 
   const handleUserChange = (selected: any) => {
     setSelectedUser(selected);
@@ -83,41 +128,32 @@ const Page = () => {
       try {
         // Prepare the payload to match the Postman example
         const payload = {
-          projectName: formData.projectName,
-          userId: selectedUser ? selectedUser.id : "", // Ensure userId is from selected user
-          projectimageLink: formData.projectimageLink,
-          projectstartDate: formData.projectstartDate,
-          projectendDate: formData.projectendDate,
-          description: formData.description,
-          attachments: formData.attachments.length > 0 
-            ? formData.attachments 
-            : ["https://example.com/attachments.zip"], // Default attachment if none
-          status: formData.status,
-          notes: formData.notes ? [formData.notes] : [], // Ensure notes is an array of strings
-          associates: associates 
-            ? associates.map((associate: any) => associate.value) 
-            : ["james", "Micheal"] // Default associates if none selected
-        };
+            projectName: formData.projectName,
+            userId: selectedUser ? selectedUser.id : "", // Ensure userId is from selected user
+            projectimageLink: formData.projectimageLink,
+            projectstartDate: formData.projectstartDate,
+            projectendDate: formData.projectendDate,
+            description: formData.description,
+            attachments: formData.attachments.length > 0 
+              ? formData.attachments 
+              : ["https://example.com/attachments.zip"], // Default attachment if none
+            status: formData.status,
+            // notes: formData.notes 
+            //   ? formData.notes.split(",").map(note => note.trim()).filter(note => note) 
+            //   : [], 
+            // associates: associates.length > 0 
+            //   ? associates.map((associate: any) => associate.value) 
+            //   : [], 
+          };
   
-        const response = await addNewProject("/admin/projects", payload);
+        const response = await updateSingleProjectData(`/admin/project/${id}`, payload);
+        console.log('payload:', payload);
+        console.log('response:', response);
         
-        if (response?.status === 201) {
+        if (response?.status === 200) {
           setNotification("Project Added Successfully");
-          
-          // Reset form after successful submission
-          setFormData({
-            projectName: "",
-            projectimageLink: "",
-            projectstartDate: "",
-            projectendDate: "",
-            userId: "",
-            description: "",
-            attachments: [],
-            status: "",
-            notes: "",
-          });
-          setSelectedUser(null);
-          setAssociates("");
+          mutate(); 
+          onClose();
         } else {
           toast.error("Failed to add project");
         }
@@ -130,7 +166,15 @@ const Page = () => {
 
 
   return (
-    <>
+    <Modal
+    isOpen={isOpen}
+    onRequestClose={onClose}
+    bodyOpenClassName='overflow-hidden'
+    contentLabel="Edit Client Details"
+    className="modal max-w-[1081px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
+    overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
+    ariaHideApp={false}
+  >
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
           <h2 className="section-projectName">About Project</h2>
@@ -247,7 +291,7 @@ const Page = () => {
             >
               {" "}
               <AddIcon className="w-4 h-4" />
-              {isPending ? "Adding..." : "Add New Project"}
+              {isPending ? "Updating..." : "Update Project Details"}
             </button>
           </div>
         </form>
@@ -256,7 +300,7 @@ const Page = () => {
           onClose={() => setNotification(null)}
         />
       </div>
-    </>
+    </Modal>
   );
 };
-export default Page;
+export default UpdateSingleProjectModal;

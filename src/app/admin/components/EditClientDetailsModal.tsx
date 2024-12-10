@@ -29,7 +29,7 @@ const EditClientDetailsModal = ({
   handleInputChange: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
-  handleSubmit: () => void;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
 }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 

@@ -1,24 +1,16 @@
 import { DeleteIcon, EditButtonIcon, NotesIcon } from '@/utils/svgicons';
 import React from 'react';
 
-const Notes = () => {
-    const NotesData = [
-        {
-          note: 'Lorem Ipsum Name of the file.pdf',
-         },
-         {
-            note: 'Lorem Ipsum Name of the file.pdf',
-        },
-        {
-            note: 'Lorem Ipsum Name of the file.pdf',
-        },
-      ];
-    return (
+interface Notes {
+  note: any;
+}
+const Notes: React.FC<Notes> = ({note}) => {
+  return (
         <div>
-         {NotesData.map((data, index) => (
-             <div key={index} className="grid grid-cols-[auto_1fr_auto] gap-3  mb-[10px] ">
+         {note?.map((data: any) => (
+             <div key={data} className="grid grid-cols-[auto_1fr_auto] gap-3  mb-[10px] ">
                 <span><NotesIcon /> </span>
-                <p className='text-[#8B8E98]  '>{data.note} </p>
+                <p className='text-[#8B8E98]  '>{data} </p>
                 <button><DeleteIcon /> </button>
             </div>
             ))}

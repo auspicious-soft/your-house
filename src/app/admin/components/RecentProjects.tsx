@@ -18,7 +18,7 @@ interface recentProjectsProps {
 
 const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, isLoading, error, setQuery}) => {
 
-  const total = recentProjects?.total ?? 0
+  const total = recentProjects?.total ?? 0;
   const router= useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
@@ -53,9 +53,9 @@ const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, 
       toast.error("An error occurred while deleting the Client");
     }
   }
-  const EditProjectData =(id: string) => {
+const EditProjectData =(id: string) => {
     router.push(`/admin/projects/project-profile/${id}`);
-   }
+}
 
 
   return (
@@ -129,7 +129,7 @@ const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, 
           disabledClassName={'opacity-50 cursor-not-allowed'}
         />
       </div>
-       <DeleteDataModal
+      <DeleteDataModal
       isOpen={isDeleteModalOpen}
       onClose={() =>setIsDeleteModalOpen(false)}
       title='Are you sure you want to delete this project?'

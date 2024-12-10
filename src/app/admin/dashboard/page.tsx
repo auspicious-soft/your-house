@@ -73,7 +73,7 @@ const Home = () => {
             </div>
             <AddIcon />
           </div>
-        </div>
+        </div> 
       </div>
 
       <section className="mt-10">

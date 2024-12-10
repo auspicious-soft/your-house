@@ -25,16 +25,23 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { getSingleProject } from "@/services/admin/admin-service";
+import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProjectModal";
+import dayjs from "dayjs";
 
 const Page = () => {
   const {id} = useParams();
   const {data, error, mutate} = useSWR(`/admin/project/${id}`, getSingleProject);
-  const project = data?.data?.data?.project;
-  console.log('projectttttt:', project);
-  const userData = data?.data?.data?.user;
-
+  const project = data?.data?.data;
+  console.log('project:', project);
+  const userData = data?.data?.data?.userId;
+  
+  const [startDate, setStartDate] = useState(
+    project?.projectstartDate ? dayjs(project.projectstartDate) : dayjs()
+  );
   const [date, setDate] = useState<Date | null>(new Date());
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const [activeTab, setActiveTab] = useState("Overview");
 
@@ -46,24 +53,36 @@ const Page = () => {
     { id: 4, label: "Completed", value: 100 },
   ];
 
+  useEffect(() => {
+    const statusToProgress = { 
+      '1': 25,
+      '2': 50,
+      '3': 75,
+      '4': 100
+    };
+    const numericStatus = String(project?.status);
+    const calculatedProgress = (statusToProgress as any)[numericStatus] || 0;
+    setProgress(calculatedProgress);
+  }, [project?.status]);
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "Overview":
         return (
           <div>
-            <OverviewOfProjects />
+            <OverviewOfProjects overView={project?.attachments} />
           </div>
         );
       case "Status":
         return (
           <div>
-            <CompletedProjects />
+            {/* <CompletedProjects /> */}
           </div>
         );
       case "Notes":
         return (
           <div>
-            <Notes />{" "}
+            <Notes note={project?.notes} />
           </div>
         );
       default:
@@ -74,29 +93,7 @@ const Page = () => {
   useEffect(() => {
   }, [activeTab]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setImagePreview(result);
-        // setFormData((prevData) => ({
-        //   ...prevData,
-        //   image: result,
-        // }));
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
 
-  const triggerFileInputClick = () => {
-    const fileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
-    }
-  };
 
   return (
     <div>
@@ -104,8 +101,8 @@ const Page = () => {
         <div className="bg-white rounded-[10px] md:rounded-[30px] box-shadow ">
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10">
             <h2 className="main-heading">{project?.projectName}</h2>
-            <button className="!rounded-[3px] !h-[37px] button !px-4 ">
-              <AddIcon className="w-4 h-4" /> Edit Name
+            <button  onClick={() => setIsModalOpen(true)} className="!rounded-[3px] !h-[37px] button !px-4 ">
+              <AddIcon className="w-4 h-4" /> Edit Project Details
             </button>
           </div>
           <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
@@ -114,17 +111,17 @@ const Page = () => {
                 <label className="block text-[#8B8E98] text-[14px] ">
                   Starting Date
                 </label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer
-                    components={["DatePicker", "DatePicker", "DatePicker"]}
-                  >
-                    <DatePicker
-                   // value={project?.projectstartDate}
-                      //   label={'"year", "month" and "day"'}
-                    views={["year", "month", "day"]}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DatePicker", "DatePicker"]}>
+          <DatePicker
+            defaultValue={project?.projectstartDate ? dayjs(project.projectstartDate) : null}
+            value={project?.projectstartDate ? dayjs(project.projectstartDate) : null}
+            views={["year", "month", "day"]}
+          />
+           
+
+        </DemoContainer>
+      </LocalizationProvider>
               </div>
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
@@ -134,7 +131,11 @@ const Page = () => {
                   <DemoContainer
                     components={["DatePicker", "DatePicker", "DatePicker"]}
                   >
-                    <DatePicker views={["year", "month", "day"]} />
+                   <DatePicker
+            defaultValue={project?.projectendDate ? dayjs(project.projectendDate) : null}
+            value={project?.projectendDate ? dayjs(project.projectendDate) : null}
+            views={["year", "month", "day"]}
+          />
                   </DemoContainer>
                 </LocalizationProvider>
               </div>
@@ -218,56 +219,50 @@ const Page = () => {
                 </div>
               </div>
             </div>
-            <h2 className="section-title !m-0 text-center">Morgan Melendez</h2>
+            <h2 className="section-title !m-0 text-center">{userData?.fullName}</h2>
           </div>
           <div className="px-[30px] py-5 ">
             <div className="flex gap-[15px] mb-4  ">
-              <span>
-                <CallIcon />{" "}
-              </span>
-              <p className="text-sm text-[#8B8E98] ">+1 (734) 412-4178</p>
+              <span><CallIcon /></span>
+              <p className="text-sm text-[#8B8E98] ">{userData?.phoneNumber}</p>
             </div>
             <div className="flex gap-[15px] mb-4  ">
-              <span>
-                <MailIcon />{" "}
-              </span>
+              <span><MailIcon /></span>
               <p className="text-sm text-[#8B8E98] ">
-                morganmelendez1122@gmail.com
+                {userData?.email}
               </p>
             </div>
             <div className="flex gap-[15px]  ">
-              <span>
-                <MapIcon />{" "}
-              </span>
+              <span><MapIcon /></span>
               <p className="text-sm text-[#8B8E98] ">
-                klausdalsbrovej 309, 4 hus 109 2730 Herlev
+                {userData?.address}
               </p>
             </div>
-
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
                 Description <EditProfile />
               </h3>
-              <p className="text-[#8B8E98] text-sm  ">
-                Customers value our decade-long reliability and quality,
-                demonstrated through consistent loyalty and referrals. This
-                trust underscores our commitment to delivering exceptional
-                software development services.
+              <p className="text-[#8B8E98] text-sm  ">{project?.description}
               </p>
             </div>
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
                 Employees Associated <EditProfile />
               </h3>
-              <p className="text-[#8B8E98] text-sm  ">
-                James Anderson, Emma Johnson, Michael Brown, Olivia Martinez,
-                William Davis, Sophia Garcia, Ethan Wilson, Isabella Taylor,
-                Alexander Thomas, Ava Harris
-              </p>
+                {project?.associates?.map((index: any)=>(
+                 <p className="text-[#8B8E98] text-sm capitalize " key={index}>{index} </p>
+                ))}
+                
             </div>
           </div>
         </div>
       </div>
+      <UpdateSingleProjectModal 
+      id={id} 
+      data={project} 
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
