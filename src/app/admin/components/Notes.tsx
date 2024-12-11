@@ -1,6 +1,6 @@
-import { deleteNotesData, getNotesData } from '@/services/admin/admin-service';
-import { DeleteIcon, EditButtonIcon, NotesIcon } from '@/utils/svgicons';
-import React, { useState } from 'react';
+import { addNotesData, deleteNotesData, getNotesData } from '@/services/admin/admin-service';
+import { AddFileIcon, DeleteIcon, EditButtonIcon, NotesIcon } from '@/utils/svgicons';
+import React, { useState, useTransition } from 'react';
 import useSWR from 'swr';
 import Modal from "react-modal";
 import { toast } from 'sonner';
@@ -13,10 +13,9 @@ const Notes: React.FC<Notes> = ({id}) => {
   const {data, isLoading, error, mutate} = useSWR(`/admin/notes/${id}`, getNotesData)
   const notes = data?.data?.data
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [text, setText] = useState<string>("");
 
-  console.log('notessssssssssss:', notes);
 
-  // const deleteNote =(id: any) =>{
   const deleteNote = async (id: any) => {
     try {
       const response = await deleteNotesData(`/admin/notes/${id}`); 
@@ -32,6 +31,32 @@ const Notes: React.FC<Notes> = ({id}) => {
       toast.error("An error occurred while deleting the Note");
     }
   }
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!text.trim()) {
+      toast.error("Text cannot be empty");
+      return;
+    }
+    try {
+      const notesData = { text };
+      console.log('notesData:', notesData);
+      const response = await addNotesData(`/admin/notes/${id}`, notesData)
+      console.log('response:', response);
+      if (response?.status === 201) {
+        toast.success("Note added successfully");
+        setIsModalOpen(false);
+        mutate()
+        setText("")
+      } else {
+        toast.error("Failed to add Note");
+      }
+    } catch (error) {
+      console.error("Error adding Note", error);
+      toast.error("An error occurred while adding the Note");
+    }
+  }
   return (
         <div>
          {notes?.map((row: any) => (
@@ -42,19 +67,25 @@ const Notes: React.FC<Notes> = ({id}) => {
             </div>
             ))}
             <div className="mt-4">
-        <button className="w-full button !h-[40px] "> <EditButtonIcon/>
+        <button  onClick={()=>setIsModalOpen(true)} className="w-full button !h-[40px] "> <EditButtonIcon/>
           Upload New Note
         </button>
       </div>
       <Modal
-    isOpen={isModalOpen}
-    onRequestClose={()=>setIsModalOpen(false)}
-    bodyOpenClassName='overflow-hidden'
-    contentLabel="Edit Client Details"
-    className="modal max-w-[1081px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
-    overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
-    ariaHideApp={false}
-  >
+      isOpen={isModalOpen}
+      onRequestClose={()=>setIsModalOpen(false)}
+      bodyOpenClassName='overflow-hidden'
+      contentLabel="Edit Client Details"
+      className="modal max-w-[600px] bg-white mx-auto rounded-[20px] w-full max-h-[90vh] "
+      overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
+      ariaHideApp={false}>
+  <div className='overflow-y-auto overflow-custom p-5'>
+    <h2 className="mb-2 ">New Note</h2>
+    <form onSubmit={handleSubmit} className="fomm-wrapper">
+      <textarea name="text" value={text} onChange={(e)=>setText(e.target.value)} aria-required placeholder="Enter your note here" required></textarea>
+      <button type="submit" className='button w-full mt-5'><AddFileIcon/> Add Note</button>
+    </form>
+  </div>
   </Modal>
 
     </div>

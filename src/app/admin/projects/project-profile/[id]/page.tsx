@@ -32,7 +32,6 @@ const Page = () => {
   const {id} = useParams();
   const {data, error, mutate} = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data;
-  console.log('project:', project);
   const userData = data?.data?.data?.userId;
   
   const [startDate, setStartDate] = useState(
@@ -70,7 +69,7 @@ const Page = () => {
       case "Overview":
         return (
           <div>
-            <OverviewOfProjects overView={project?.attachments} />
+            <OverviewOfProjects id={id} />
           </div>
         );
       case "Status":

@@ -28,6 +28,23 @@ export const deleteNotesData = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.delete(route)
 }
+export const addNotesData = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true);
+    return axiosInstance.post(route, payload);
+};
+export const getAttachmentsData = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.get(route)
+}
+export const deleteAttachmentsData = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.delete(route)
+}
+export const addAttachmentsData = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true);
+    return axiosInstance.post(route, payload);
+};
+
 export const updateSingleProjectData = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.patch(route, payload)

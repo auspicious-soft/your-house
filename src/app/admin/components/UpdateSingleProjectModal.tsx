@@ -126,21 +126,13 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
     
     startTransition(async () => {
       try {
-        // Prepare the payload to match the Postman example
         const payload = {
             projectName: formData.projectName,
-            userId: selectedUser ? selectedUser.id : "", // Ensure userId is from selected user
             projectimageLink: formData.projectimageLink,
             projectstartDate: formData.projectstartDate,
             projectendDate: formData.projectendDate,
             description: formData.description,
-            // attachments: formData.attachments.length > 0 
-            //   ? formData.attachments 
-            //   : ["https://example.com/attachments.zip"], // Default attachment if none
-            // status: formData.status,
-            // notes: formData.notes 
-            //   ? formData.notes.split(",").map(note => note.trim()).filter(note => note) 
-            //   : [], 
+             status: formData.status,
             associates: associates.length > 0 
               ? associates.map((associate: any) => associate.value) 
               : [], 
@@ -151,6 +143,7 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
         console.log('response:', response);
         
         if (response?.status === 200) {
+        toast.success("Updated successfully");
           //setNotification("Project Added Successfully");
           mutate(); 
           onClose();
@@ -162,7 +155,7 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
         toast.error("An error occurred while adding the project");
       }
     });
-  };
+  }; 
 
 
   return (
