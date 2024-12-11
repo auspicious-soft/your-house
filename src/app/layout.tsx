@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import Providers from './(website)/components/ProgressBarProvider';
 
 const SFProDisplay = localFont({
-  src: '../assets/fonts/SfProDisplayRegular.otf', //400
+  src: '../assets/fonts/SfProDisplayRegular.otf', 
   display: 'swap',
   variable: '--font-SF-Pro-Display', 
 })
@@ -17,7 +17,7 @@ const SFProDisplaySemibold = localFont({
   variable: '--font-SF-Pro-Display-Semibold', 
 })
 const SFProDisplayMedium = localFont({
-  src: '../assets/fonts/SFProDisplayMedium.otf',  //500
+  src: '../assets/fonts/SFProDisplayMedium.otf',  
   display: 'swap',
   variable: '--font-SF-Pro-Display-Medium', 
 })
@@ -47,13 +47,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProvider>
-
         <Toaster richColors />
-        <body className={`${SFProDisplay.variable} ${SFProDisplaySemibold.variable} ${SFProDisplayMedium.variable} ${SFProDisplayBold.variable} ${SFProDisplayThin.variable}`}>
          <Providers>
+        <body className={`${SFProDisplay.variable} ${SFProDisplaySemibold.variable} ${SFProDisplayMedium.variable} ${SFProDisplayBold.variable} ${SFProDisplayThin.variable}`}>
           {children}
-         </Providers>
         </body>
+         </Providers>
       </SessionProvider>
     </html>
   );

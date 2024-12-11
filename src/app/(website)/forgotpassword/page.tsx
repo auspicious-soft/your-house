@@ -22,7 +22,7 @@ const handleSubmit = (e: any) => {
   startTransition(async () => {
     try {
       const response = await forgotPasswordService({ username })
-      if (response.status === 200) {
+      if (response?.status === 200) {
         toast.success('Email sent successfully to you with otp')
         router.push('/otp')
       }
@@ -30,8 +30,8 @@ const handleSubmit = (e: any) => {
         toast.error("Something went wrong")
       }
     }
-    catch (err: any) {
-      if (err.status == 404) toast.error('Email not found')
+  catch (err: any) {
+      if (err.status == 404) toast.error('UserName not found')
       else toast.error('Something went wrong')
     }
   })
@@ -51,7 +51,7 @@ const handleSubmit = (e: any) => {
         <form>
           <InputField
           label="Phone Number / Email Address"
-            type="email"
+            type="text"
             value={username}
             placeholder="Phone Number/Email Address"
             onChange={handleChange}

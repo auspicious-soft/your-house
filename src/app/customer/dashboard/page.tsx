@@ -15,7 +15,6 @@ const Home = () => {
   const router = useRouter();
   const { data, error, isLoading } = useSWR(`/user/dashboard`, getDashboardData);
   const finalData: any = data?.data?.data;
-  console.log('finalDataaaaaaaaa:', finalData);
  const onGoingProjects = finalData?.workingProjectDetails;
   const OverviewData = [
     {

@@ -17,7 +17,7 @@ const Page = () => {
   const id = session?.data?.user?.id
   const [activeTab, setActiveTab] = useState('On-going Projects');
   const [query, setQuery] = useState('');
-  const {data, error, isLoading, mutate} = useSWR(`/user/${id}/projects?state=${activeTab === 'On-going Projects' ? "completed" : 'ongoing'}&${query}`, getClientsAllProjects)
+  const {data, error, isLoading, mutate} = useSWR(`/user/${id}/projects?state=${activeTab === 'On-going Projects' ? "ongoing" : 'completed'}&${query}`, getClientsAllProjects)
   const projectsData = data?.data;
  
   

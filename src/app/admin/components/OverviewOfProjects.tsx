@@ -13,7 +13,6 @@ interface OverViewProps {
 const OverviewOfProjects: React.FC<OverViewProps> = ({id}) => {
   const {data, isLoading, error, mutate} = useSWR(`/admin/attachments/${id}`, getAttachmentsData)
   const attachments = data?.data?.data
-  console.log('attachments:', attachments);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState("");
   
@@ -39,9 +38,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({id}) => {
 
     try {
       const attachments = { url };
-      console.log('notesData:', );
       const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
-      console.log('response:', response);
       if (response?.status === 201) {
         toast.success("Note added successfully");
         setIsModalOpen(false);

@@ -55,7 +55,6 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
   startTransition(async () => {
     try {
       const response = await updateUserInfo( `/user/${session?.data?.user?.id}`,formData); 
-      console.log('formData:', formData);
       if (response?.status === 200) {
       setIsModalOpen(false);
       mutate()

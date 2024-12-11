@@ -14,7 +14,7 @@ import { getAllProjects } from "@/services/admin/admin-service";
 const Page = () => {
   const [activeTab, setActiveTab] = useState('On-going Projects');
   const [query, setQuery] = useState('page=1&limit=10');
-  const {data, error, isLoading, mutate} = useSWR(`/admin/projects?state=${activeTab === 'On-going Projects' ? "completed" : 'ongoing'}&${query}`, getAllProjects)
+  const {data, error, isLoading, mutate} = useSWR(`/admin/projects?state=${activeTab === 'On-going Projects' ? "ongoing" : 'completed'}&${query}`, getAllProjects)
   const projectsData = data?.data;
   const router = useRouter();
 

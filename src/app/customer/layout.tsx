@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "./clientstyles.css";
 import SideNav from "@/app/customer/components/SideNav";
 import localFont from "next/font/local";
 import MobileHeader from "@/app/customer/components/MobileHeader";

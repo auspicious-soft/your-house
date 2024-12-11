@@ -41,9 +41,7 @@ const Notes: React.FC<Notes> = ({id}) => {
     }
     try {
       const notesData = { text };
-      console.log('notesData:', notesData);
       const response = await addNotesData(`/admin/notes/${id}`, notesData)
-      console.log('response:', response);
       if (response?.status === 201) {
         toast.success("Note added successfully");
         setIsModalOpen(false);

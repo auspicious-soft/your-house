@@ -24,14 +24,16 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { getSingleProject } from "@/services/admin/admin-service";
+import { getSingleProject, updateSingleProjectData } from "@/services/admin/admin-service";
 import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProjectModal";
 import dayjs from "dayjs";
+import { toast } from "sonner";
 
 const Page = () => {
   const {id} = useParams();
-  const {data, error, mutate} = useSWR(`/admin/project/${id}`, getSingleProject);
+  const {data, error, mutate, isLoading} = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data;
+  console.log('project:', project);
   const userData = data?.data?.data?.userId;
   
   const [startDate, setStartDate] = useState(
@@ -92,7 +94,21 @@ const Page = () => {
   useEffect(() => {
   }, [activeTab]);
 
-
+  const updateProjectStatus = async (step: number) => {
+    try {
+      const statusValue = step/25; // Assuming 4 steps total
+      const response = await updateSingleProjectData(`/admin/project/${id}`, { status: statusValue });
+      if (response?.status === 200) {
+        toast.success("Project status updated successfully");
+        mutate();
+      } else {
+        toast.error("Failed to update project status");
+      }
+    } catch (error) {
+      console.error("Error updating project status:", error);
+      toast.error("An error occurred while updating the project status");
+    }
+  };
 
   return (
     <div>
@@ -145,7 +161,10 @@ const Page = () => {
                 {steps.map((step) => (
                   <button
                     key={step.id}
-                    onClick={() => setProgress(step.value)}
+                    onClick={() => {
+                      setProgress(step.value);
+                      updateProjectStatus(step.value);
+                    }}
                     className={`progress-step ${
                       progress >= step.value ? "active" : ""
                     }`}
@@ -239,14 +258,16 @@ const Page = () => {
             </div>
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
-                Description <EditProfile />
+                Description 
+                {/* <EditProfile /> */}
               </h3>
               <p className="text-[#8B8E98] text-sm  ">{project?.description}
               </p>
             </div>
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
-                Employees Associated <EditProfile />
+                Employees Associated
+                 {/* <EditProfile /> */}
               </h3>
                 {project?.associates?.map((index: any)=>(
                  <p className="text-[#8B8E98] text-sm capitalize " key={index}>{index} </p>
@@ -261,6 +282,7 @@ const Page = () => {
       data={project} 
       isOpen={isModalOpen}
       onClose={() => setIsModalOpen(false)}
+      mutate={mutate}
       />
     </div>
   );

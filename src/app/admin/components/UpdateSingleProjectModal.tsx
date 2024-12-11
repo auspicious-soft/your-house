@@ -28,12 +28,11 @@ interface UpdateProps {
   isOpen: boolean;
   id?: any;
   data: any;
-  mutate?: any;
+  mutate: any;
   onClose: () => void;
   
 }
 const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, data, mutate}) => {
-    console.log('data:', data);
   const [notification, setNotification] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
@@ -139,8 +138,6 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
           };
   
         const response = await updateSingleProjectData(`/admin/project/${id}`, payload);
-        console.log('payload:', payload);
-        console.log('response:', response);
         
         if (response?.status === 200) {
         toast.success("Updated successfully");

@@ -14,9 +14,8 @@ export default function NotifactionBar() {
           <div className="cursor-pointer"> 
             <Image
               src={avatar}
-              alt="User Pr 
-              
-              ofile"
+              alt="User Profile"
+              onClick={() => setShowData(!showData)}
               width={30}
               height={30}
               className="rounded-[5px] w-[30px] h-[30px]"

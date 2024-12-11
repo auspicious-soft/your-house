@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "./adminstyles.css";
 import SideNav from "@/app/admin/components/SideNav";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
