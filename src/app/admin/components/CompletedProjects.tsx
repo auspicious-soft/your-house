@@ -18,7 +18,7 @@ interface CompleteProps {
 
 const CompletedProjects: React.FC<CompleteProps> = ({projectsData, mutate, isLoading, error, setQuery}) => {
 const projects = projectsData?.data;
-  const total = projectsData?.total ?? 0;
+const total = projectsData?.total ?? 0;
 const router = useRouter();
 const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 const [selectedId, setSelectedId] = useState('');

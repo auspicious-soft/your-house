@@ -69,6 +69,9 @@ const MobileHeader = () => {
              My Profile
             </Link>
           </li>
+          <li className="mr-3">
+          <button onClick={() => signOut({ redirectTo: '/' })} className="button w-full !h-10 ">Log Out</button>
+          </li>
         </ul>
         </div>
       </div>

@@ -14,18 +14,18 @@ import { toast } from 'sonner';
 
 const Page: React.FC = () => {
   const router = useRouter();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('page=1&limit=10');
   const {data, error, mutate, isLoading} = useSWR(`/admin/users`, getAllUsers)
   const usersData = data?.data?.data;
-  const total = usersData?.total ?? 0;
    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
    const [selectedId, setSelectedId] = useState('');
 
 
+  const total = data?.data?.total ?? 0;
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
-    setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
-  }
+  setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
+}
 
   const openDeleteModal = (id: string) => {
     setIsDeleteModalOpen(true);
@@ -47,9 +47,6 @@ const Page: React.FC = () => {
       toast.error("An error occurred while deleting the Client");
     }
   }
-
-
-
    const openProfile = (id:string) => { 
     router.push(`/admin/customers/profile/${id}`);
   };
@@ -107,7 +104,7 @@ const Page: React.FC = () => {
       </table>
       </div>
       <div className="text-right mt-4">
-        <ReactPaginate
+      <ReactPaginate
           previousLabel={<PreviousLabel/>}
           nextLabel={<NextLabel/>}
           breakLabel={'...'}

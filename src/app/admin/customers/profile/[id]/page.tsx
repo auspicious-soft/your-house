@@ -126,7 +126,7 @@ const Page = () => {
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              placeholder="emailaddress@mail.com"
+              placeholder="address"
               readOnly
             />
           </div>

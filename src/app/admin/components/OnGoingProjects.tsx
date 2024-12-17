@@ -15,7 +15,7 @@ interface OnGoingProps {
   mutate: any;
   isLoading: boolean;
   setQuery: any;
-  error: any;
+  error: any; 
 }
 
 const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoading, error, setQuery  }) => {

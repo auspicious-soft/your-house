@@ -17,6 +17,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/L
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import pdfImg from '@/assets/images/PDF.png';
+import { useParams } from "next/navigation";
+import ClientAttachments from "@/app/customer/components/ClientAttachments";
+import ClientNotes from "@/app/customer/components/ClientNotes";
 
 interface FileItem {
   name: string;
@@ -24,7 +27,7 @@ interface FileItem {
   time: string;
 }
 const Page = () => {
-
+  const {id} = useParams();
   const [activeTab, setActiveTab] = useState("Overview");
 
   const [progress, setProgress] = useState(50);
@@ -64,27 +67,10 @@ const Page = () => {
   ];
   const renderTabContent = () => {
     switch (activeTab) {
-      case "Overview":
+      case "Overview": 
         return (
           <div>
-           {fileItems.map((file, index) => (
-        <div key={index} className="flex justify-between items-center mb-5">
-          <div className='flex items-center gap-3 '>
-            <div><Image src={pdfImg} alt='' /> </div>
-          <div>
-            <p className="text-[#43527B] text-sm  ">{file.name}</p>
-            <p className="text-[#8B8E98] text-xs mt-1  ">
-              Uploaded by {file.uploadedBy} <span className='ml-5'>Time: {file.time}</span>
-            </p>
-          </div>
-          </div>
-         <div className="flex gap-[6px]  ">
-         <button>
-            <DownloadIcon />
-          </button>
-         </div>
-        </div>
-      ))}
+           <ClientAttachments id={id} />
         </div>
         );
       case "Status":
@@ -96,13 +82,7 @@ const Page = () => {
       case "Notes":
         return (
           <div>
-            {NotesData.map((data, index) => (
-             <div key={index} className="grid grid-cols-[auto_1fr_auto] gap-3  mb-[10px] ">
-                <span><NotesIcon /> </span>
-                <p className='text-[#8B8E98]  '>{data.note} </p>
-              
-            </div>
-            ))}
+           <ClientNotes id={id} />
           </div>
         );
       default:
@@ -120,10 +100,7 @@ const Page = () => {
       <div className="grid grid-cols-[1fr] gap-5">
         <div className="bg-white rounded-[10px] md:rounded-[30px] box-shadow ">
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10"> 
-            <h2 className="main-heading">Project Name</h2>
-            <button className="!rounded-[3px] !h-[37px] button !px-4 ">
-              <AddIcon className="w-4 h-4" /> Edit Name
-            </button> 
+            <h2 className="main-heading">Project Name</h2> 
           </div>
           <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
             <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px] md:mb-[40px]">

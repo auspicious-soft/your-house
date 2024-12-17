@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import Image from 'next/image';
 import success from "@/assets/images/succes.png"; // Make sure the success image path is correct

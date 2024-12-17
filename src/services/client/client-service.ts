@@ -21,3 +21,11 @@ export const updateUserInfo = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance()
     return axiosInstance.put(route, payload)
 }
+export const getClientAttachments = async (route: string) => {
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get(route)
+}
+export const getClientNotes = async (route: string) => {
+    const axiosInstance = await getAxiosInstance()
+    return axiosInstance.get(route)
+}
