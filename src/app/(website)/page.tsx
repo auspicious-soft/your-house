@@ -146,21 +146,21 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
 
-                  <div className="mt-[-10px] mb-[50px] flex justify-between items-center">
-                    <label htmlFor="" className="text-[#353E6C] text-[14px] ">
+                  <div className="justify-end mt-[-10px] mb-[50px] flex items-center">
+                    {/* <label htmlFor="" className="text-[#353E6C] text-[14px] "> */}
                       {/* <input type="checkbox" name="" id="" className="mr-[10px]" /> */}
-                      <input
+                      {/* <input
                         type="checkbox"
                         checked={rememberMe}
                         onChange={() => setRememberMe(!rememberMe)}
                         className="mr-[10px]"
                       />
                       Keep me logged in
-                    </label>
+                    </label> */}
 
                     <Link
                       href="/forgotpassword"
-                      className="text-[#1657FF] text-[14px] "
+                      className="text-[#1657FF] text-[14px]  "
                     >
                       Forgot Password?
                     </Link>
