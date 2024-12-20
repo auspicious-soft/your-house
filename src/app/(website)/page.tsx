@@ -10,8 +10,10 @@ import { toast } from "sonner";
 import { loginAction } from "@/actions";
 import Logo from "@/assets/images/logo.png";
 import LoginImage from "./components/LoginImage";
+import { useTranslations } from "next-intl";
 
-const Page: React.FC = () => {
+export default function Page() {
+  const t = useTranslations('LoginPage');
   const { data: session } = useSession();
   const [username, serUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -126,54 +128,44 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
               />
             </p>
             <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">
-              Welcome Back
+             {t('welcomeBack')}
             </h2>
             <div className="login rounded-[20px] bg-white">
               <div className="">
                 <form onSubmit={handleSubmit}>
                   <InputField
                     type="text"
-                    label="Email Address / Phone"
+                    label={t('emailOrPhone')}
                     value={username}
-                    placeholder="Email Address / Phone"
+                    placeholder={t('emailOrPhone')}
                     onChange={(e) => serUsername(e.target.value)}
                   />
                   <InputField
                     type="password"
-                    label="Your Password"
+                    label={t('password')}
                     value={password}
-                    placeholder="Your Password"
+                    placeholder={t('password')}
                     onChange={(e) => setPassword(e.target.value)}
                   />
 
                   <div className="justify-end mt-[-10px] mb-[50px] flex items-center">
-                    {/* <label htmlFor="" className="text-[#353E6C] text-[14px] "> */}
-                      {/* <input type="checkbox" name="" id="" className="mr-[10px]" /> */}
-                      {/* <input
-                        type="checkbox"
-                        checked={rememberMe}
-                        onChange={() => setRememberMe(!rememberMe)}
-                        className="mr-[10px]"
-                      />
-                      Keep me logged in
-                    </label> */}
 
                     <Link
                       href="/forgotpassword"
                       className="text-[#1657FF] text-[14px]  "
                     >
-                      Forgot Password?
+                    {t('forgotPassword')}
                     </Link>
                   </div>
 
                   <button type="submit" className="login-button w-full">
-                    {!isPending ? "Log In" : "Logging In"}
+                  {!isPending ? t('logIn') : t('loggingIn')}
                   </button>
 
                   <p className="mt-5 text-center text-[#353E6C] text-[14px]">
-                    Don’t have an account?{" "}
+                   {t('noAccount')}
                     <Link href="/signup" className="text-[#1657FF] ">
-                      Create one
+                      {t('createAccount')}
                     </Link>{" "}
                   </p>
                 </form>
@@ -187,4 +179,3 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
   );
 };
 
-export default Page;

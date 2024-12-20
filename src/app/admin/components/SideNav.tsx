@@ -7,14 +7,11 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { CustomerActiveIcon, CustomerIcon, DashboardActiveIcon, DashboardIcon, ProjectActiveIcon, ProjectIcon } from "@/utils/svgicons";
+import { useTranslations } from "next-intl";
 
 const SideNav = () => {
   const router = useRouter();
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem('authToken');
-  //   router.push('https://blacktherapy.vercel.app/');
-  // };
+ const t = useTranslations('CustomerDashboard');
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -43,20 +40,20 @@ const SideNav = () => {
           <li className={isActive('/admin/dashboard')}>
             <Link href="/admin/dashboard">
               {isActive('/admin/dashboard') ? <DashboardActiveIcon /> : <DashboardIcon />}
-              Dashboard
+           {t('dashboard')}
             </Link>
           </li>
           <li className={`${isActive('/admin/projects')} ${pathname.startsWith('/admin/projects/project-profile') ? 'active' : '' }`}>
             <Link href="/admin/projects"> 
             {isActive('/admin/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
-              Projects
+            {t('projects')}
             </Link>
           </li>
           <li className={`${isActive('/admin/customers')} ${pathname.startsWith('/admin/customers/profile') ? 'active' : ''}`}>
           {/* {isActive('/admin/customers')}> */}
             <Link href="/admin/customers">
              {isActive('/admin/customers') ? <CustomerActiveIcon /> : <CustomerIcon />}
-              Customers
+             {t('customers')}
             </Link>
           </li>
         </ul>

@@ -10,10 +10,12 @@ import { toast } from "sonner";
 import LoginImage from "../components/LoginImage";
 import Logo from '@/assets/images/logo.png';
 import { sendOtpService } from "@/services/admin/admin-service";
+import { useTranslations } from "next-intl";
 
 //import { sendOtpService } from "@/services/user-service";
 
 export default function Page() {
+  const t = useTranslations('EnterOTPPage');
   const [otpValues, setOtpValues] = useState(['', '', '', '', '', '']);
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -58,7 +60,7 @@ export default function Page() {
       try {
         const response = await sendOtpService({ otp: completeOtp })
         if (response.status === 200) {
-          toast.success('Email sent successfully to you with otp')
+          toast.success(t('emailSentSuccess'))
           router.push(`/resetpassword?otp=${completeOtp}`)
         }
         else {
@@ -67,9 +69,9 @@ export default function Page() {
       }
       catch (err: any) {
         if (err.status == 404 || err.status == 400) {
-         alert('Invalid otp or expired')
+         alert(t('invalidOtpOrExpired'))
         }
-        else toast.error('Something went wrong')
+        else toast.error(t('somethingWentWrong'))
       }
     })
   };
@@ -82,7 +84,7 @@ export default function Page() {
       <p className="mb-5 md:mb-9 text-center">
         <Image src={Logo} alt="animate" className="mx-auto max-w-[172px]"/>
           </p>
-          <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">Enter OTP</h2>
+          <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">{t('enterOtp')}</h2>
             {/* <p className="login-desc mb-5 md:mb-10">Enter 4 digit pin sent to your email address.</p> */}
             <form onSubmit={handleSubmit}>
               <div className="mb-5 md:mb-[50px] otp-inputs justify-center flex gap-[11px] items-center">
@@ -112,7 +114,7 @@ export default function Page() {
               <button
                 type="submit"
                 className="login-button w-full"
-              >Confirm
+              >{t('confirm')}
               </button>
             </form>
           </div>

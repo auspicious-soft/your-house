@@ -8,8 +8,10 @@ import Logo from '@/assets/images/logo.png';
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { forgotPasswordService } from "@/services/admin/admin-service";
+import { useTranslations } from "next-intl";
 
 const Page: React.FC = () => {
+  const t = useTranslations('ForgotPasswordPage');
   const router = useRouter()
   const [username, setUsername] = useState("")
   const [isPending, startTransition] = useTransition()
@@ -23,16 +25,16 @@ const handleSubmit = (e: any) => {
     try {
       const response = await forgotPasswordService({ username })
       if (response?.status === 200) {
-        toast.success('Email sent successfully to you with otp')
+        toast.success(t('otpSentSuccess'))
         router.push('/otp')
       }
       else {
-        toast.error("Something went wrong")
+        toast.error(t("somethingWentWrong"))
       }
     }
   catch (err: any) {
       if (err.status == 404) toast.error('UserName not found')
-      else toast.error('Something went wrong')
+      else toast.error(t('somethingWentWrong'))
     }
   })
 }
@@ -46,24 +48,22 @@ const handleSubmit = (e: any) => {
      <p className="mb-5 md:mb-9 text-center">
         <Image src={Logo} alt="animate" className="mx-auto max-w-[172px]"/>
           </p>
-          <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">Forgot Password?</h2>
+          <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">{t('forgotTitle')}</h2>
         <div className="login rounded-[20px] bg-white">
         <form>
           <InputField
-          label="Phone Number / Email Address"
+          label={t('emailOrPhone')}
             type="text"
             value={username}
-            placeholder="Phone Number/Email Address"
+            placeholder={t('emailOrPhone')}
             onChange={handleChange}
           />
            <button disabled={isPending} onClick={handleSubmit} type="submit" className="login-button w-full mt-[50px]">
-           Confirm</button>
-        {/* <Link href="/resetpassword" className="login-button w-full mt-[50px]">Confirm</Link> */}
-       
+           {t('confirm')}</button>
           </form>
+        </div>  
         </div>
-       </div>
-          </div>
+        </div>
           <LoginImage/>
         </div>
         </div>

@@ -20,6 +20,7 @@ import pdfImg from '@/assets/images/PDF.png';
 import { useParams } from "next/navigation";
 import ClientAttachments from "@/app/customer/components/ClientAttachments";
 import ClientNotes from "@/app/customer/components/ClientNotes";
+import { useTranslations } from "next-intl";
 
 interface FileItem {
   name: string;
@@ -27,47 +28,21 @@ interface FileItem {
   time: string;
 }
 const Page = () => {
+  const t = useTranslations('ProjectsPage'); 
   const {id} = useParams();
-  const [activeTab, setActiveTab] = useState("Overview");
+  const [activeTab, setActiveTab] = useState(t("overview"));
 
   const [progress, setProgress] = useState(50);
   const steps = [
-    { id: 1, label: "Foundation", value: 25 },
-    { id: 2, label: "Construction", value: 50 },
-    { id: 3, label: "Interior Work", value: 75 },
-    { id: 4, label: "Completed", value: 100 },
+    { id: 1, label: t("foundation"), value: 25 },
+    { id: 2, label: t("construction"), value: 50 },
+    { id: 3, label: t("interiorWork"), value: 75 },
+    { id: 4, label: t("completed"), value: 100 },
   ];
-  const fileItems: FileItem[] = [
-    {
-      name: 'Lorem Ipsum Name of the file.pdf',
-      uploadedBy: 'Neil Metender',
-      time: '11:23 AM',
-    },
-    {
-      name: 'Lorem Ipsum Name of the file.pdf',
-      uploadedBy: 'Neil Metender',
-      time: '11:24 AM',
-    },
-    {
-      name: 'Lorem Ipsum Name of the file.pdf',
-      uploadedBy: 'Neil Metender',
-      time: '11:24 AM',
-    },
-  ];
-  const NotesData = [
-    {
-      note: 'Lorem Ipsum Name of the file.pdf',
-     },
-     {
-        note: 'Lorem Ipsum Name of the file.pdf',
-    },
-    {
-        note: 'Lorem Ipsum Name of the file.pdf',
-    },
-  ];
+
   const renderTabContent = () => {
     switch (activeTab) {
-      case "Overview": 
+      case t("overview"): 
         return (
           <div>
            <ClientAttachments id={id} />
@@ -79,7 +54,7 @@ const Page = () => {
             {/* <CompletedProjects /> */}
           </div>
         );
-      case "Notes":
+      case t("notes"):
         return (
           <div>
            <ClientNotes id={id} />
@@ -154,7 +129,7 @@ const Page = () => {
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
               <div className="flex gap-2.5">
-                {["Overview", "Notes"].map((tab) => (
+                {[t("overview"), t("notes")].map((tab) => (
                   <button
                     key={tab}
                     className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${

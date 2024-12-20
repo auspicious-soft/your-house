@@ -28,12 +28,13 @@ import { getSingleProject, updateSingleProjectData } from "@/services/admin/admi
 import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProjectModal";
 import dayjs from "dayjs";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const Page = () => {
+  const t = useTranslations('ProjectsPage'); 
   const {id} = useParams();
   const {data, error, mutate, isLoading} = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data;
-  console.log('project:', project);
   const userData = data?.data?.data?.userId;
   
   const [startDate, setStartDate] = useState(
@@ -44,14 +45,14 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 
-  const [activeTab, setActiveTab] = useState("Overview");
+  const [activeTab, setActiveTab] = useState(t("overview"));
 
   const [progress, setProgress] = useState(0);
   const steps = [
-    { id: 1, label: "Foundation", value: 25 },
-    { id: 2, label: "Construction", value: 50 },
-    { id: 3, label: "Interior Work", value: 75 },
-    { id: 4, label: "Completed", value: 100 },
+    { id: 1, label: t("foundation"), value: 25 },
+    { id: 2, label: t("construction"), value: 50 },
+    { id: 3, label: t("interiorWork"), value: 75 },
+    { id: 4, label: t("completed"), value: 100 },
   ];
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const Page = () => {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "Overview":
+      case t("overview"):
         return (
           <div>
             <OverviewOfProjects id={id} />
@@ -80,7 +81,7 @@ const Page = () => {
             {/* <CompletedProjects /> */}
           </div>
         );
-      case "Notes":
+      case t("notes"):
         return (
           <div>
             <Notes id={id} />
@@ -117,7 +118,7 @@ const Page = () => {
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10">
             <h2 className="main-heading capitalize">{project?.projectName}</h2>
             <button  onClick={() => setIsModalOpen(true)} className="!rounded-[3px] !h-[37px] button !px-4 ">
-              <AddIcon className="w-4 h-4" /> Edit Project Details
+              <AddIcon className="w-4 h-4" /> {t('editProjectDetails')}
             </button>
           </div>
           <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
@@ -201,7 +202,7 @@ const Page = () => {
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
               <div className="flex gap-2.5">
-                {["Overview", "Notes"].map((tab) => (
+                {[t("overview"), t("notes")].map((tab) => (
                   <button
                     key={tab}
                     className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${

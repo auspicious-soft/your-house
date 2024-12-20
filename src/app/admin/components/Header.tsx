@@ -4,6 +4,7 @@ import Image, { StaticImageData } from "next/image";
 //import { MenuIcon, ToggleClose } from "@/utils/svgIcons";
 import { usePathname } from "next/navigation";
 import NotifactionBar from "./NotifactionBar";
+import { useTranslations } from "next-intl";
 
 interface HeaderProps {
   notificationsCount: number;
@@ -14,16 +15,16 @@ interface HeaderProps {
 
 const Header: React.FC = () => {
   const pathname = usePathname();
-  // const router = useRouter()
+  const t = useTranslations('CustomerDashboard');
   const pageNames: { [key: string]: string } = {
-    "/admin/dashboard": "Dashboard",
-    "/admin/projects": "Projects",
-    "/admin/customers": "Customers",
-    "/admin/new-project": "Add New Project",
-    "/admin/projects/project-profile/": "Projects"
+    "/admin/dashboard": t("dashboard"),
+    "/admin/projects": t("projects"),
+    "/admin/customers": t("customers"),
+    "/admin/new-project": t("addNewProject"),
+    "/admin/projects/project-profile/": t("projects")
   };
 
-  const currentPageName = pageNames[pathname] || "Projects";
+  const currentPageName = pageNames[pathname] || t("projects");
 
   return (
     <header className="flex justify-between items-center p-[15px]  lg:p-[40px] ">

@@ -11,42 +11,55 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth()
-  const notUserOrAdmin = ['user']
-  // ['therapist', 'client']
+  const session = await auth();
 
   if (!session) {
-    redirect("/")
+    redirect("/");
   }
-  else if (!notUserOrAdmin.includes((session as any)?.user?.role)) {
+
+  const userRole = (session as any)?.user?.role;
+  const restrictedRoles = ['user']; // Add other restricted roles as needed
+  
+  // Check if user has restricted role
+  if (restrictedRoles.includes(userRole)) {
     return (
       <html lang="en">
         <body>
-          <div className=" w-full lg:h-screen  lg:flex-row lg:overflow-hidden">
-            <div className="flex-none hidden h-[100vh] lg:block float-left w-[270px]">
-              <SideNav />
-            </div>
-            <div className="w-full lg:hidden">
-           <AdminMobileHeader/>
-            </div>
-          <div className="float-left w-full lg:w-[calc(100%-270px)] ">
-            <Header />
-            <main className="p-[15px] lg:h-[calc(100vh-116px)]  pb-10 overflo-custom md:overflow-y-auto lg:pb-10 lg:px-[40px]">
-              {children}
-            </main>
-       </div>
+          <div className="p-3 bg-black min-h-screen text-white">
+            <span>You are not authorized to view this page click{" "}</span>
+            <Link href="/" className="p-3 text-black bg-white">
+              Login
+            </Link>
           </div>
         </body>
       </html>
     );
-  } else {
-    return (
-      <div className="p-3 bg-black h-screen text-white">
-        You are not authorized to view this page click
-        <Link href="/" className="p-3 text-black bg-white">
-          Login
-        </Link>
-      </div>
-    );
   }
+
+  // Main admin layout for authorized users
+  return (
+    <html lang="en">
+      <body>
+        <div className="w-full lg:h-screen lg:flex-row lg:overflow-hidden">
+          {/* Sidebar */}
+          <div className="flex-none hidden h-screen lg:block float-left w-[270px]">
+            <SideNav />
+          </div>
+          
+          {/* Mobile Header */}
+          <div className="w-full lg:hidden">
+            <AdminMobileHeader />
+          </div>
+          
+          {/* Main Content */}
+          <div className="float-left w-full lg:w-[calc(100%-270px)]">
+            <Header />
+            <div className="p-4 lg:h-[calc(100vh-116px)] overflow-y-auto pb-10 lg:pb-10 lg:px-10">
+              {children}
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  );
 }

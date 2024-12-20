@@ -9,62 +9,38 @@ import Image from "next/image";
 import { ProgressIcon } from "@/utils/svgicons";
 import { Line } from "rc-progress";
 import { getDashboardData } from "@/services/client/client-service";
+import { useTranslations } from "next-intl";
 
 const Home = () => {
-  const session = useSession();
-  const router = useRouter();
+ const t = useTranslations('CustomerDashboard'); 
   const { data, error, isLoading } = useSWR(`/user/dashboard`, getDashboardData);
   const finalData: any = data?.data?.data;
  const onGoingProjects = finalData?.workingProjectDetails;
   const OverviewData = [
     {
       id: "1",
-      title: "Ongoing Projects",
+      title: t("ongoingProjects"),
       value: finalData?.ongoingProjectCount,
       bgColor: "#F44771",
     },
     {
       id: "2",
-      title: "Completed Projects",
+      title: t("completedProjects"),
       value: finalData?.completedProjectCount,
       bgColor: "#FF9A3E",
     },
   ];
 
   const steps = [
-    { id: 1, label: "Foundation" },
-    { id: 2, label: "Construction" },
-    { id: 3, label: "Interior Work" },
-    { id: 4, label: "Completed" },
-  ];
-  const projects = [
-    {
-      id: 1,
-      name: "Summer Houses 1",
-      image: projectImg,
-      progress: 46,
-      completedSteps: 2,
-    },
-    {
-      id: 2,
-      name: "Summer Houses 2",
-      image: projectImg,
-      progress: 46,
-      completedSteps: 2,
-    },
-    {
-      id: 3,
-      name: "Summer Houses 2",
-      image: projectImg,
-      progress: 80,
-      completedSteps: 3,
-    },
-    // Add more projects as needed
+    { id: 1, label: t("foundation") },
+    { id: 2, label: t("construction") },
+    { id: 3, label: t("interiorWork") },
+    { id: 4, label: t("completed") },
   ];
 
   return (
     <>
-      <h2 className="section-title">Monthly Overview</h2>
+      <h2 className="section-title">{t('monthlyOverview')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-[15px] md:gap-[22px]">
         <div className="md:col-span-2 grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[15px] md:gap-[22px]">
           {OverviewData.map((card) => (
@@ -89,11 +65,11 @@ const Home = () => {
       </div>
 
       <section className="mt-10">
-        <h2 className="section-title">Working Progress</h2>
+        <h2 className="section-title">{t('workingProgress')} </h2>
         <div className="bg-white rounded-[10px]  md:rounded-[30px] ">
           <div className="progress-container">
             <h2 className="section-title pt-[30px] px-[30px] ">
-              {onGoingProjects?.length} Ongoing Projects
+              {onGoingProjects?.length} {t('ongoingProjects')}
             </h2>
 
             {onGoingProjects?.map((row: any) => (

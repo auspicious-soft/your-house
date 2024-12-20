@@ -10,8 +10,10 @@ import ProjectsProgress from "../components/ProjectsProgress";
 import { useRouter } from "next/navigation";
 import { getDashboardStats } from "@/services/admin/admin-service";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const Home = () => {
+  const t = useTranslations('CustomerDashboard'); 
   const session = useSession();
   const router = useRouter();
   const [query, setQuery] = useState('');
@@ -20,13 +22,13 @@ const Home = () => {
   const OverviewData = [
     {
       id: "1",
-      title: "Ongoing Projects",
+      title: t("ongoingProjects"),
       value: dashboardData?.ongoingProjectCount,
       bgColor: "#F44771",
     },
     {
       id: "2",
-      title: "Completed Projects",
+      title: t("completedProjects"),
       value: dashboardData?.completedProjectCount,
       bgColor: "#FF9A3E",
     },
@@ -65,10 +67,10 @@ const Home = () => {
           >
             <div className="flex flex-col  gap-3 md:gap-3">
               <p className="leading-normal font-sfproDisplaybold text-[18px] md:text-[20px] text-[#fff] ">
-                Create a New Project
+              {t('createNewProject')}
               </p>
               <p className="text-[#fff] text-[14px] max-w-[180px]">
-                Click to add a new project to the list.
+              {t('clickToAddProject')}
               </p>
             </div>
             <AddIcon />
@@ -77,24 +79,23 @@ const Home = () => {
       </div>
 
       <section className="mt-10">
-      <h2 className="section-title">Working Progress</h2>
+      <h2 className="section-title">{t('workingProgress')}</h2>
       <div className="bg-white rounded-[10px]  md:rounded-[30px]  py-[30px] px-[15px] md:p-[30px]">
-        <h3 className="text-lg text-[#353E6C] font-sfproDisplaysemibold mb-[26px] ">{dashboardData?.workingProjectDetails.length} Ongoing Projects</h3>
+        <h3 className="text-lg text-[#353E6C] font-sfproDisplaysemibold mb-[26px] ">{dashboardData?.workingProjectDetails.length} {t('ongoingProjects')}</h3>
           {dashboardData?.workingProjectDetails.map((data: any)=>(
-            <ProjectsProgress
+          <ProjectsProgress
             key={data?._id}
             title={data?.projectName}
             progress={data?.status*25}
             imgSrc={data?.df}
             />
           ))}
-
       </div>
 
       </section>
 
       <section className="mt-10">
-        <h2 className="section-title">Recent Projects</h2>
+        <h2 className="section-title">{t('recentProjects')}</h2>
         <RecentProjects setQuery={setQuery} recentProjects={dashboardData?.recentProjectDetails} error={error} isLoading={isLoading} mutate={mutate} />
       </section>
     </>
