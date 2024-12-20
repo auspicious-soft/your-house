@@ -10,9 +10,11 @@ import { useParams } from "next/navigation";
 import { getSingleUser, updateSingleUser } from "@/services/admin/admin-service";
 import useSWR from "swr";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 
 const Page = () => {
+   const t = useTranslations('ProfilePage'); 
   const {id} = useParams();
   const [query, setQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,33 +77,33 @@ const Page = () => {
   };
   return ( 
     <div>
-      <h2 className="section-title text-[#3C3F88]">Client Details</h2>
+      <h2 className="section-title text-[#3C3F88]"> {t('clientDetails')}</h2>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
           {/* src={formData.profilePic || imgNew}  */}
             <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />           
         <div> 
           <button  onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] "> 
-          <EditButtonIcon/> Edit Details
+          <EditButtonIcon/> {t('editDetails')}
         </button></div>
         </div>
         <div className="fomm-wrapper grid md:flex flex-wrap gap-5 ">
           <div className="w-full">
-            <label className="block">Full Name</label>
+            <label className="block">{t('fullName')}</label>
             <input
               type="text"
               name="fullName"
               value={formData.fullName}
-              placeholder="Full Name"
+              placeholder={t('fullName')}
               onChange={handleInputChange}
               readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
-            <label className="block">Phone Number</label>
+            <label className="block">{t('phoneNumber')}</label>
             <input
               type="text"
-              name="phoneNumber"
+              name={t('phoneNumber')}
               value={formData.phoneNumber}
               onChange={handleInputChange}
               placeholder="Phone Number"
@@ -109,24 +111,24 @@ const Page = () => {
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
-            <label className="block">Email Address</label>
+            <label className="block">{t('emailAddress')}</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="fullname@mail.com"
+              placeholder={t('emailAddress')}
               readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
-            <label className="block">Home Address</label>
+            <label className="block">{t('homeAddress')}</label>
             <input
               type="text"
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              placeholder="address"
+              placeholder={t('homeAddress')}
               readOnly
             />
           </div>
@@ -142,7 +144,7 @@ const Page = () => {
         mutate={mutate}
       />
       <section className="mt-10">
-        <h2 className="section-title">Associated Projects</h2>
+        <h2 className="section-title">{t('associatedProjects')} </h2>
         <AssociatedProjects setQuery={setQuery} mutate={mutate} data={associatedProjects} />
       </section>
     </div>

@@ -8,6 +8,7 @@ import { AddIcon } from "@/utils/svgicons";
 import CustomSelect from "@/app/(website)/components/CustomSelect";
 import { addNewProject } from "@/services/admin/admin-service";
 import useClients from "@/utils/useClients";
+import { useTranslations } from "next-intl";
 
 const option = [
   { label: "Associate 1", value: "Associate 1" },
@@ -22,6 +23,8 @@ const option = [
   { label: "Associate 10", value: "Associate 10" },
 ];
 const Page = () => {
+  const t = useTranslations('ProjectsPage'); 
+
   const [notification, setNotification] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
@@ -133,43 +136,43 @@ const Page = () => {
     <>
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
-          <h2 className="section-projectName">About Project</h2>
+          <h2 className="section-projectName">{t('aboutProject')}</h2>
           <div className="grid md:flex flex-wrap gap-5 mb-[20px] md:mb-[33px] pb-[33px] relative progress-line">
             <div className="md:w-[calc(66.66%-8px)]">
-              <label className="block">Title</label>
+              <label className="block">{t('title')}</label>
               <input
                 type="text"
                 name="projectName"
                 value={formData.projectName}
-                placeholder="Add projectName"
+                placeholder={t('addTitle')}
                 onChange={handleInputChange}
                 required
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">Image</label>
+              <label className="block">{t('image')}</label>
               <input
                 type="text"
                 name="projectimageLink"
                 value={formData.projectimageLink}
-                placeholder="Add projectName"
+                placeholder="Tilføj"
                 onChange={handleInputChange}
                 required
               />
             </div>
             <div className="md:w-[calc(50%-10px)]">
-              <label className="block">Start Date</label>
+              <label className="block"> {t('startDate')}</label>
               <input
                 type="date"
                 name="projectstartDate"
                 value={formData.projectstartDate}
                 onChange={handleInputChange}
-                placeholder="+12346987"
+                placeholder={t('startDate')}
                 required
               />
             </div>
             <div className="md:w-[calc(50%-10px)]">
-              <label className="block">Expected End Date</label>
+              <label className="block">{t('expectedEndDate')}</label>
               <input
                 type="date"
                 name="projectendDate"
@@ -180,62 +183,62 @@ const Page = () => {
               />
             </div>
             <div className="md:w-[calc(50%-14px)]">
-              <label className="block">Assign Customer</label>
+              <label className="block">{t('assignCustomer')}</label>
               <CustomSelect
                 value={selectedUser}
                 options={userData}
                 onChange={handleUserChange}
-                placeholder="Select User"
+                placeholder={t('selectUser')}
               />
             </div>
             <div className="md:w-[calc(50%-14px)]">
-            <label className="block">Employees Associated</label>
+            <label className="block">{t('employeesAssociated')}</label>
 
               <CustomSelect
                 value={associates}
                 options={option}
                 isMulti={true}
                 onChange={handleSelectChange}
-                placeholder="Select Assoiates"
+                placeholder={t('selectAssociates')}
               />
             </div>
             <div className="w-full">
-              <label className="block">Description</label>
+              <label className="block">{t('description')}</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder="Description"
+                placeholder={t('description')}
               ></textarea>
             </div>
           </div>
-          <h2 className="section-projectName">Project Progress</h2>
+          <h2 className="section-projectName">{t('projectProgress')}</h2>
           <div className="grid md:flex flex-wrap gap-5 ">
             <div className="md:w-[calc(50%-10px)]">
-              <label className="block">Attachments</label>
+              <label className="block">{t('attachments')}</label>
               <input type="file" id="myfile" name="myfile" />
             </div>
             <div className="md:w-[calc(50%-10px)]">
-              <label className="block">Status</label>
+              <label className="block">{t('status')}</label>
               <select 
             name="status" 
             value={formData.status} 
             onChange={handleInputChange}
           >
-            <option value="">Select Status</option>
-            <option value="1">Foundation</option>
-            <option value="2">Construction</option>
-            <option value="3">Interior Work</option>
-            <option value="4">Completed</option>
+            <option value="">{t('selectStatus')} </option>
+            <option value="1">{t('foundation')}</option>
+            <option value="2">{t('construction')}</option>
+            <option value="3">{t('interiorWork')} Work</option>
+            <option value="4">{t('completed')}</option>
           </select>
             </div>
             <div className="w-full">
-              <label className="block">Add Notes</label>
+              <label className="block">{t('addNotes')}</label>
               <textarea
                 name="notes"
                 value={formData.notes}
                 onChange={handleInputChange}
-                placeholder="Add Notes"
+                placeholder={t('addNotes')}
               ></textarea>
             </div>
           </div>
@@ -247,7 +250,7 @@ const Page = () => {
             >
               {" "}
               <AddIcon className="w-4 h-4" />
-              {isPending ? "Adding..." : "Add New Project"}
+              {isPending ? "Adding..." : t("addNewProject")}
             </button>
           </div>
         </form>

@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import avatar from "@/assets/images/avatar.png";
 import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export default function NotifactionBar() {
   const [showData, setShowData] = useState(false);
-
+  const t = useTranslations('CustomerDashboard'); 
   return (
     <div>
        <div className="flex items-center gap-3 md:gap-5 relative">
@@ -22,7 +23,7 @@ export default function NotifactionBar() {
           </div>
           {showData && (
            <div className="text-right absolute z-[2] top-[40px] right-0 w-[150px] h-auto bg-white p-3 rounded-lg shadow-[0_4px_4px_0_rgba(0,0,0,0.08)]">
-            <button onClick={() => signOut({ redirectTo: '/' })} className="button w-full !h-10 ">Log Out</button>
+            <button onClick={() => signOut({ redirectTo: '/' })} className="button w-full !h-10 ">{t('logOut')}</button>
           </div>
           )}
         </div>

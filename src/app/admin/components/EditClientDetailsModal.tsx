@@ -6,6 +6,7 @@ import prev from "@/assets/images/img13.png"
 import { toast } from "sonner";
 import { updateUserInfo } from "@/services/client/client-service";
 import { mutate } from "swr";
+import { useTranslations } from "next-intl";
 const EditClientDetailsModal = ({
   isOpen,
   onClose,
@@ -32,6 +33,7 @@ const EditClientDetailsModal = ({
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
 }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const t = useTranslations('ProfilePage');
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -67,7 +69,7 @@ const EditClientDetailsModal = ({
     >
       <div className="bg-white rounded-lg p-8 relative">
         <div className="flex items-center justify-between mb-10 ">
-        <h2 className="main-heading">Edit Client Details</h2>
+        <h2 className="main-heading">{t('editClientDetails')}</h2>
         <button
           onClick={onClose}
           className="bg-[#3B3F88] text-white p-1 px-2 rounded-3xl  "
@@ -121,7 +123,7 @@ const EditClientDetailsModal = ({
           {/* Form Fields */}
           <div className="w-full">
           <label className="block">
-            Full Name
+            {t('fullName')}
           </label>
           <input
               type="text"
@@ -133,7 +135,7 @@ const EditClientDetailsModal = ({
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
           <label className="block">
-            Phone Number
+          {t('phoneNumber')}
           </label>
           <input
               type="text"
@@ -145,7 +147,7 @@ const EditClientDetailsModal = ({
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
           <label className="block">
-            Email Address
+          {t('emailAddress')}
           </label>
           <input
               type="email"
@@ -157,7 +159,7 @@ const EditClientDetailsModal = ({
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
           <label className="block">
-            Home Address
+          {t('homeAddress')}
           </label>
           <input
               type="text"
@@ -171,7 +173,7 @@ const EditClientDetailsModal = ({
           <button
              type="submit"
             className="w-full button !h-[44px] rounded-lg "
-            > Save Details
+            > {t('saveDetails')}
           </button>
         </div>
         </form>

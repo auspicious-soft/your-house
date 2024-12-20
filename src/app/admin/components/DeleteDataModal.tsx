@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from "react-modal";
 import VideoPlayer from './VideoPlayer';
+import { useTranslations } from 'next-intl';
 
 
 
@@ -12,6 +13,7 @@ interface DeleteModalProps {
     title?: string;
 }
 const DeleteDataModal:React.FC<DeleteModalProps> = ({onClose, isOpen, selectedId, handleDelete, title}) => {
+      const t = useTranslations('ProjectsPage'); 
     return (
         <Modal
         isOpen={isOpen}
@@ -26,8 +28,8 @@ const DeleteDataModal:React.FC<DeleteModalProps> = ({onClose, isOpen, selectedId
         <h2 className='main-heading text-right w-[calc(100%-134px)] '>{title}</h2>
         </div>
         <div className='grid grid-cols-[1fr,1.5fr] gap-2.5 '>
-            <button onClick={handleDelete} className='text-[#1657FF] border border-[#1657FF] bg-white h-[50px] py-2 rounded-[50px] text-xl font-sfproDisplaybold '>Confirm </button>
-            <button onClick={onClose} className='bg-[#FF16A2] text-white h-[50px] py-2 rounded-[50px] text-xl font-sfproDisplaybold '>No, Keep It</button>
+            <button onClick={handleDelete} className='text-[#1657FF] border border-[#1657FF] bg-white h-[50px] py-2 rounded-[50px] text-xl font-sfproDisplaybold '>{t('confirmButton')} </button>
+            <button onClick={onClose} className='bg-[#FF16A2] text-white h-[50px] py-2 rounded-[50px] text-xl font-sfproDisplaybold '>{t('cancelButton')}</button>
         </div>
     </Modal>
     );

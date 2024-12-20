@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
     <>
-      <h2 className="section-title">Monthly Overview</h2>
+      <h2 className="section-title">{t('monthlyOverview')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-[15px] md:gap-[22px]">
         <div className="md:col-span-2 grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[15px] md:gap-[22px]">
           {OverviewData.map((card) => (

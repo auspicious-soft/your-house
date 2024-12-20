@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { deleteProject } from '@/services/admin/admin-service';
 import { toast } from 'sonner';
 import DeleteDataModal from './DeleteDataModal';
+import { useTranslations } from 'next-intl';
 
 interface ProjectsProps {
  data: any;
@@ -15,6 +16,7 @@ interface ProjectsProps {
  mutate: any;
 }
 const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) => {
+  const t = useTranslations('ProjectsPage'); 
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
@@ -54,12 +56,12 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
       <table>
         <thead>
           <tr>
-            <th>Project ID</th>
-            <th>Image</th>
-            <th>Name of the project</th>
-            <th>Starting Date</th>
-            <th>Estimated End Date</th>
-            <th>Action</th>
+            <th>{t('projectId')}</th>
+            <th>{t('image')}</th>
+            <th>{t('projectName')}</th>
+            <th>{t('startDate')}</th>
+            <th>{t('expectedEndDate')}</th>
+            <th>{t('action')}</th>
           </tr>
         </thead>
         <tbody>
@@ -106,7 +108,7 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
       <DeleteDataModal
       isOpen={isDeleteModalOpen}
       onClose={() =>setIsDeleteModalOpen(false)}
-      title='Are you sure you want to delete this project?'
+      title={t('areYouSureMessage')}
       handleDelete={handleDelete}
       />
     </div>

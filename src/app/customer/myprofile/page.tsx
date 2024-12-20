@@ -11,15 +11,17 @@ import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { getUserInfo, updateUserInfo } from "@/services/client/client-service";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const Page = () => {
+  const t = useTranslations('ProfilePage'); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const session = useSession();
   const [isPending, startTransition] = useTransition();
   const {data, error, mutate, isLoading} = useSWR(`/user/${session?.data?.user?.id}`, getUserInfo)
   const customerData = data?.data?.data?.user;
   const [formData, setFormData] = useState<any>({
-    fullName: "",
+  fullName: "",
    phoneNumber: "",
    email: "",
    address: "",
@@ -59,14 +61,14 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       setIsModalOpen(false);
       mutate()
         //setNotification("User Added Successfully");
-         toast.success("User details updated successfully");
+         toast.success(t("successUserAdded"));
         
       } else {
-        toast.error("Failed to add User Data");
+        toast.error(t("errorUserAddFailed"));
       }
     } catch (error) {
-      console.error("Error adding User Data:", error);
-      toast.error("An error occurred while adding the User Data");
+    
+      toast.error(t("errorUserAddException"));
     }
   });
   
@@ -80,51 +82,51 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />           
         <div> 
           <button  onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] "> 
-          <EditButtonIcon/> Edit Details
+          <EditButtonIcon/>{t('editDetails')} 
         </button></div>
         </div>
         <div className="fomm-wrapper grid md:flex flex-wrap gap-5 ">
           <div className="w-full">
-            <label className="block">Full Name</label>
+            <label className="block">{t('fullName')}</label>
             <input
               type="text"
               name="fullName"
               value={formData.fullName}
-              placeholder="Full Name"
+              placeholder={t('fullName')}
               onChange={handleInputChange}
               readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
-            <label className="block">Phone Number</label>
+            <label className="block">{t('phoneNumber')}</label>
             <input
               type="text"
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleInputChange}
-              placeholder="Phone Number"
+              placeholder={t('phoneNumber')}
               readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
-            <label className="block">Email Address</label>
+            <label className="block">{t('emailAddress')}</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="fullname@mail.com"
+              placeholder={t('emailAddress')}
               readOnly
             />
           </div>
           <div className="md:w-[calc(33.33%-14px)]">
-            <label className="block">Home Address</label>
+            <label className="block">{t('homeAddress')}</label>
             <input
               type="text"
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              placeholder="emailaddress@mail.com"
+              placeholder={t('homeAddress')}
               readOnly
             />
           </div>

@@ -1,14 +1,13 @@
 "use client"
 import { DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
-import Image, {StaticImageData} from 'next/image';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import imgs from '@/assets/images/avatar.png'
 import { useRouter } from 'next/navigation';
 import DeleteDataModal from './DeleteDataModal';
 import { deleteProject } from '@/services/admin/admin-service';
 import { toast } from 'sonner';
 import ReactLoading from 'react-loading';
+import { useTranslations } from 'next-intl';
 
 interface OnGoingProps { 
   projectsData: any;
@@ -24,7 +23,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
-
+  const t = useTranslations('ProjectsPage'); 
   
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
@@ -64,25 +63,25 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
       <table>
         <thead>
           <tr>
-            <th>Project ID</th>
-            <th>Image</th>
-            <th>Name of the project</th>
-            <th>Starting Date</th>
-            <th>Estimated End Date</th>
-            <th>Action</th>
+          <th>{t('projectId')}</th>
+            <th>{t('image')}</th>
+            <th>{t('projectName')}</th>
+            <th>{t('startDate')}</th>
+            <th>{t('expectedEndDate')}</th>
+            <th>{t('action')}</th>
           </tr>
         </thead>
         <tbody>
          {isLoading ? (
               <tr>
                 <td colSpan={5} className="">
-                  Loading...
+                {t('loading')}...
                 </td>
               </tr>
             ) : error ? (
               <tr>
                 <td colSpan={5} className="text-center text-red-500 ">
-                  Error loading data.
+                {t('errorLoadingData')}.
                 </td>
               </tr>
             ) : projects?.length > 0 ? (
@@ -103,7 +102,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
           ))
         ) : (
           <tr>
-            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>No data found</p>}</td>
+            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</td>
           </tr>
         )}
         </tbody>
@@ -132,7 +131,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
       <DeleteDataModal
       isOpen={isDeleteModalOpen}
       onClose={() =>setIsDeleteModalOpen(false)}
-      title='Are you sure you want to delete this project?'
+      title={t('areYouSureMessage')}
       handleDelete={handleDelete}
       />
     </div>

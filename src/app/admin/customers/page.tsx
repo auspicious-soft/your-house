@@ -10,9 +10,12 @@ import { deleteUsers, getAllUsers } from '@/services/admin/admin-service';
 import ReactLoading from 'react-loading';
 import DeleteDataModal from '../components/DeleteDataModal';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 
 const Page: React.FC = () => {
+  const t = useTranslations('ProjectsPage'); 
+
   const router = useRouter();
   const [query, setQuery] = useState('page=1&limit=10');
   const {data, error, mutate, isLoading} = useSWR(`/admin/users`, getAllUsers)
@@ -58,25 +61,25 @@ const Page: React.FC = () => {
       <table>
         <thead>
           <tr>
-            <th>Image</th>
-            <th>Name of the client</th>
-            <th>Email Address</th>
-            <th>Phone Number</th>
-            <th>Home Address</th>
-            <th>Action</th>
+            <th>{t('image')}Image</th>
+            <th>{t('name')}Name of the client</th>
+            <th>{t('email')}Email Address</th>
+            <th>{t('phone')}Phone Number</th>
+            <th>{t('address')}Home Address</th>
+            <th>{t('action')}Action</th>
           </tr>
         </thead>
         <tbody>
         {isLoading ? (
               <tr>
                 <td colSpan={5} className="">
-                  Loading...
+                {t('loading')}...
                 </td>
               </tr>
             ) : error ? (
               <tr>
                 <td colSpan={5} className="text-center text-red-500 ">
-                  Error loading data.
+                {t('errorLoadingData')}.
                 </td>
               </tr>
             ) : usersData?.length > 0 ? (
@@ -97,7 +100,7 @@ const Page: React.FC = () => {
           ))
         ) : (
           <tr>
-            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>No data found</p>}</td>
+            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</td>
           </tr>
         )}
         </tbody>
@@ -126,7 +129,7 @@ const Page: React.FC = () => {
       <DeleteDataModal
       isOpen={isDeleteModalOpen}
       onClose={() =>setIsDeleteModalOpen(false)}
-      title='Are you sure you want to delete this customer?'
+      title={t('deleteMsgCustomer')}
       handleDelete={handleDelete}
       />
     </div>

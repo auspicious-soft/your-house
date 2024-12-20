@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import imgs from '@/assets/images/avatar.png'
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface BillingData {
   id: string;
@@ -30,7 +31,7 @@ const ClientProfileProjects: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 2;
-
+  const t = useTranslations('ProjectsPage'); 
   // Pagination handler
   const handlePageClick = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
@@ -49,11 +50,11 @@ const EditProjectData =(id: string) => {
       <table>
         <thead>
           <tr>
-            <th>Project ID</th>
-            <th>Image</th>
-            <th>Name of the project</th>
-            <th>Starting Date</th>
-            <th>Estimated End Date</th>
+          <th>{t('projectId')}</th>
+            <th>{t('image')}</th>
+            <th>{t('projectName')}</th>
+            <th>{t('startDate')}</th>
+            <th>{t('expectedEndDate')}</th>
           </tr>
         </thead>
         <tbody>

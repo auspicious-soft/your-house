@@ -125,7 +125,7 @@ const Page = () => {
             <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px] md:mb-[40px]">
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
-                  Starting Date
+                {t('startDate')}
                 </label>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -141,7 +141,7 @@ const Page = () => {
               </div>
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
-                  Expected End Date
+                {t('expectedEndDate')}
                 </label>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
@@ -157,7 +157,7 @@ const Page = () => {
               </div>
             </div>
             <div className="progress-container">
-              <h2 className="section-title">Progress</h2>
+              <h2 className="section-title"> {t('progress')}</h2>
               <div className="progress-steps grid grid-cols-4 mb-5 ">
                 {steps.map((step) => (
                   <button
@@ -259,7 +259,7 @@ const Page = () => {
             </div>
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
-                Description 
+              {t('description')}
                 {/* <EditProfile /> */}
               </h3>
               <p className="text-[#8B8E98] text-sm  ">{project?.description}
@@ -267,7 +267,7 @@ const Page = () => {
             </div>
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
-                Employees Associated
+              {t('employeesAssociated')}
                  {/* <EditProfile /> */}
               </h3>
                 {project?.associates?.map((index: any)=>(

@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import imgs from '@/assets/images/avatar.png'
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface BillingData {
   id: string;
@@ -17,6 +18,7 @@ interface BillingData {
 
 const AssociatedProjects: React.FC = () => {
   const router = useRouter();
+  const t = useTranslations('ProjectsPage'); 
   // Dummy data
   const data: BillingData[] = [
     { id: '123', img: imgs, renewalDate: '04 Jan 2025', chatWithClinician: 'Yes', videoChat: 'Yes', billingAmount: '$25.00' },
@@ -49,12 +51,12 @@ const AssociatedProjects: React.FC = () => {
       <table>
         <thead>
           <tr>
-            <th>Project ID</th>
-            <th>Image</th>
-            <th>Name of the project</th>
-            <th>Starting Date</th>
-            <th>Estimated End Date</th>
-            <th>Action</th>
+          <th>{t('projectId')}</th>
+            <th>{t('image')}</th>
+            <th>{t('projectName')}</th>
+            <th>{t('startDate')}</th>
+            <th>{t('expectedEndDate')}</th>
+            <th>{t('action')}</th>
           </tr>
         </thead>
         <tbody>

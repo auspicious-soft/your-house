@@ -6,6 +6,7 @@ import Image, {StaticImageData} from 'next/image';
 import ReactPaginate from 'react-paginate';
 import ReactLoading from 'react-loading';
 import imgs from '@/assets/images/avatar.png'
+import { useTranslations } from 'next-intl';
 
 
 interface CompletedProps {
@@ -20,7 +21,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
   const projects = projectsData?.data;
   const total = projectsData?.total ?? 0;
   const router = useRouter();
- 
+  const t = useTranslations('ProjectsPage'); 
 
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
@@ -35,25 +36,25 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
       <table>
         <thead>
           <tr>
-            <th>Project ID</th>
-            <th>Image</th>
-            <th>Name of the project</th>
-            <th>Starting Date</th>
-            <th>Estimated End Date</th>
-            <th>Action</th>
+          <th>{t('projectId')}</th>
+            <th>{t('image')}</th>
+            <th>{t('projectName')}</th>
+            <th>{t('startDate')}</th>
+            <th>{t('expectedEndDate')}</th>
+            <th>{t('action')}</th>
           </tr>
         </thead>
         <tbody>
         {isLoading ? (
               <tr>
                 <td colSpan={5} className="">
-                  Loading...
+                {t('loading')}...
                 </td>
               </tr>
             ) : error ? (
               <tr>
                 <td colSpan={5} className="text-center text-red-500 ">
-                  Error loading data.
+                {t('errorLoadingData')}.
                 </td>
               </tr>
             ) : projects?.length > 0 ? (
@@ -69,7 +70,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
           ))
         ) : (
           <tr>
-            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>No data found</p>}</td>
+            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</td>
           </tr>
         )}
         </tbody>

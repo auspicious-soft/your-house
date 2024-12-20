@@ -6,11 +6,13 @@ import useSWR from 'swr';
 import { addAttachmentsData, deleteAttachmentsData, getAttachmentsData } from '@/services/admin/admin-service';
 import Modal from "react-modal";
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 interface OverViewProps {
   id: any;
   } 
 const OverviewOfProjects: React.FC<OverViewProps> = ({id}) => {
+  const t = useTranslations('ProjectsPage'); 
   const {data, isLoading, error, mutate} = useSWR(`/admin/attachments/${id}`, getAttachmentsData)
   const attachments = data?.data?.data
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,7 +75,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({id}) => {
       ))}
       <div className="">
         <button onClick={()=>setIsModalOpen(true)} className="w-full button !h-[40px] "> <EditButtonIcon/>
-          Upload New File
+        {t('uploadNewFile')}
         </button>
       </div>
       <Modal

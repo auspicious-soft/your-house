@@ -4,12 +4,15 @@ import React, { useState, useTransition } from 'react';
 import useSWR from 'swr';
 import Modal from "react-modal";
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 
 interface Notes {
   id: any;
 }
 const Notes: React.FC<Notes> = ({id}) => {
+  const t = useTranslations('ProjectsPage'); 
+
   const {data, isLoading, error, mutate} = useSWR(`/admin/notes/${id}`, getNotesData)
   const notes = data?.data?.data
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,7 +69,7 @@ const Notes: React.FC<Notes> = ({id}) => {
             ))}
             <div className="mt-4">
         <button  onClick={()=>setIsModalOpen(true)} className="w-full button !h-[40px] "> <EditButtonIcon/>
-          Upload New Note
+        {t('addNotes')}
         </button>
       </div>
       <Modal

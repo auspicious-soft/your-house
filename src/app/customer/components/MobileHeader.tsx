@@ -8,6 +8,7 @@ import Image from "next/image";
 import NavLogo from "@/assets/images/logo.png";
 import { CustomerActiveIcon, CustomerIcon, DashboardActiveIcon, DashboardIcon, HamburgerIcon, ProjectActiveIcon, ProjectIcon } from "@/utils/svgicons";
 import NotifactionBar from "@/app/admin/components/NotifactionBar";
+import { useTranslations } from "next-intl";
 
 const MobileHeader = () => {
   const router = useRouter();
@@ -16,6 +17,7 @@ const MobileHeader = () => {
     await signOut({ redirect: false })
     router.push('/'); 
   };
+  const t = useTranslations('CustomerDashboard'); 
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -54,23 +56,23 @@ const MobileHeader = () => {
           <li className={isActive('/customer/dashboard')}>
             <Link href="/customer/dashboard" onClick={() => handleLinkClick("/customer/dashboard")}>
               {isActive('/customer/dashboard') ? <DashboardActiveIcon /> : <DashboardIcon />}
-              Dashboard
+             {t('dashboard')}
             </Link>
           </li>
           <li className={isActive('/customer/projects')}>
             <Link href="/customer/projects" onClick={() => handleLinkClick("/customer/projects")}> 
             {isActive('/customer/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
-              Projects
+            {t('projects')}
             </Link>
           </li>
           <li className={isActive('/customer/myprofile')}>
             <Link href="/customer/myprofile" onClick={() => handleLinkClick("/customer/myprofile")}>
              {isActive('/customer/myprofile') ? <CustomerActiveIcon /> : <CustomerIcon />}
-             My Profile
+             {t('myProfile')}
             </Link>
           </li>
           <li className="mr-3">
-          <button onClick={() => signOut({ redirectTo: '/' })} className="button w-full !h-10 ">Log Out</button>
+          <button onClick={() => signOut({ redirectTo: '/' })} className="button w-full !h-10 "> {t('logOut')}</button>
           </li>
         </ul>
         </div>
