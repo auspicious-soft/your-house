@@ -152,7 +152,7 @@ const Page = () => {
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t('image')}</label>
               <input
-                type="text"
+                type="file"
                 name="projectimageLink"
                 value={formData.projectimageLink}
                 placeholder="Tilføj"
