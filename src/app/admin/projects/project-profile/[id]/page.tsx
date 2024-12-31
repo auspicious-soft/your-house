@@ -6,8 +6,6 @@ import OverviewOfProjects from "@/app/admin/components/OverviewOfProjects";
 import {
   AddIcon,
   CallIcon,
-  EditImageIcon,
-  EditProfile,
   MailIcon,
   MapIcon,
   ProgressIcon,
@@ -31,19 +29,12 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
 const Page = () => {
-  const t = useTranslations('ProjectsPage'); 
-  const {id} = useParams();
-  const {data, error, mutate, isLoading} = useSWR(`/admin/project/${id}`, getSingleProject);
+  const t = useTranslations('ProjectsPage');
+  const { id } = useParams();
+  const { data, error, mutate, isLoading } = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data;
   const userData = data?.data?.data?.userId;
-  
-  const [startDate, setStartDate] = useState(
-    project?.projectstartDate ? dayjs(project.projectstartDate) : dayjs()
-  );
-  const [date, setDate] = useState<Date | null>(new Date());
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   const [activeTab, setActiveTab] = useState(t("overview"));
 
@@ -56,7 +47,7 @@ const Page = () => {
   ];
 
   useEffect(() => {
-    const statusToProgress = { 
+    const statusToProgress = {
       '1': 25,
       '2': 50,
       '3': 75,
@@ -97,7 +88,7 @@ const Page = () => {
 
   const updateProjectStatus = async (step: number) => {
     try {
-      const statusValue = step/25; // Assuming 4 steps total
+      const statusValue = step / 25; // Assuming 4 steps total
       const response = await updateSingleProjectData(`/admin/project/${id}`, { status: statusValue });
       if (response?.status === 200) {
         toast.success("Project status updated successfully");
@@ -117,7 +108,7 @@ const Page = () => {
         <div className="bg-white rounded-[10px] md:rounded-[30px] box-shadow ">
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10">
             <h2 className="main-heading capitalize">{project?.projectName}</h2>
-            <button  onClick={() => setIsModalOpen(true)} className="!rounded-[3px] !h-[37px] button !px-4 ">
+            <button onClick={() => setIsModalOpen(true)} className="!rounded-[3px] !h-[37px] button !px-4 ">
               <AddIcon className="w-4 h-4" /> {t('editProjectDetails')}
             </button>
           </div>
@@ -125,33 +116,35 @@ const Page = () => {
             <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px] md:mb-[40px]">
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
-                {t('startDate')}
+                  {t('startDate')}
                 </label>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DatePicker", "DatePicker"]}>
-          <DatePicker
-            defaultValue={project?.projectstartDate ? dayjs(project.projectstartDate) : null}
-            value={project?.projectstartDate ? dayjs(project.projectstartDate) : null}
-            views={["year", "month", "day"]}
-          />
-           
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      disabled
+                      defaultValue={project?.projectstartDate ? dayjs(project.projectstartDate) : null}
+                      value={project?.projectstartDate ? dayjs(project.projectstartDate) : null}
+                      views={["year", "month", "day"]}
+                    />
 
-        </DemoContainer>
-      </LocalizationProvider>
+
+                  </DemoContainer>
+                </LocalizationProvider>
               </div>
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
-                {t('expectedEndDate')}
+                  {t('expectedEndDate')}
                 </label>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
-                    components={["DatePicker", "DatePicker", "DatePicker"]}
+                    components={["DatePicker"]}
                   >
-                   <DatePicker
-            defaultValue={project?.projectendDate ? dayjs(project.projectendDate) : null}
-            value={project?.projectendDate ? dayjs(project.projectendDate) : null}
-            views={["year", "month", "day"]}
-          />
+                    <DatePicker
+                      disabled
+                      defaultValue={project?.projectendDate ? dayjs(project.projectendDate) : null}
+                      value={project?.projectendDate ? dayjs(project.projectendDate) : null}
+                      views={["year", "month", "day"]}
+                    />
                   </DemoContainer>
                 </LocalizationProvider>
               </div>
@@ -166,9 +159,8 @@ const Page = () => {
                       setProgress(step.value);
                       updateProjectStatus(step.value);
                     }}
-                    className={`progress-step ${
-                      progress >= step.value ? "active" : ""
-                    }`}
+                    className={`progress-step ${progress >= step.value ? "active" : ""
+                      }`}
                   >
                     <div className="checked flex justify-center mb-2.5  ">
                       {progress >= step.value ? (
@@ -178,11 +170,10 @@ const Page = () => {
                       )}
                     </div>
                     <span
-                      className={`text-sm font-sfproDisplaymedium ${
-                        progress >= step.value
-                          ? "text-[#43527B]"
-                          : "text-[#8B8E98]"
-                      }`}
+                      className={`text-sm font-sfproDisplaymedium ${progress >= step.value
+                        ? "text-[#43527B]"
+                        : "text-[#8B8E98]"
+                        }`}
                     >
                       {step.label}
                     </span>
@@ -205,11 +196,10 @@ const Page = () => {
                 {[t("overview"), t("notes")].map((tab) => (
                   <button
                     key={tab}
-                    className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${
-                      activeTab === tab
-                        ? "text-white bg-[#3C3F88] "
-                        : "text-[#8B8E98] bg-[#F4F5F7] "
-                    }`}
+                    className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab
+                      ? "text-white bg-[#3C3F88] "
+                      : "text-[#8B8E98] bg-[#F4F5F7] "
+                      }`}
                     onClick={() => setActiveTab(tab)}
                   >
                     {" "}
@@ -259,7 +249,7 @@ const Page = () => {
             </div>
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
-              {t('description')}
+                {t('description')}
                 {/* <EditProfile /> */}
               </h3>
               <p className="text-[#8B8E98] text-sm  ">{project?.description}
@@ -267,23 +257,23 @@ const Page = () => {
             </div>
             <div className="mt-7">
               <h3 className="text-[#3C3F88] text-sm flex mb-2 items-center justify-between ">
-              {t('employeesAssociated')}
-                 {/* <EditProfile /> */}
+                {t('employeesAssociated')}
+                {/* <EditProfile /> */}
               </h3>
-                {project?.associates?.map((index: any)=>(
-                 <p className="text-[#8B8E98] text-sm capitalize " key={index}>{index} </p>
-                ))}
-                
+              {project?.associates?.map((index: any) => (
+                <p className="text-[#8B8E98] text-sm capitalize " key={index}>{index} </p>
+              ))}
+
             </div>
           </div>
         </div>
       </div>
-      <UpdateSingleProjectModal 
-      id={id} 
-      data={project} 
-      isOpen={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
-      mutate={mutate}
+      <UpdateSingleProjectModal
+        id={id}
+        data={project}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        mutate={mutate}
       />
     </div>
   );

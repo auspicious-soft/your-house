@@ -11,7 +11,7 @@ import { useTranslations } from "next-intl";
 
 const SideNav = () => {
   const router = useRouter();
- const t = useTranslations('CustomerDashboard');
+  const t = useTranslations('CustomerDashboard');
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -30,9 +30,9 @@ const SideNav = () => {
     <div className={`sideNav ${isCollapsed ? 'collapsed' : ''} h-[100%] overflo-custom`}>
       <div className="">
         <div className="mb-[50px] ">
-              <Link href="/admin/dashboard" className="inline-block">
-              <Image src={NavLogo} alt="animate" className=" max-w-[172px]"/>
-              </Link>
+          <Link href="/admin/dashboard" className="inline-block">
+            <Image src={NavLogo} alt="animate" className=" max-w-[172px]" />
+          </Link>
           <button onClick={toggleSidebar} className="hamburgerButton">
           </button>
         </div>
@@ -40,20 +40,20 @@ const SideNav = () => {
           <li className={isActive('/admin/dashboard')}>
             <Link href="/admin/dashboard">
               {isActive('/admin/dashboard') ? <DashboardActiveIcon /> : <DashboardIcon />}
-           {t('dashboard')}
+              {t('dashboard')}
             </Link>
           </li>
-          <li className={`${isActive('/admin/projects')} ${pathname.includes('/new-project') ? 'active' : ''}`}>
-            <Link href="/admin/projects"> 
-            {isActive('/admin/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
-            {t('projects')}
+          <li className={`${isActive('/admin/projects')} ${pathname.includes('/new-project') ? 'active' : ''} ${pathname.includes('/project-profile') ? 'active' : ''}`}>
+            <Link href="/admin/projects">
+              {isActive('/admin/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
+              {t('projects')}
             </Link>
           </li>
           <li className={`${isActive('/admin/customers')} ${pathname.startsWith('/admin/customers/profile') ? 'active' : ''}`}>
-          {/* {isActive('/admin/customers')}> */}
+            {/* {isActive('/admin/customers')}> */}
             <Link href="/admin/customers">
-             {isActive('/admin/customers') ? <CustomerActiveIcon /> : <CustomerIcon />}
-             {t('customers')}
+              {isActive('/admin/customers') ? <CustomerActiveIcon /> : <CustomerIcon />}
+              {t('customers')}
             </Link>
           </li>
         </ul>

@@ -63,7 +63,7 @@ const Home = () => {
         </div>
         <div className="md:col-span-1">
           <div onClick={()=>openNewProject()}
-            className="bg-[#1657FF] min-h-[120px]  md:min-h-[100%] rounded-[10px] md:rounded-[20px] py-[20px] px-[25px] flex justify-between gap-3 md:gap-3 "
+            className="bg-[#1657FF] min-h-[120px] cursor-pointer md:min-h-[100%] rounded-[10px] md:rounded-[20px] py-[20px] px-[25px] flex justify-between gap-3 md:gap-3 "
           >
             <div className="flex flex-col  gap-3 md:gap-3">
               <p className="leading-normal font-sfproDisplaybold text-[18px] md:text-[20px] text-[#fff] ">

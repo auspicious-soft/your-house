@@ -61,12 +61,12 @@ const Page: React.FC = () => {
       <table>
         <thead>
           <tr>
-            <th>{t('image')}Image</th>
-            <th>{t('name')}Name of the client</th>
-            <th>{t('email')}Email Address</th>
-            <th>{t('phone')}Phone Number</th>
-            <th>{t('address')}Home Address</th>
-            <th>{t('action')}Action</th>
+            <th>{t('image')}</th>
+            <th>{t('name')}</th>
+            <th>{t('email')}</th>
+            <th>{t('phone')}</th>
+            <th>{t('address')}</th>
+            <th>{t('action')}</th>
           </tr>
         </thead>
         <tbody>
