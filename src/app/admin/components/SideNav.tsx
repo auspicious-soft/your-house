@@ -43,7 +43,7 @@ const SideNav = () => {
            {t('dashboard')}
             </Link>
           </li>
-          <li className={`${isActive('/admin/projects')} ${pathname.startsWith('/admin/projects/project-profile') ? 'active' : '' }`}>
+          <li className={`${isActive('/admin/projects')} ${pathname.includes('/new-project') ? 'active' : ''}`}>
             <Link href="/admin/projects"> 
             {isActive('/admin/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
             {t('projects')}

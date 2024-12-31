@@ -30,9 +30,9 @@ const SideNav = () => {
     <div className={`sideNav ${isCollapsed ? 'collapsed' : ''} h-[100%] overflo-custom`}>
       <div className="">
         <div className="mb-[50px] ">
-              <Link href="/customer/dashboard" className="inline-block">
-              <Image src={NavLogo} alt="animate" className=" max-w-[172px]"/>
-              </Link>
+          <Link href="/customer/dashboard" className="inline-block">
+            <Image src={NavLogo} alt="animate" className=" max-w-[172px]" />
+          </Link>
           <button onClick={toggleSidebar} className="hamburgerButton">
           </button>
         </div>
@@ -43,16 +43,16 @@ const SideNav = () => {
               {t('dashboard')}
             </Link>
           </li>
-          <li className={isActive('/customer/projects')}>
-            <Link href="/customer/projects"> 
-            {isActive('/customer/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
-            {t('projects')}
+          <li className={`${isActive('/customer/projects')}`}>
+            <Link href="/customer/projects">
+              {isActive('/customer/projects') ? <ProjectActiveIcon /> : <ProjectIcon />}
+              {t('projects')}
             </Link>
           </li>
           <li className={isActive('/customer/myprofile')}>
             <Link href="/customer/myprofile">
-             {isActive('/customer/myprofile') ? <CustomerActiveIcon /> : <CustomerIcon />}
-             {t('myProfile')}
+              {isActive('/customer/myprofile') ? <CustomerActiveIcon /> : <CustomerIcon />}
+              {t('myProfile')}
             </Link>
           </li>
         </ul>
