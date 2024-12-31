@@ -41,10 +41,43 @@ export const getTokenCustom = async () => {
     return cookiesOfNextAuth?.value!
 }
 
-export const generateSignedUrlToUploadOn = async (fileName: string, fileType: string) => {
+export const generateSignedUrlToUploadOn = async (fileName: string, fileType: string, userEmail: string) => {
     const uploadParams = {
         Bucket: process.env.AWS_BUCKET_NAME,
-        Key: `avatars/${fileName}`,
+        Key: `projects/${userEmail}/${fileName}`,
+        ContentType: fileType,
+    }
+    try {
+        const command = new PutObjectCommand(uploadParams)
+        const signedUrl = await getSignedUrl(await createS3Client(), command)
+        return signedUrl
+    } catch (error) {
+        console.error("Error generating signed URL:", error);
+        throw error
+    }
+}
+
+export const generateSignedUrlOfProjectAttachment = async (fileName: string, fileType: string, userEmail: string) => {
+    const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: `projects/${userEmail}/attachments/${fileName}`,
+        ContentType: fileType,
+    }
+    try {
+        const command = new PutObjectCommand(uploadParams)
+        const signedUrl = await getSignedUrl(await createS3Client(), command)
+        return signedUrl
+    } catch (error) {
+        console.error("Error generating signed URL:", error);
+        throw error
+    }
+}
+
+
+export const generateSignedUrlForUserProfile = async (fileName: string, fileType: string, userEmail: string) => {
+    const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: `users/${userEmail}/${fileName}`,
         ContentType: fileType,
     }
     try {
