@@ -36,7 +36,7 @@ const ClientAttachments: React.FC<OverViewProps> = ({ id }) => {
   return (
     <div className=''>
       {attachments?.map((attachment: any) => {
-        const fileName = attachment.url.replace('users/', '').replace(`${email}/`, '');
+        const fileName = attachment.url.replace('users/', '').replace(`${email}/`, '').replace('projects/', '').replace(`attachments/`, '')
         return (
           <div key={attachment._id} className="flex justify-between items-center mb-5">
             <div className='flex items-center gap-3 '>
