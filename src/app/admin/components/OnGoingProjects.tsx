@@ -8,28 +8,30 @@ import { deleteProject } from '@/services/admin/admin-service';
 import { toast } from 'sonner';
 import ReactLoading from 'react-loading';
 import { useTranslations } from 'next-intl';
+import TableRowImage from '@/components/table-row-img';
+import { getImageClientS3URL } from '@/utils/axios';
 
-interface OnGoingProps { 
+interface OnGoingProps {
   projectsData: any;
   mutate: any;
   isLoading: boolean;
   setQuery: any;
-  error: any; 
+  error: any;
 }
 
-const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoading, error, setQuery  }) => {
+const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoading, error, setQuery }) => {
   const projects = projectsData?.data;
   const total = projectsData?.total ?? 0;
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
-  const t = useTranslations('ProjectsPage'); 
-  
+  const t = useTranslations('ProjectsPage');
+
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
   }
-  
+
 
   //const paginatedData = data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
 
@@ -37,10 +39,10 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
     setIsDeleteModalOpen(true);
     setSelectedId(id);
   };
- 
+
   const handleDelete = async () => {
     try {
-      const response = await deleteProject(`/admin/project/${selectedId}`); 
+      const response = await deleteProject(`/admin/project/${selectedId}`);
       if (response.status === 200) {
         toast.success("Client deleted successfully");
         setIsDeleteModalOpen(false);
@@ -53,65 +55,65 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
       toast.error("An error occurred while deleting the Client");
     }
   }
-  
-  const EditProjectData =(id: string) => {
-   router.push(`/admin/projects/project-profile/${id}`);
+
+  const EditProjectData = (id: string) => {
+    router.push(`/admin/projects/project-profile/${id}`);
   }
   return (
     <div>
-    <div className="table-common overflo-custom mt-[20px] box-shadow">
-      <table>
-        <thead>
-          <tr>
-          <th>{t('projectId')}</th>
-            <th>{t('image')}</th>
-            <th>{t('projectName')}</th>
-            <th>{t('startDate')}</th>
-            <th>{t('expectedEndDate')}</th>
-            <th>{t('action')}</th>
-          </tr>
-        </thead>
-        <tbody>
-         {isLoading ? (
+      <div className="table-common overflo-custom mt-[20px] box-shadow">
+        <table>
+          <thead>
+            <tr>
+              <th>{t('projectId')}</th>
+              <th>{t('image')}</th>
+              <th>{t('projectName')}</th>
+              <th>{t('startDate')}</th>
+              <th>{t('expectedEndDate')}</th>
+              <th>{t('action')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading ? (
               <tr>
                 <td colSpan={5} className="">
-                {t('loading')}...
+                  {t('loading')}...
                 </td>
               </tr>
             ) : error ? (
               <tr>
                 <td colSpan={5} className="text-center text-red-500 ">
-                {t('errorLoadingData')}.
+                  {t('errorLoadingData')}.
                 </td>
               </tr>
             ) : projects?.length > 0 ? (
               projects?.map((row: any) => (
-            <tr key={row?._id}>
-              <td>{row?._id}</td>
-              <td>{row?.projectimageLink}</td>
-              <td>{row?.projectName}</td>
-              <td>{row?.projectstartDate}</td>
-              <td>{row?.projectendDate}</td>
-              <td>
-                <div className='flex items-center gap-[6px] '>
-                  <button onClick={()=>EditProjectData(row?._id)}><EditIcon /> </button>
-                  <button onClick={() => openDeleteModal(row?._id)}><DeleteIcon/> </button>
-                </div>
-              </td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</td>
-          </tr>
-        )}
-        </tbody>
-      </table>
+                <tr key={row?._id}>
+                  <td>{row?._id}</td>
+                  <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
+                  <td>{row?.projectName}</td>
+                  <td>{row?.projectstartDate}</td>
+                  <td>{row?.projectendDate}</td>
+                  <td>
+                    <div className='flex items-center gap-[6px] '>
+                      <button onClick={() => EditProjectData(row?._id)}><EditIcon /> </button>
+                      <button onClick={() => openDeleteModal(row?._id)}><DeleteIcon /> </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
       <div className="text-right mt-4">
         <ReactPaginate
-          previousLabel={<PreviousLabel/>}
-          nextLabel={<NextLabel/>}
+          previousLabel={<PreviousLabel />}
+          nextLabel={<NextLabel />}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={Math.ceil(total / rowsPerPage)}
@@ -120,7 +122,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
           onPageChange={handlePageClick}
           containerClassName={'inline-flex mt-[34px] gap-1'}
           pageClassName={' text-[#3C3F88] border border-{#F1F1F1} bg-white rounded-full'}  // anchor tag
-          pageLinkClassName={'grid place-items-center h-10 w-10  inline-block'} 
+          pageLinkClassName={'grid place-items-center h-10 w-10  inline-block'}
           activeClassName={'!bg-[#1657FF] active rounded-full text-white'} // active anchor
           previousClassName={'leading-[normal]  '}
           previousLinkClassName={'grid place-items-center h-10 w-10 inline-block border border-{#F1F1F1} bg-white rounded-full'}
@@ -129,10 +131,10 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, isLoadin
         />
       </div>
       <DeleteDataModal
-      isOpen={isDeleteModalOpen}
-      onClose={() =>setIsDeleteModalOpen(false)}
-      title={t('areYouSureMessage')}
-      handleDelete={handleDelete}
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title={t('areYouSureMessage')}
+        handleDelete={handleDelete}
       />
     </div>
   );

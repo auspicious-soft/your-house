@@ -8,6 +8,7 @@ import ReactLoading from 'react-loading';
 import imgs from '@/assets/images/avatar.png'
 import { useTranslations } from 'next-intl';
 import TableRowImage from '@/components/table-row-img';
+import { getImageClientS3URL } from '@/utils/axios';
 
 
 interface CompletedProps {
@@ -62,7 +63,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
               projects?.map((row: any) => (
             <tr key={row?._id}>
               <td>{row?._id} </td>
-              <td><TableRowImage image={row?.projectimageLink} /></td>
+              <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>

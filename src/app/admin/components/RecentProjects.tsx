@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 import { deleteProject } from '@/services/admin/admin-service';
 import ReactLoading from 'react-loading';
 import { useTranslations } from 'next-intl';
+import { getImageClientS3URL } from '@/utils/axios';
+import TableRowImage from '@/components/table-row-img';
 
 interface recentProjectsProps {
   recentProjects: any;
@@ -90,7 +92,7 @@ const EditProjectData =(id: string) => {
           recentProjects?.map((row: any) => (
             <tr key={row?._id}>
               <td>{row?._id}</td>
-              <td>{row?.projectimageLink}</td>
+              <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>

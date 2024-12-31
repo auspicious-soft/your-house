@@ -29,3 +29,7 @@ const createAuthInstance = async (adminRole: boolean = false) => {
 export const getAxiosInstance = async (adminRole?: boolean) => {
     return await createAuthInstance(adminRole)
 }
+
+export const getImageClientS3URL = (key: string) => {
+    return `${process.env.NEXT_PUBLIC_AWS_BUCKET_PATH}${key}`
+}

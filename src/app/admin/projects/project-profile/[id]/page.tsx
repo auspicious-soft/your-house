@@ -27,6 +27,7 @@ import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProject
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { getImageClientS3URL } from "@/utils/axios";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -63,7 +64,7 @@ const Page = () => {
       case t("overview"):
         return (
           <div>
-            <OverviewOfProjects id={id} />
+            <OverviewOfProjects id={id} userEmail = {userData?.email} />
           </div>
         );
       case "Status":
@@ -219,7 +220,7 @@ const Page = () => {
               <div className="grid place-items-center h-full w-full">
                 <div>
                   <Image
-                    src={imgNew}
+                    src={getImageClientS3URL(userData?.profilePic) || imgNew}
                     alt="upload"
                     width={120}
                     height={120}
@@ -268,13 +269,13 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <UpdateSingleProjectModal
+      {isModalOpen && <UpdateSingleProjectModal
         id={id}
         data={project}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mutate={mutate}
-      />
+      />}
     </div>
   );
 };

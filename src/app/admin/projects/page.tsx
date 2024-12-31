@@ -1,10 +1,6 @@
 "use client";
-import { FaHandsHelping } from "react-icons/fa";
-import { useState, useEffect, useTransition } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
-import { useSession } from 'next-auth/react'; 
-import Modal from 'react-modal';
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import OnGoingProjects from "../components/OnGoingProjects";
@@ -12,6 +8,7 @@ import CompletedProjects from "../components/CompletedProjects";
 import { AddIcon } from "@/utils/svgicons";
 import { getAllProjects } from "@/services/admin/admin-service";
 import { useTranslations } from "next-intl";
+
 const Page = () => {
   const t = useTranslations('ProjectsPage'); 
   const [activeTab, setActiveTab] = useState(t('ongoingProjects'));

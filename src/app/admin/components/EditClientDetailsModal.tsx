@@ -34,7 +34,6 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      // Store the actual File object in formData
       setFormData((prev: any) => ({
         ...prev,
         profilePic: file

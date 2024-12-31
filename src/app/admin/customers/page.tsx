@@ -11,6 +11,8 @@ import ReactLoading from 'react-loading';
 import DeleteDataModal from '../components/DeleteDataModal';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import TableRowImage from '@/components/table-row-img';
+import { getImageClientS3URL } from '@/utils/axios';
 
 
 const Page: React.FC = () => {
@@ -85,7 +87,7 @@ const Page: React.FC = () => {
             ) : usersData?.length > 0 ? (
           usersData.map((row: any) => (
             <tr key={row?._id}>
-              <td><Image src={row?.profilePi} alt='profile' width={50} height={50}/> </td>
+             <td><TableRowImage image={getImageClientS3URL(row?.profilePic)} /></td>
               <td>{row?.fullName} </td>
               <td>{row?.email}</td>
               <td>{row?.phoneNumber}</td>

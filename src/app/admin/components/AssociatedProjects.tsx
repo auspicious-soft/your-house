@@ -9,6 +9,8 @@ import { deleteProject } from '@/services/admin/admin-service';
 import { toast } from 'sonner';
 import DeleteDataModal from './DeleteDataModal';
 import { useTranslations } from 'next-intl';
+import TableRowImage from '@/components/table-row-img';
+import { getImageClientS3URL } from '@/utils/axios';
 
 interface ProjectsProps {
  data: any;
@@ -69,7 +71,7 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
           data?.map((row: any) => (
             <tr key={row?._id}>
               <td>{row?._id} </td>
-              <td><Image src={row.img} alt='project' width={50} height={50}/> </td>
+              <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>

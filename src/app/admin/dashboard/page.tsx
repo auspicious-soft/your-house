@@ -11,9 +11,10 @@ import { useRouter } from "next/navigation";
 import { getDashboardStats } from "@/services/admin/admin-service";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { getImageClientS3URL } from "@/utils/axios";
 
 const Home = () => {
-  const t = useTranslations('CustomerDashboard'); 
+  const t = useTranslations('CustomerDashboard');
   const session = useSession();
   const router = useRouter();
   const [query, setQuery] = useState('');
@@ -62,35 +63,37 @@ const Home = () => {
           ))}
         </div>
         <div className="md:col-span-1">
-          <div onClick={()=>openNewProject()}
+          <div onClick={() => openNewProject()}
             className="bg-[#1657FF] min-h-[120px] cursor-pointer md:min-h-[100%] rounded-[10px] md:rounded-[20px] py-[20px] px-[25px] flex justify-between gap-3 md:gap-3 "
           >
             <div className="flex flex-col  gap-3 md:gap-3">
               <p className="leading-normal font-sfproDisplaybold text-[18px] md:text-[20px] text-[#fff] ">
-              {t('createNewProject')}
+                {t('createNewProject')}
               </p>
               <p className="text-[#fff] text-[14px] max-w-[180px]">
-              {t('clickToAddProject')}
+                {t('clickToAddProject')}
               </p>
             </div>
             <AddIcon />
           </div>
-        </div> 
+        </div>
       </div>
 
       <section className="mt-10">
-      <h2 className="section-title">{t('workingProgress')}</h2>
-      <div className="bg-white rounded-[10px]  md:rounded-[30px]  py-[30px] px-[15px] md:p-[30px]">
-        <h3 className="text-lg text-[#353E6C] font-sfproDisplaysemibold mb-[26px] ">{dashboardData?.workingProjectDetails.length} {t('ongoingProjects')}</h3>
-          {dashboardData?.workingProjectDetails.map((data: any)=>(
-          <ProjectsProgress
-            key={data?._id}
-            title={data?.projectName}
-            progress={data?.status*25}
-            imgSrc={data?.df}
-            />
-          ))}
-      </div>
+        <h2 className="section-title">{t('workingProgress')}</h2>
+        <div className="bg-white rounded-[10px]  md:rounded-[30px]  py-[30px] px-[15px] md:p-[30px]">
+          <h3 className="text-lg text-[#353E6C] font-sfproDisplaysemibold mb-[26px] ">{dashboardData?.workingProjectDetails.length} {t('ongoingProjects')}</h3>
+          {dashboardData?.workingProjectDetails.map((data: any) => {
+            return (
+              <ProjectsProgress
+                key={data?._id}
+                title={data?.projectName}
+                progress={data?.status * 25}
+                imgSrc={getImageClientS3URL(data?.projectimageLink)}
+              />
+            )
+          })}
+        </div>
 
       </section>
 

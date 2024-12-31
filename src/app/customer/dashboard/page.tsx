@@ -7,6 +7,7 @@ import { Line } from "rc-progress";
 import { getDashboardData } from "@/services/client/client-service";
 import { useTranslations } from "next-intl";
 import TableRowImage from "@/components/table-row-img";
+import { getImageClientS3URL } from "@/utils/axios";
 
 const Home = () => {
  const t = useTranslations('CustomerDashboard'); 
@@ -76,7 +77,7 @@ const Home = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                   <TableRowImage image={row?.projectimageLink} />
+                   <TableRowImage image={getImageClientS3URL(row?.projectimageLink)} />
                     <span className="text-[#353E6C] ">{row?.projectName}</span>
                   </div>
                   <div className="bg-[#FF16A2] text-white px-4 py-[7px] rounded-[5px] text-base">

@@ -8,6 +8,8 @@ import DeleteDataModal from './DeleteDataModal';
 import { deleteProject } from '@/services/admin/admin-service';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import TableRowImage from '@/components/table-row-img';
+import { getImageClientS3URL } from '@/utils/axios';
 
 interface CompleteProps {
   projectsData: any;
@@ -86,7 +88,7 @@ const handlePageClick = (selectedItem: { selected: number }) => {
               projects?.map((row: any) => (
             <tr key={row?._id}>
               <td>{row?._id}</td>
-              <td>{row?.projectimageLink}</td>
+              <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>
