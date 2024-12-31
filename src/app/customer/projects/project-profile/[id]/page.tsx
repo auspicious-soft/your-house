@@ -97,7 +97,7 @@ const Page = () => {
                 <p className="text-base text-[#3C3F88] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">{project?.projectendDate}</p>
               </div>
             </div>
-            <div className="progress-container">
+            <div className="progress-container pb-4">
               <h2 className="section-title">{t('progress')}</h2>
               <div className="progress-steps grid grid-cols-4 mb-5 ">
                 {steps.map((step) => (

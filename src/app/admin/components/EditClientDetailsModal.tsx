@@ -3,18 +3,11 @@ import Modal from "react-modal";
 import Image from "next/image"; // Import Image for Next.js
 import { EditImageIcon } from "@/utils/svgicons";
 import prev from "@/assets/images/img13.png"
-import { toast } from "sonner";
 import { updateUserInfo } from "@/services/client/client-service";
 import { mutate } from "swr";
 import { useTranslations } from "next-intl";
-const EditClientDetailsModal = ({
-  isOpen,
-  onClose,
-  formData,
-  mutate,
-  handleInputChange,
-  id,
-  handleSubmit,
+
+const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInputChange, id, handleSubmit, profilePic, setFormData, isPending
 }: {
   isOpen: boolean;
   id?: string;
@@ -27,22 +20,33 @@ const EditClientDetailsModal = ({
     address: string;
     profilePic: string;
   };
+  setFormData: React.Dispatch<any>;
+  profilePic: string;
   handleInputChange: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
+  isPending: boolean
 }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const t = useTranslations('ProfilePage');
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      // Store the actual File object in formData
+      setFormData((prev: any) => ({
+        ...prev,
+        profilePic: file
+      }));
+
+      // Create preview URL
       const reader = new FileReader();
       reader.onload = (event) => {
         const result = event.target?.result as string;
         setImagePreview(result);
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   };
 
@@ -55,7 +59,7 @@ const EditClientDetailsModal = ({
     }
   };
 
-  
+
 
 
   return (
@@ -69,12 +73,12 @@ const EditClientDetailsModal = ({
     >
       <div className="bg-white rounded-lg p-8 relative">
         <div className="flex items-center justify-between mb-10 ">
-        <h2 className="main-heading">{t('editClientDetails')}</h2>
-        <button
-          onClick={onClose}
-          className="bg-[#3B3F88] text-white p-1 px-2 rounded-3xl  "
+          <h2 className="main-heading">{t('editClientDetails')}</h2>
+          <button
+            onClick={onClose}
+            className="bg-[#3B3F88] text-white p-1 px-2 rounded-3xl  "
           >✖
-        </button>
+          </button>
         </div>
         <div className=" fomm-wrapper">
           {/* Image Upload Section */}
@@ -105,13 +109,13 @@ const EditClientDetailsModal = ({
             ) : (
               <div className="grid place-items-center h-full w-full bg-[#f1f1f1] rounded-full">
                 <div>
-                  <Image
-                    src={prev}
+                  {profilePic && <Image
+                    src={profilePic || prev}
                     alt="upload"
                     width={200}
                     height={200}
                     className="rounded-full max-h-[200px] "
-                  />
+                  />}
                   <p className="absolute bottom-[10px] right-4 pointer-events-none">
                     <EditImageIcon />
                   </p>
@@ -119,64 +123,65 @@ const EditClientDetailsModal = ({
               </div>
             )}
           </div>
-            <form onSubmit={handleSubmit} className="grid md:flex flex-wrap gap-5">
-          {/* Form Fields */}
-          <div className="w-full">
-          <label className="block">
-            {t('fullName')}
-          </label>
-          <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
+          <form onSubmit={handleSubmit} className="grid md:flex flex-wrap gap-5">
+            {/* Form Fields */}
+            <div className="w-full">
+              <label className="block">
+                {t('fullName')}
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+              />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
-          <label className="block">
-          {t('phoneNumber')}
-          </label>
-          <input
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
+              <label className="block">
+                {t('phoneNumber')}
+              </label>
+              <input
+                type="text"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+              />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
-          <label className="block">
-          {t('emailAddress')}
-          </label>
-          <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
+              <label className="block">
+                {t('emailAddress')}
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+              />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
-          <label className="block">
-          {t('homeAddress')}
-          </label>
-          <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            />
+              <label className="block">
+                {t('homeAddress')}
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+              />
             </div>
-        <div className="w-full ">
-          <button
-             type="submit"
-            className="w-full button !h-[44px] rounded-lg "
-            > {t('saveDetails')}
-          </button>
-        </div>
-        </form>
+            <div className="w-full ">
+              <button
+                disabled={isPending}
+                type="submit"
+                className="w-full button !h-[44px] rounded-lg"
+              > {!isPending ? t('saveDetails') : t('saving')}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </Modal>

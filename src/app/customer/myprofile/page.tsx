@@ -1,89 +1,117 @@
 "use client";
 import Image from "next/image";
 import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
-import imgNew from "@/assets/images/img13.png";
-import Modal from "react-modal";
 import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
-import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
-import ClientProfileProjects from "../components/ClientProfileProjects";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { getUserInfo, updateUserInfo } from "@/services/client/client-service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-
+import { deleteFileFromS3, generateSignedUrlForUserProfile, generateSignedUrlToUploadOn, getImageUrl } from "@/actions";
+import imgNew from "@/assets/images/img13.png";
 const Page = () => {
-  const t = useTranslations('ProfilePage'); 
+  const t = useTranslations('ProfilePage');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const session = useSession();
   const [isPending, startTransition] = useTransition();
-  const {data, error, mutate, isLoading} = useSWR(`/user/${session?.data?.user?.id}`, getUserInfo)
+  const userId = session?.data?.user?.id
+  const { data, error, mutate, isLoading } = useSWR(userId ? `/user/${userId}` : null, getUserInfo)
   const customerData = data?.data?.data?.user;
   const [formData, setFormData] = useState<any>({
-  fullName: "",
-   phoneNumber: "",
-   email: "",
-   address: "",
-   profilePic: "",
- });
-
- useEffect(() => {
-  if (customerData) {
-    setFormData({
-      fullName: customerData.fullName || "",
-      phoneNumber: customerData.phoneNumber || "",
-      email: customerData.email || "",
-      address: customerData.address || "",
-      profilePic: customerData.profilePic || "",
-    });
-  }
-}, [customerData]);
-
-
-const handleInputChange = (
-  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-) => {
-  const { name, value } = e.target as HTMLInputElement & { files: FileList };
-  setFormData({
-    ...formData,
-    [name]: name === "phoneNumber" ? value : value, 
+    fullName: "",
+    phoneNumber: "",
+    email: "",
+    address: "",
+    profilePic: "",
   });
-};
 
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
-  startTransition(async () => {
-    try {
-      const response = await updateUserInfo( `/user/${session?.data?.user?.id}`,formData); 
-      if (response?.status === 200) {
-      setIsModalOpen(false);
-      mutate()
-        //setNotification("User Added Successfully");
-         toast.success(t("successUserAdded"));
-        
-      } else {
-        toast.error(t("errorUserAddFailed"));
-      }
-    } catch (error) {
-    
-      toast.error(t("errorUserAddException"));
+  useEffect(() => {
+    if (customerData) {
+      setFormData({
+        fullName: customerData.fullName || "",
+        phoneNumber: customerData.phoneNumber || "",
+        email: customerData.email || "",
+        address: customerData.address || "",
+        profilePic: !(formData.profilePic instanceof File) ? customerData.profilePic || "" : formData.profilePic,
+      })
     }
-  });
-  
-};
+    const getImage = async (image: string) => {
+      if (typeof image === 'string') {
+        const url = await getImageUrl(image);
+        setProfilePic(url)
+      }
+    }
+    getImage(formData.profilePic)
+
+  }, [customerData, formData.profilePic]);
+
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target as HTMLInputElement & { files: FileList };
+    setFormData({
+      ...formData,
+      [name]: name === "phoneNumber" ? value : value,
+    });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    startTransition(async () => {
+      try {
+        let updatedFormData = { ...formData }
+
+        //is image uploaded
+        if (formData.profilePic instanceof File) {
+          const fileName = formData.profilePic.name + '-' + new Date().getTime()
+          const email = (session as any)?.data?.user?.username
+          const uploadUrl = await generateSignedUrlForUserProfile(fileName, formData.profilePic.type, email)
+          await fetch(uploadUrl, {
+            method: 'PUT',
+            body: formData.profilePic,
+            headers: {
+              'Content-Type': formData.profilePic.type,
+            },
+          })
+          const oldImage = customerData.profilePic
+          if (oldImage.includes('users')) {
+            await deleteFileFromS3(customerData.profilePic)
+          }
+          updatedFormData.profilePic = `users/${email}/${fileName}`
+        }
+        const response = await updateUserInfo(`/user/${session?.data?.user?.id}`, updatedFormData);
+        if (response?.status === 200) {
+          setIsModalOpen(false);
+          //setNotification("User Added Successfully");
+          toast.success(t("successUserAdded"));
+          window.location.reload();
+
+        } else {
+          toast.error(t("errorUserAddFailed"));
+        }
+      } catch (error) {
+
+        toast.error(t("errorUserAddException"));
+      }
+    });
+
+  };
+
+  const [profilePic, setProfilePic] = useState<string>('');
 
   return (
     <div>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
           {/* src={formData.profilePic || imgNew}  */}
-            <Image src={imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />           
-        <div> 
-          <button  onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] "> 
-          <EditButtonIcon/>{t('editDetails')} 
-        </button></div>
+          <Image src={profilePic || imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />
+          <div>
+            <button onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] ">
+              <EditButtonIcon />{t('editDetails')}
+            </button></div>
         </div>
         <div className="fomm-wrapper grid md:flex flex-wrap gap-5 ">
           <div className="w-full">
@@ -133,16 +161,19 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         </div>
       </div>
 
-      <EditClientDetailsModal
+      {isModalOpen && <EditClientDetailsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         formData={formData}
+        profilePic={profilePic}
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
+        setFormData={setFormData}
         id={session?.data?.user?.id}
         mutate={mutate}
+        isPending = {isPending}
       />
-
+      }
       {/* <section className="mt-10">
         <h2 className="section-title">My Projects</h2>
         <ClientProfileProjects />

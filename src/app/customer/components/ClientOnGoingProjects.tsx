@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import ReactLoading from 'react-loading';
 import { useTranslations } from 'next-intl';
+import TableRowImage from '@/components/table-row-img';
 
 interface OnGoingProps {
   projectsData: any;
@@ -61,7 +62,7 @@ const ClientOnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, is
               projects?.map((row: any) => (
             <tr key={row?._id}>
               <td>{row?._id} </td>
-              <td><Image src={imgs} alt='fgfdg' width={50} height={50}/> </td>
+              <td><TableRowImage image={row?.projectimageLink} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>

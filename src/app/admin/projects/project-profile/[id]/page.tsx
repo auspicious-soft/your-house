@@ -149,7 +149,7 @@ const Page = () => {
                 </LocalizationProvider>
               </div>
             </div>
-            <div className="progress-container">
+            <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>
               <div className="progress-steps grid grid-cols-4 mb-5 ">
                 {steps.map((step) => (

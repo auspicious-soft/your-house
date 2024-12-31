@@ -120,3 +120,7 @@ export const generateSignedUrlToGet = async (imageKey: string) => {
         throw error
     }
 }
+
+export const getImageUrl = (subPath: string): string => {
+    return `${process.env.NEXT_PUBLIC_AWS_BUCKET_PATH}${subPath}`
+}

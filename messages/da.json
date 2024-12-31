@@ -114,6 +114,7 @@
     "errorUserAddException": "Der opstod en fejl under tilføjelsen af brugerdata",
     "editClientDetails": "Rediger klientoplysninger",
     "saveDetails": "Gem oplysninger",
+    "saving": "Gemmer",
     "logOut": "Log ud",
     "clientDetails": "Kundeoplysninger",
      "associatedProjects": "Tilknyttede Projekter"

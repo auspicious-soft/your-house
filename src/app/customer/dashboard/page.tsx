@@ -1,15 +1,12 @@
 "use client";
 import DashboardCard from "@/app/admin/components/DashboardCard";
-import projectImg from "@/assets/images/cardImg1.png";
-import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import ReactLoading from "react-loading";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { ProgressIcon } from "@/utils/svgicons";
 import { Line } from "rc-progress";
 import { getDashboardData } from "@/services/client/client-service";
 import { useTranslations } from "next-intl";
+import TableRowImage from "@/components/table-row-img";
 
 const Home = () => {
  const t = useTranslations('CustomerDashboard'); 
@@ -67,7 +64,7 @@ const Home = () => {
       <section className="mt-10">
         <h2 className="section-title">{t('workingProgress')} </h2>
         <div className="bg-white rounded-[10px]  md:rounded-[30px] ">
-          <div className="progress-container">
+          <div className="progress-container pb-4">
             <h2 className="section-title pt-[30px] px-[30px] ">
               {onGoingProjects?.length} {t('ongoingProjects')}
             </h2>
@@ -79,13 +76,7 @@ const Home = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <Image
-                      src={row?.image}
-                      alt={row?.name}
-                      height={40}
-                      width={40}
-                      className="max-w-10 max-h-10 object-cover rounded-full"
-                    />
+                   <TableRowImage image={row?.projectimageLink} />
                     <span className="text-[#353E6C] ">{row?.projectName}</span>
                   </div>
                   <div className="bg-[#FF16A2] text-white px-4 py-[7px] rounded-[5px] text-base">

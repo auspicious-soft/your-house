@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import ReactLoading from 'react-loading';
 import imgs from '@/assets/images/avatar.png'
 import { useTranslations } from 'next-intl';
+import TableRowImage from '@/components/table-row-img';
 
 
 interface CompletedProps {
@@ -61,7 +62,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
               projects?.map((row: any) => (
             <tr key={row?._id}>
               <td>{row?._id} </td>
-              <td><Image src={imgs} alt='fgfdg' width={50} height={50}/> </td>
+              <td><TableRowImage image={row?.projectimageLink} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>
