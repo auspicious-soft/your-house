@@ -4,7 +4,6 @@ import { getImageUrl } from '@/actions';
 
 const TableRowImage = ({ image }: { image: string }) => {
     const [imageUrl, setImageUrl] = useState<string>('');
-    console.log('imageUrl: ', imageUrl);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 

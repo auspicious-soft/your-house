@@ -106,8 +106,7 @@ const Page = () => {
     <div>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
-          {/* src={formData.profilePic || imgNew}  */}
-          <Image src={profilePic || imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />
+          {profilePic && <Image src={profilePic || imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />}
           <div>
             <button onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] ">
               <EditButtonIcon />{t('editDetails')}
@@ -171,7 +170,7 @@ const Page = () => {
         setFormData={setFormData}
         id={session?.data?.user?.id}
         mutate={mutate}
-        isPending = {isPending}
+        isPending={isPending}
       />
       }
       {/* <section className="mt-10">
