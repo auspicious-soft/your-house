@@ -53,7 +53,7 @@ const ClientAttachments: React.FC<OverViewProps> = ({ id }) => {
                 if (fileLinks[attachment._id]) {
                   window.open(fileLinks[attachment._id], '_blank');
                 }
-              }} aria-label={`Download ${fileName}`}>
+              }} className='cursor-pointer' aria-label={`Download ${fileName}`}>
                 <DownloadIcon />
               </div>
             </div>
