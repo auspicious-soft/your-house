@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import Link from "next/link";
 import NavLogo from "@/assets/images/logo.png"
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { CustomerActiveIcon, CustomerIcon, DashboardActiveIcon, DashboardIcon, ProjectActiveIcon, ProjectIcon } from "@/utils/svgicons";
 import { useTranslations } from "next-intl";
@@ -22,10 +21,7 @@ const SideNav = () => {
     setIsCollapsed(!isCollapsed);
   };
   const isActive = (path: string) => pathname === path ? 'active' : '';
-  const handleLogout = async () => {
-    await signOut({ redirect: false })
-    router.push('/');
-  }
+
   return (
     <div className={`sideNav ${isCollapsed ? 'collapsed' : ''} h-[100%] overflo-custom`}>
       <div className="">
