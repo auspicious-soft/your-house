@@ -4,24 +4,27 @@ import Image from "next/image";
 import success from "@/assets/images/succes.png";
 import Notification from "../components/Notification";
 import { toast } from "sonner";
-import { AddIcon } from "@/utils/svgicons";
+import { AddIcon, EditButtonIcon } from "@/utils/svgicons";
 import CustomSelect from "@/app/(website)/components/CustomSelect";
-import { addNewProject, updateSingleProjectData } from "@/services/admin/admin-service";
+import { updateSingleProjectData } from "@/services/admin/admin-service";
 import useClients from "@/utils/useClients";
 import Modal from "react-modal";
+import { getImageClientS3URL } from "@/utils/axios";
+import { useTranslations } from "next-intl";
+import { deleteFileFromS3, generateSignedUrlToUploadOn } from "@/actions";
 
 
 export const option = [
-    { label: "Associate 1", value: "Associate 1" },
-    { label: "Associate 2", value: "Associate 2" },
-    { label: "Associate 3", value: "Associate 3" },
-    { label: "Associate 4", value: "Associate 4" },
-    { label: "Associate 5", value: "Associate 5" },
-    { label: "Associate 6", value: "Associate 6" },
-    { label: "Associate 7", value: "Associate 7" },
-    { label: "Associate 8", value: "Associate 8" },
-    { label: "Associate 9", value: "Associate 9" },
-    { label: "Associate 10", value: "Associate 10" },
+  { label: "Associate 1", value: "Associate 1" },
+  { label: "Associate 2", value: "Associate 2" },
+  { label: "Associate 3", value: "Associate 3" },
+  { label: "Associate 4", value: "Associate 4" },
+  { label: "Associate 5", value: "Associate 5" },
+  { label: "Associate 6", value: "Associate 6" },
+  { label: "Associate 7", value: "Associate 7" },
+  { label: "Associate 8", value: "Associate 8" },
+  { label: "Associate 9", value: "Associate 9" },
+  { label: "Associate 10", value: "Associate 10" },
 ];
 
 interface UpdateProps {
@@ -30,33 +33,35 @@ interface UpdateProps {
   data: any;
   mutate: any;
   onClose: () => void;
-  
+
 }
-const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, data, mutate}) => {
-  const [notification, setNotification] = useState<string | null>(null);
+const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, data, mutate }) => {
+  const t = useTranslations('ProfilePage');
+  const [notification, setNotification] = useState<string | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
   const { userData, isLoading } = useClients(true);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<any>(null)
+  const oldProjectImage = data.projectimageLink
   const [formData, setFormData] = useState<any>({
     projectName: "",
     projectimageLink: "",
     projectstartDate: "",
     projectendDate: "",
     assignCustomer: "",
-    // associates: "",
     description: "",
     attachments: [],
     status: "",
     notes: [],
   });
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   useEffect(() => {
     if (data) {
-      // Prepare initial form data from the prop
       setFormData({
         projectName: data.projectName || "",
-        projectimageLink: data.projectimageLink || "",
+        projectimageLink: (data.projectimageLink) || "",
         projectstartDate: data.projectstartDate || "",
         projectendDate: data.projectendDate || "",
         description: data.description || "",
@@ -64,13 +69,14 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
         status: data.status || "",
         notes: data.notes || [],
       });
-
+      setImagePreview(getImageClientS3URL(data.projectimageLink));
       // Set selected user if user data exists
       if (data.userId) {
         setSelectedUser({
           id: data.userId._id,
           label: data.userId.fullName,
-          value: data.userId._id
+          value: data.userId._id,
+          email: data.userId.email,
         });
       }
 
@@ -83,11 +89,10 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
         setAssociates(selectedAssociates);
       }
     }
-  }, [data]);
+  }, []);
 
   const handleUserChange = (selected: any) => {
     setSelectedUser(selected);
-    // Set the userId when a user is selected
     setFormData((prev: any) => ({
       ...prev,
       userId: selected ? selected.id : ""
@@ -96,75 +101,80 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
 
   const handleSelectChange = (selected: any) => {
     setAssociates(selected);
-  };
- 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  }
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, files } = e.target as HTMLInputElement & { files: FileList };
-    
-    if (files && files.length > 0) {
-      const fileURLs = Array.from(files).map((file) =>
-        URL.createObjectURL(file) // Replace with actual upload logic later
-      );
-      setFormData((prev: any) => ({
-        ...prev,
-        attachments: fileURLs,
-      }));
-    } else {
+
+    if (files && files.length > 0 && name === "projectimageLink") {
+      const file = files[0];
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+    else {
       setFormData((prev: any) => ({
         ...prev,
         [name]: name === "phoneNumber" ? Number(value) : value,
-      }));
-    }
-  };
-  
+      }))
+    }    
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    let imageUrl = formData.projectimageLink
     startTransition(async () => {
       try {
+        if (selectedFile) {
+          const { signedUrl, key } = await generateSignedUrlToUploadOn(selectedFile.name, selectedFile.type, selectedUser.email)
+          await fetch(signedUrl, {
+            method: 'PUT',
+            body: selectedFile,
+            headers: {
+              'Content-Type': selectedFile.type,
+            },
+          })
+          oldProjectImage && await deleteFileFromS3(oldProjectImage)
+          imageUrl = key
+        }
         const payload = {
-            projectName: formData.projectName,
-            projectimageLink: formData.projectimageLink,
-            projectstartDate: formData.projectstartDate,
-            projectendDate: formData.projectendDate,
-            description: formData.description,
-             status: formData.status,
-            associates: associates.length > 0 
-              ? associates.map((associate: any) => associate.value) 
-              : [], 
-          };
-  
+          projectName: formData.projectName,
+          projectimageLink: imageUrl,
+          projectstartDate: formData.projectstartDate,
+          projectendDate: formData.projectendDate,
+          description: formData.description,
+          status: formData.status,
+          associates: associates.length > 0
+            ? associates.map((associate: any) => associate.value)
+            : [],
+        };
+
         const response = await updateSingleProjectData(`/admin/project/${id}`, payload);
-        
+
         if (response?.status === 200) {
-        toast.success("Updated successfully");
-          //setNotification("Project Added Successfully");
-          mutate(); 
+          toast.success("Updated successfully");
+          mutate();
           onClose();
         } else {
           toast.error("Failed to add project");
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.error("Error adding project:", error);
         toast.error("An error occurred while adding the project");
       }
-    });
-  }; 
-
+    })
+  }
 
   return (
     <Modal
-    isOpen={isOpen}
-    onRequestClose={onClose}
-    bodyOpenClassName='overflow-hidden'
-    contentLabel="Edit Client Details"
-    className="modal max-w-[1081px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
-    overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
-    ariaHideApp={false}
-  >
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      bodyOpenClassName='overflow-hidden'
+      contentLabel="Edit Client Details"
+      className="modal max-w-[1081px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
+      overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
+      ariaHideApp={false}
+    >
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
           <h2 className="section-projectName">About Project</h2>
@@ -180,15 +190,50 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
                 required
               />
             </div>
-            <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">Image</label>
+            <div className="md:w-[calc(33.33%-14px)] mb-5">
+              <label className="block">Project Image</label>
+              {!selectedFile ? (
+                <div className="relative h-full">
+                  <Image
+                    src={imagePreview}
+                    alt="Preview"
+                    width={200}
+                    height={200}
+                    className="rounded-full object-cover w-[200px] h-[200px]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => document.getElementById('fileInput')?.click()}
+                    className="absolute bottom-5 right-24 p-2 rounded-full bg-[#1657ff] text-white"
+                  >
+                    <EditButtonIcon />
+                  </button>
+                </div>
+              ) : (
+                <div className="relative h-full">
+                  <Image
+                    src={imagePreview}
+                    alt="upload"
+                    width={200}
+                    height={200}
+                    className="rounded-full object-cover w-[200px] h-[200px]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => document.getElementById('fileInput')?.click()}
+                    className="absolute bottom-5 right-24 p-2 rounded-full bg-[#1657ff] text-white"
+                  >
+                    <EditButtonIcon />
+                  </button>
+                </div>
+              )}
               <input
-                type="text"
+                type="file"
+                id="fileInput"
                 name="projectimageLink"
-                value={formData.projectimageLink}
-                placeholder="Add projectName"
+                className="hidden"
                 onChange={handleInputChange}
-                required
+                accept="image/*"
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
@@ -215,17 +260,17 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">Status</label>
-              <select 
-            name="status" 
-            value={formData.status} 
-            onChange={handleInputChange}
-          >
-            <option value="">Select Status</option>
-            <option value="1">Foundation</option>
-            <option value="2">Construction</option>
-            <option value="3">Interior Work</option>
-            <option value="4">Completed</option>
-          </select>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Status</option>
+                <option value="1">Foundation</option>
+                <option value="2">Construction</option>
+                <option value="3">Interior Work</option>
+                <option value="4">Completed</option>
+              </select>
             </div>
             <div className="md:w-[calc(50%-14px)]">
               <label className="block">Assign Customer</label>
@@ -237,7 +282,7 @@ const UpdateSingleProjectModal:React.FC<UpdateProps> = ({isOpen, onClose, id, da
               />
             </div>
             <div className="md:w-[calc(50%-14px)]">
-            <label className="block">Employees Associated</label>
+              <label className="block">Employees Associated</label>
 
               <CustomSelect
                 value={associates}
