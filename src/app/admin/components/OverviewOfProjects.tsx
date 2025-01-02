@@ -21,7 +21,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
   const attachments = data?.data?.data
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setUrl] = useState<any>("");
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const deleteAttachments = async (id: any, s3Url: string) => {
     try {
@@ -44,7 +44,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
     e.preventDefault();
     setLoading(true)
     try {
-      const uploadUrl = await generateSignedUrlOfProjectAttachment(file.name, file.type, userEmail)
+      const { signedUrl: uploadUrl } = await generateSignedUrlOfProjectAttachment(file.name, file.type, userEmail)
       await fetch(uploadUrl, {
         method: 'PUT',
         body: file,
@@ -52,7 +52,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
           'Content-Type': file.type,
         },
       })
-      const url =`projects/${userEmail}/attachments/${file.name as string}`
+      const url = `projects/${userEmail}/attachments/${file.name as string}`
       const attachments = { url };
       const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
       if (response?.status === 201) {
@@ -115,7 +115,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
             <input type="file" name="url" required onChange={(e) => {
               setUrl(e.target.files![0] as any)
             }} />
-            <button disabled = {loading} type="submit" className='button w-full mt-5'><AddFileIcon />{!loading ?  'Add Attachment': 'Loading...'}</button>
+            <button disabled={loading} type="submit" className='button w-full mt-5'><AddFileIcon />{!loading ? 'Add Attachment' : 'Loading...'}</button>
           </form>
         </div>
       </Modal>

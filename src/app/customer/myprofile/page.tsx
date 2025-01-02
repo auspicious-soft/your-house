@@ -8,7 +8,7 @@ import useSWR from "swr";
 import { getUserInfo, updateUserInfo } from "@/services/client/client-service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { deleteFileFromS3, generateSignedUrlForUserProfile, generateSignedUrlToUploadOn, getImageUrl } from "@/actions";
+import { deleteFileFromS3, generateSignedUrlForUserProfile, getImageUrl } from "@/actions";
 import imgNew from "@/assets/images/img13.png";
 const Page = () => {
   const t = useTranslations('ProfilePage');
@@ -17,6 +17,7 @@ const Page = () => {
   const [isPending, startTransition] = useTransition();
   const userId = session?.data?.user?.id
   const { data, error, mutate, isLoading } = useSWR(userId ? `/user/${userId}` : null, getUserInfo)
+
   const customerData = data?.data?.data?.user;
   const [formData, setFormData] = useState<any>({
     fullName: "",

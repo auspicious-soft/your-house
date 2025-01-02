@@ -15,7 +15,7 @@ export default function NotifactionBar() {
   const userId = session?.data?.user?.id
   const [showData, setShowData] = useState(false);
   const t = useTranslations('CustomerDashboard');
-  const { data, error, mutate, isLoading } = useSWR(userId ? `/user/${userId}` : null, getUserInfo, {
+  const { data } = useSWR(userId ? `/user/${userId}` : null, getUserInfo, {
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
     revalidateIfStale: true,

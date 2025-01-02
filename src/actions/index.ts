@@ -50,7 +50,7 @@ export const generateSignedUrlToUploadOn = async (fileName: string, fileType: st
     try {
         const command = new PutObjectCommand(uploadParams)
         const signedUrl = await getSignedUrl(await createS3Client(), command)
-        return signedUrl
+        return { signedUrl, key: uploadParams.Key }
     } catch (error) {
         console.error("Error generating signed URL:", error);
         throw error
@@ -66,7 +66,7 @@ export const generateSignedUrlOfProjectAttachment = async (fileName: string, fil
     try {
         const command = new PutObjectCommand(uploadParams)
         const signedUrl = await getSignedUrl(await createS3Client(), command)
-        return signedUrl
+        return {signedUrl, key: uploadParams.Key}
     } catch (error) {
         console.error("Error generating signed URL:", error);
         throw error

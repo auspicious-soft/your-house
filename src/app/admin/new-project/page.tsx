@@ -1,7 +1,5 @@
 "use client";
 import React, { ChangeEvent, FormEvent, useState, useTransition } from "react";
-import Image from "next/image";
-import success from "@/assets/images/succes.png";
 import Notification from "../components/Notification";
 import { toast } from "sonner";
 import { AddIcon } from "@/utils/svgicons";
@@ -9,6 +7,7 @@ import CustomSelect from "@/app/(website)/components/CustomSelect";
 import { addNewProject } from "@/services/admin/admin-service";
 import useClients from "@/utils/useClients";
 import { useTranslations } from "next-intl";
+import { generateSignedUrlOfProjectAttachment, generateSignedUrlToUploadOn } from "@/actions";
 
 const option = [
   { label: "Associate 1", value: "Associate 1" },
@@ -23,8 +22,7 @@ const option = [
   { label: "Associate 10", value: "Associate 10" },
 ];
 const Page = () => {
-  const t = useTranslations('ProjectsPage'); 
-
+  const t = useTranslations('ProjectsPage');
   const [notification, setNotification] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
@@ -32,16 +30,15 @@ const Page = () => {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
     projectName: "",
-    projectimageLink: "",
+    projectimageLink: null, // Changed to null for file storage
     projectstartDate: "",
     projectendDate: "",
     assignCustomer: "",
-    // associates: "",
     description: "",
-    attachments: [],
+    attachments: null, // Changed to null for file storage
     status: "",
     notes: [],
-  });
+  })
 
 
   const handleUserChange = (selected: any) => {
@@ -56,20 +53,23 @@ const Page = () => {
   const handleSelectChange = (selected: any) => {
     setAssociates(selected);
   };
- 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, files } = e.target as HTMLInputElement & { files: FileList };
-    
+
     if (files && files.length > 0) {
-      const fileURLs = Array.from(files).map((file) =>
-        URL.createObjectURL(file) // Replace with actual upload logic later
-      );
-      setFormData((prev: any) => ({
-        ...prev,
-        attachments: fileURLs,
-      }));
+      if (name === "projectimageLink") {
+        setFormData((prev: any) => ({
+          ...prev,
+          projectimageLink: files[0]
+        }))
+
+      } else if (name === "attachments") {
+        setFormData((prev: any) => ({
+          ...prev,
+          attachments: files[0]
+        }))
+      }
     } else {
       setFormData((prev: any) => ({
         ...prev,
@@ -77,50 +77,59 @@ const Page = () => {
       }));
     }
   };
-  
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    let projectImageLink: string;
+    let attachementUrl: string;
     startTransition(async () => {
+      if (formData.projectimageLink instanceof File && formData.attachments instanceof File) {
+        const { signedUrl, key } = await generateSignedUrlToUploadOn(formData.projectimageLink.name, formData.projectimageLink.type, selectedUser.email)
+        await fetch(signedUrl, {
+          method: 'PUT',
+          body: formData.projectimageLink,
+          headers: {
+            'Content-Type': formData.projectimageLink.type,
+          },
+        })
+        projectImageLink = key
+
+        const { signedUrl: attachmentUrl, key: attachmentKey } = await generateSignedUrlOfProjectAttachment(formData.attachments.name, formData.attachments.type, selectedUser.email)
+        await fetch(attachmentUrl, {
+          method: 'PUT',
+          body: formData.attachments,
+          headers: {
+            'Content-Type': formData.attachments.type,
+          },
+        })
+        attachementUrl = attachmentKey
+      }
+      else {
+        toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
+      }
       try {
-        // Prepare the payload to match the Postman example
         const payload = {
           projectName: formData.projectName,
           userId: selectedUser ? selectedUser.id : "", // Ensure userId is from selected user
-          projectimageLink: formData.projectimageLink,
+          projectimageLink: projectImageLink,
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
           description: formData.description,
-          attachments: formData.attachments.length > 0 
-            ? formData.attachments 
-            : ["https://example.com/attachments.zip"], // Default attachment if none
+          attachments: attachementUrl, // Default attachment if none
           status: formData.status,
-          notes: formData.notes ? [formData.notes] : [], // Ensure notes is an array of strings
-          associates: associates 
-            ? associates.map((associate: any) => associate.value) 
+          notes: formData.notes, // Ensure notes is an array of strings
+          associates: associates
+            ? associates.map((associate: any) => associate.value)
             : ["james", "Micheal"] // Default associates if none selected
-        };
-  
+        }
+
         const response = await addNewProject("/admin/projects", payload);
-        
+
         if (response?.status === 201) {
-          setNotification("Project Added Successfully");
-          
-          // Reset form after successful submission
-          setFormData({
-            projectName: "",
-            projectimageLink: "",
-            projectstartDate: "",
-            projectendDate: "",
-            userId: "",
-            description: "",
-            attachments: [],
-            status: "",
-            notes: "",
-          });
-          setSelectedUser(null);
-          setAssociates("");
+          setNotification("Project Added Successfully")
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         } else {
           toast.error("Failed to add project");
         }
@@ -154,11 +163,11 @@ const Page = () => {
               <input
                 type="file"
                 name="projectimageLink"
-                value={formData.projectimageLink}
-                placeholder="Tilføj"
                 onChange={handleInputChange}
+                accept="image/*"
                 required
               />
+
             </div>
             <div className="md:w-[calc(50%-10px)]">
               <label className="block"> {t('startDate')}</label>
@@ -192,7 +201,7 @@ const Page = () => {
               />
             </div>
             <div className="md:w-[calc(50%-14px)]">
-            <label className="block">{t('employeesAssociated')}</label>
+              <label className="block">{t('employeesAssociated')}</label>
 
               <CustomSelect
                 value={associates}
@@ -216,21 +225,28 @@ const Page = () => {
           <div className="grid md:flex flex-wrap gap-5 ">
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('attachments')}</label>
-              <input type="file" id="myfile" name="myfile" />
+              <input
+                type="file"
+                name="attachments"
+                onChange={handleInputChange}
+                accept=".pdf,.doc,.docx,.zip"
+                required
+              />
             </div>
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('status')}</label>
-              <select 
-            name="status" 
-            value={formData.status} 
-            onChange={handleInputChange}
-          >
-            <option value="">{t('selectStatus')} </option>
-            <option value="1">{t('foundation')}</option>
-            <option value="2">{t('construction')}</option>
-            <option value="3">{t('interiorWork')} Work</option>
-            <option value="4">{t('completed')}</option>
-          </select>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">{t('selectStatus')} </option>
+                <option value="1">{t('foundation')}</option>
+                <option value="2">{t('construction')}</option>
+                <option value="3">{t('interiorWork')} Work</option>
+                <option value="4">{t('completed')}</option>
+              </select>
             </div>
             <div className="w-full">
               <label className="block">{t('addNotes')}</label>
@@ -239,6 +255,7 @@ const Page = () => {
                 value={formData.notes}
                 onChange={handleInputChange}
                 placeholder={t('addNotes')}
+                required
               ></textarea>
             </div>
           </div>

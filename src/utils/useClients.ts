@@ -8,6 +8,7 @@ const useClients = (isOnboarding?: boolean) => {
     const userData = data?.data?.data?.map((user: any) => ({
         label: `${user?.fullName}`,
         id: user._id,
+        email : user.email,
     })) || []; 
 
     return {
