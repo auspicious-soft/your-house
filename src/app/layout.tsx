@@ -5,33 +5,34 @@ import { SessionProvider } from "next-auth/react";
 import localFont from 'next/font/local'
 import type { Metadata } from "next";
 import Providers from './(website)/components/ProgressBarProvider';
-import {NextIntlClientProvider} from 'next-intl';
-import {getLocale, getMessages} from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+import { auth } from '@/auth';
 
 const SFProDisplay = localFont({
-  src: '../assets/fonts/SfProDisplayRegular.otf', 
+  src: '../assets/fonts/SfProDisplayRegular.otf',
   display: 'swap',
-  variable: '--font-SF-Pro-Display', 
+  variable: '--font-SF-Pro-Display',
 })
 const SFProDisplaySemibold = localFont({
-  src: '../assets/fonts/SFProDisplaySemibold.otf', 
+  src: '../assets/fonts/SFProDisplaySemibold.otf',
   display: 'swap',
-  variable: '--font-SF-Pro-Display-Semibold', 
+  variable: '--font-SF-Pro-Display-Semibold',
 })
 const SFProDisplayMedium = localFont({
-  src: '../assets/fonts/SFProDisplayMedium.otf',  
+  src: '../assets/fonts/SFProDisplayMedium.otf',
   display: 'swap',
-  variable: '--font-SF-Pro-Display-Medium', 
+  variable: '--font-SF-Pro-Display-Medium',
 })
 const SFProDisplayBold = localFont({
-  src: '../assets/fonts/SFProDisplayBold.otf', 
+  src: '../assets/fonts/SFProDisplayBold.otf',
   display: 'swap',
-  variable: '--font-SF-Pro-Display-Bold', 
+  variable: '--font-SF-Pro-Display-Bold',
 })
 const SFProDisplayThin = localFont({
-  src: '../assets/fonts/SFProDisplayThin.otf', 
+  src: '../assets/fonts/SFProDisplayThin.otf',
   display: 'swap',
-  variable: '--font-SF-Pro-Display-Thin', 
+  variable: '--font-SF-Pro-Display-Thin',
 })
 
 
@@ -42,24 +43,23 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
-
+  const session = await auth();
   const messages = await getMessages();
+
   return (
     <html lang={locale}>
-      <SessionProvider>
-        <Toaster richColors />
-         <Providers>
-        <body className={`${SFProDisplay.variable} ${SFProDisplaySemibold.variable} ${SFProDisplayMedium.variable} ${SFProDisplayBold.variable} ${SFProDisplayThin.variable}`}>
-         <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-        </body>
-         </Providers>
-      </SessionProvider>
+      <body className={`${SFProDisplay.variable} ${SFProDisplaySemibold.variable} ${SFProDisplayMedium.variable} ${SFProDisplayBold.variable} ${SFProDisplayThin.variable}`}>
+        <SessionProvider session={session}>
+          <NextIntlClientProvider messages={messages}>
+            <Providers>
+              {children}
+              <Toaster richColors />
+            </Providers>
+          </NextIntlClientProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

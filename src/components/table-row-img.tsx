@@ -10,7 +10,7 @@ const TableRowImage = ({ image }: { image: string }) => {
             unoptimized
             height={40}
             width={40}
-            className="max-w-10 max-h-10 object-cover rounded-full"
+            className="w-9 h-9 object-cover rounded-full"
         />
     );
 };
