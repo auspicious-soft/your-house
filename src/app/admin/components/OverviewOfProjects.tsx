@@ -81,7 +81,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
               <div>
                 <p className="text-[#43527B] text-sm  ">{fileName}</p>
                 <p className="text-[#8B8E98] text-xs mt-1  ">
-                  Uploaded by {index?.createdby?.fullName} <span className='ml-5'>Time: {index?.createdby?.createdAt} </span>
+                  Uploaded by {index?.createdby?.fullName} <span className='ml-5'>Time: {new Date(index?.createdby?.createdAt).toLocaleString()} </span>
                 </p>
               </div>
             </div>
@@ -112,7 +112,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
         <div className='overflow-y-auto overflow-custom p-5'>
           <h2 className="mb-2 ">Add New Attachment</h2>
           <form onSubmit={handleSubmit} className="fomm-wrapper">
-            <input type="file" name="url" onChange={(e) => {
+            <input type="file" name="url" required onChange={(e) => {
               setUrl(e.target.files![0] as any)
             }} />
             <button disabled = {loading} type="submit" className='button w-full mt-5'><AddFileIcon />{!loading ?  'Add Attachment': 'Loading...'}</button>

@@ -20,6 +20,7 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data, error, mutate, isLoading } = useSWR(`/admin/users/${id}`, getSingleUser)
   const customerData = data?.data?.data;
+  const oldImage = customerData?.user?.profilePic
   const associatedProjects = customerData?.projects
   const [formData, setFormData] = useState<any>({
     fullName: "",
@@ -36,10 +37,10 @@ const Page = () => {
         phoneNumber: customerData.user.phoneNumber || "",
         email: customerData.user.email || "",
         address: customerData.user.address || "",
-        profilePic: customerData.user.profilePic || "",
+        profilePic: !(formData.profilePic instanceof File) ? customerData?.user?.profilePic || "" : formData.profilePic,
       });
     }
-  }, [customerData]);
+  }, [customerData, formData.profilePic, customerData?.profilePic]);
 
 
   const handleInputChange = (
@@ -68,20 +69,16 @@ const Page = () => {
               'Content-Type': formData.profilePic.type,
             },
           })
-          const oldImage = customerData.profilePic
-          // if (oldImage.includes('users')) {
-          //   await deleteFileFromS3(customerData.profilePic)
-          // }
+          if (oldImage) {
+            await deleteFileFromS3(oldImage)
+          }
           updatedFormData.profilePic = `users/${email}/${fileName}`
         }
-        console.log('updatedFormData: ', updatedFormData);
         const response = await updateSingleUser(`/admin/users/${id}`, updatedFormData);
         if (response?.status === 200) {
           setIsModalOpen(false);
-          mutate()
-          //setNotification("User Added Successfully");
-          toast.success("User details updated successfully", {position: 'bottom-left'});
-
+          toast.success("User details updated successfully", { position: 'bottom-left' });
+          formData.profilePic instanceof File ? window.location.reload() : mutate()
         } else {
           toast.error("Failed to add User Data");
         }
@@ -97,8 +94,7 @@ const Page = () => {
       <h2 className="section-title text-[#3C3F88]"> {t('clientDetails')}</h2>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
-          {/* src={formData.profilePic || imgNew}  */}
-          <Image src={getImageClientS3URL(formData.profilePic)} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />
+          <Image src={!(formData.profilePic instanceof File) ? getImageClientS3URL(formData.profilePic) : formData.profilePic} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />
           <div>
             <button onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] ">
               <EditButtonIcon /> {t('editDetails')}
