@@ -91,6 +91,7 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
             {imagePreview ? (
               <div className="relative h-full">
                 <Image
+                  unoptimized
                   src={imagePreview}
                   alt="Preview"
                   width={200}
@@ -109,6 +110,7 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
               <div className="grid place-items-center h-full w-full bg-[#f1f1f1] rounded-full">
                 <div>
                   {profilePic && <Image
+                    unoptimized
                     src={profilePic || prev}
                     alt="upload"
                     width={200}

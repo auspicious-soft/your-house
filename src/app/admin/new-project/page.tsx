@@ -128,7 +128,7 @@ const Page = () => {
         if (response?.status === 201) {
           setNotification("Project Added Successfully")
           setTimeout(() => {
-            window.location.reload();
+            window.location.href = "/admin/projects"
           }, 2000);
         } else {
           toast.error("Failed to add project");
@@ -229,7 +229,7 @@ const Page = () => {
                 type="file"
                 name="attachments"
                 onChange={handleInputChange}
-                accept=".pdf,.doc,.docx,.zip"
+                accept=".pdf,.doc,.docx,.zip,image/*"
                 required
               />
             </div>

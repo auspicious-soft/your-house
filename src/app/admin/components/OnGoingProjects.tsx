@@ -10,6 +10,7 @@ import ReactLoading from 'react-loading';
 import { useTranslations } from 'next-intl';
 import TableRowImage from '@/components/table-row-img';
 import { getImageClientS3URL } from '@/utils/axios';
+import { deleteFileFromS3 } from '@/actions';
 
 interface OnGoingProps {
   projectsData: any;
@@ -24,7 +25,8 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
   const total = projectsData?.total ?? 0;
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState('');
+  const [selectedId, setSelectedId] = useState('')
+  const [selectedProjectImage, setSelectedProjectImage] = useState('')
   const t = useTranslations('ProjectsPage');
 
   const rowsPerPage = 10;
@@ -35,16 +37,19 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
 
   //const paginatedData = data.slice(currentPage * rowsPerPage, (currentPage + 1) * rowsPerPage);
 
-  const openDeleteModal = (id: string) => {
+  const openDeleteModal = (id: string, imageLink: string) => {
     setIsDeleteModalOpen(true);
     setSelectedId(id);
+    setSelectedProjectImage(imageLink)
   };
 
   const handleDelete = async () => {
     try {
       const response = await deleteProject(`/admin/project/${selectedId}`);
       if (response.status === 200) {
-        toast.success("Client deleted successfully");
+        toast.success("Client deleted successfully")
+        await deleteFileFromS3(selectedProjectImage)
+
         setIsDeleteModalOpen(false);
         mutate()
       } else {
@@ -97,7 +102,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
                   <td>
                     <div className='flex items-center gap-[6px] '>
                       <button onClick={() => EditProjectData(row?._id)}><EditIcon /> </button>
-                      <button onClick={() => openDeleteModal(row?._id)}><DeleteIcon /> </button>
+                      <button onClick={() => openDeleteModal(row?._id, row?.projectimageLink)}><DeleteIcon /> </button>
                     </div>
                   </td>
                 </tr>
