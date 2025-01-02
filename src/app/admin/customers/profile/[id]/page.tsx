@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { ChangeEvent, FormEvent, startTransition, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
 import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
 import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
@@ -28,7 +28,8 @@ const Page = () => {
     email: "",
     address: "",
     profilePic: "",
-  });
+  })
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (customerData?.user) {
@@ -149,7 +150,7 @@ const Page = () => {
       </div>
 
       {isModalOpen && <EditClientDetailsModal
-        isPending={isLoading}
+        isPending={isPending}
         profilePic={getImageClientS3URL(formData.profilePic)}
         setFormData={setFormData}
         isOpen={isModalOpen}
