@@ -62,7 +62,7 @@ const ClientOnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, is
             ) : projects?.length > 0 ? (
               projects?.map((row: any) => (
             <tr key={row?._id}>
-              <td>{row?._id} </td>
+              <td>{row?.identifier} </td>
               <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>

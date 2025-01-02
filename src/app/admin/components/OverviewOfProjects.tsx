@@ -17,6 +17,7 @@ interface OverViewProps {
 }
 const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
   const t = useTranslations('ProjectsPage');
+  const h = useTranslations('ToastMessages');
   const { data, isLoading, error, mutate } = useSWR(`/admin/attachments/${id}`, getAttachmentsData)
   const attachments = data?.data?.data
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,15 +57,14 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
       const attachments = { url };
       const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
       if (response?.status === 201) {
-        toast.success("Note added successfully");
+        toast.success(h("Note added successfully"));
         setIsModalOpen(false);
         mutate()
       } else {
-        toast.error("Failed to add Note");
+        toast.error(h("Failed to add Note"));
       }
-    } catch (error) {
-      console.error(t('errorLoadingData'), error);
-      toast.error(t("errorLoadingData"));
+    } catch (error) { 
+      toast.error('Der opstod en fejl');
     }
     finally {
       setLoading(false)

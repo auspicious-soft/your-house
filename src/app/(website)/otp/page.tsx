@@ -64,7 +64,7 @@ export default function Page() {
           router.push(`/resetpassword?otp=${completeOtp}`)
         }
         else {
-          toast.error("Something went wrong")
+          toast.error(t('somethingWentWrong'))
         }
       }
       catch (err: any) {

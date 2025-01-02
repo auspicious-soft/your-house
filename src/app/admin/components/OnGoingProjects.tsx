@@ -28,7 +28,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
   const [selectedId, setSelectedId] = useState('')
   const [selectedProjectImage, setSelectedProjectImage] = useState('')
   const t = useTranslations('ProjectsPage');
-
+  const h = useTranslations('ToastMessages');
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
@@ -47,17 +47,16 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
     try {
       const response = await deleteProject(`/admin/project/${selectedId}`);
       if (response.status === 200) {
-        toast.success("Client deleted successfully")
+        toast.success(h("Client deleted successfully"));
         await deleteFileFromS3(selectedProjectImage)
 
         setIsDeleteModalOpen(false);
         mutate()
       } else {
-        toast.error("Failed to delete Client");
+      toast.error(h("Failed To Delete Client"));
       }
     } catch (error) {
-      console.error("Error deleting Client", error);
-      toast.error("An error occurred while deleting the Client");
+    toast.error(h("an Error Occurred While Deleting The Client"));
     }
   }
 
@@ -94,7 +93,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
             ) : projects?.length > 0 ? (
               projects?.map((row: any) => (
                 <tr key={row?._id}>
-                  <td>{row?._id}</td>
+                  <td>{row?.identifier}</td>
                   <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
                   <td>{row?.projectName}</td>
                   <td>{row?.projectstartDate}</td>

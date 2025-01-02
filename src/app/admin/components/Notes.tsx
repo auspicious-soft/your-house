@@ -12,7 +12,7 @@ interface Notes {
 }
 const Notes: React.FC<Notes> = ({id}) => {
   const t = useTranslations('ProjectsPage'); 
-
+  const h = useTranslations('ToastMessages');
   const {data, isLoading, error, mutate} = useSWR(`/admin/notes/${id}`, getNotesData)
   const notes = data?.data?.data
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,15 +23,14 @@ const Notes: React.FC<Notes> = ({id}) => {
     try {
       const response = await deleteNotesData(`/admin/notes/${id}`); 
       if (response.status === 200) {
-        toast.success("Note deleted successfully");
+        toast.success(h("Note deleted successfully"));
         setIsModalOpen(false);
         mutate()
       } else {
-        toast.error("Failed to delete Note");
+        toast.error(h("Failed to delete Note"));
       }
     } catch (error) {
-      console.error("Error deleting Note", error);
-      toast.error("An error occurred while deleting the Note");
+      toast.error(h("An error occurred while deleting the Note"));
     }
   }
   
@@ -45,17 +44,17 @@ const Notes: React.FC<Notes> = ({id}) => {
     try {
       const notesData = { text };
       const response = await addNotesData(`/admin/notes/${id}`, notesData)
-      if (response?.status === 201) {
-        toast.success("Note added successfully");
+      if (response?.status === 201) { 
+        toast.success(h("Note added successfully"));
         setIsModalOpen(false);
         mutate()
         setText("")
       } else {
-        toast.error("Failed to add Note");
+        toast.error(h("Failed to add Note"));
       }
     } catch (error) {
-      console.error("Error adding Note", error);
-      toast.error("An error occurred while adding the Note");
+      console.error("Der opstod en fejl", error);
+       toast.error('Der opstod en fejl');
     }
   }
   return (

@@ -19,6 +19,7 @@ interface ProjectsProps {
 }
 const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) => {
   const t = useTranslations('ProjectsPage'); 
+  const h = useTranslations('ToastMessages');
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
@@ -40,15 +41,14 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
     try {
       const response = await deleteProject(`/admin/project/${selectedId}`); 
       if (response.status === 200) {
-        toast.success("Client deleted successfully");
+        toast.success(h("Client deleted successfully")); 
         setIsDeleteModalOpen(false);
         mutate()
       } else {
-        toast.error("Failed to delete Client");
+        toast.error(h("Failed To Delete Client"));
       }
-    } catch (error) {
-      console.error("Error deleting Client", error);
-      toast.error("An error occurred while deleting the Client");
+    } catch (error) { 
+      toast.error(h("an Error Occurred While Deleting The Client"));
     }
   }
 
@@ -70,7 +70,7 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
           {
           data?.map((row: any) => (
             <tr key={row?._id}>
-              <td>{row?._id} </td>
+              <td>{row?.identifier} </td>
               <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>

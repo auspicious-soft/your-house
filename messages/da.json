@@ -10,6 +10,7 @@
     "noAccount": "Har du ikke en konto?",
     "createAccount": "Opret en",
     "signupSuccessful": "Tilmelding succesfuld",
+    "signUp": "Tilmeld dig",
     "phoneNumber": "Telefonnummer",
   "emailAddress": "Emailadresse",
   "fullName": "Fulde navn",
@@ -137,6 +138,22 @@
      "associatedProjects": "Tilknyttede Projekter"
   },
   "ToastMessages": {
-    
+    "Client deleted successfully": "Klient slettet succesfuldt",
+    "Failed To Delete Client": "Kunne ikke slette klient",
+    "an Error Occurred While Deleting The Client": "Der opstod en fejl under sletning af klienten",
+    "Note deleted successfully": "Note slettet succesfuldt",
+    "Failed to delete Note ": "Kunne ikke slette note",
+    "An error occurred while deleting the Note ": "Der opstod en fejl under sletning af noten",
+    "Note added successfully": "Note tilføjet succesfuldt",
+    "Failed to add Note": "Kunne ikke tilføje note",
+    "Project status updated successfully": "Projektstatus opdateret succesfuldt", 
+    "Failed to update project status" : "Kunne ikke opdatere projektstatus",
+    "An error occurred while updating the project status": "Der opstod en fejl under opdatering af projektstatus",
+    "User details updated successfully": "Brugeroplysninger opdateret succesfuldt",
+    "Failed to add User Data": "Kunne ikke tilføje brugerdata",
+    "Updated successfully": "Opdateret succesfuldt",
+    "Failed to add project": "Kunne ikke tilføje projekt",
+    "Project Added Successfully": "Projekt tilføjet succesfuldt",
+    "An error occurred while adding the project": "Der opstod en fejl under tilføjelse af projektet"
   }
 }

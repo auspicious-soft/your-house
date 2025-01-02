@@ -15,6 +15,7 @@ import { deleteFileFromS3, generateSignedUrlForUserProfile } from "@/actions";
 
 const Page = () => {
   const t = useTranslations('ProfilePage');
+  const h = useTranslations('ToastMessages');
   const { id } = useParams();
   const [query, setQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,14 +79,14 @@ const Page = () => {
         const response = await updateSingleUser(`/admin/users/${id}`, updatedFormData);
         if (response?.status === 200) {
           setIsModalOpen(false);
-          toast.success("User details updated successfully", { position: 'bottom-left' });
+          toast.success(h("User details updated successfully"), { position: 'bottom-left' });
           formData.profilePic instanceof File ? window.location.reload() : mutate()
         } else {
-          toast.error("Failed to add User Data");
+          toast.error(h("Failed to add User Data"));
         }
       } catch (error) {
-        console.error("Error adding User Data:", error);
-        toast.error("An error occurred while adding the User Data");
+        console.error("Der opstod en fejl", error);
+        toast.error("Der opstod en fejl");
       }
     });
 

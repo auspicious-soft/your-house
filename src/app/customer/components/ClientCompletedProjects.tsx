@@ -62,7 +62,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
             ) : projects?.length > 0 ? (
               projects?.map((row: any) => (
             <tr key={row?._id}>
-              <td>{row?._id} </td>
+              <td>{row?.identifier} </td>
               <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
@@ -72,7 +72,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
           ))
         ) : (
           <tr>
-            <td colSpan={5} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
+            <td colSpan={6} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
           </tr>
         )}
         </tbody>

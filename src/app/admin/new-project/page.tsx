@@ -23,6 +23,7 @@ const option = [
 ];
 const Page = () => {
   const t = useTranslations('ProjectsPage');
+   const h = useTranslations('ToastMessages');
   const [notification, setNotification] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
@@ -126,16 +127,16 @@ const Page = () => {
         const response = await addNewProject("/admin/projects", payload);
 
         if (response?.status === 201) {
-          setNotification("Project Added Successfully")
+          setNotification(h("Project Added Successfully"))
           setTimeout(() => {
             window.location.href = "/admin/projects"
           }, 2000);
         } else {
-          toast.error("Failed to add project");
+          toast.error(h("Failed to add project"));
         }
       } catch (error) {
-        console.error("Error adding project:", error);
-        toast.error("An error occurred while adding the project");
+        console.error("Der opstod en fejl", error);
+        toast.error(h("An error occurred while adding the project"));
       }
     });
   };

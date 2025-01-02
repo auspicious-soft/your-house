@@ -97,7 +97,7 @@ const Page: React.FC = () => {
                   required
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <button className="login-button w-full cursor-pointer mt-[50px]" onClick={handleSignup}>Sign Up </button>
+                <button className="login-button w-full cursor-pointer mt-[50px]" onClick={handleSignup}>{t('signUp')}</button>
             <p className="text-[#353E6C] mt-5 text-center   ">{t('alreadyHaveAnAccount')} <Link href='/' className="text-[#1657FF] ">{t('logIn')}</Link> </p>
               </div>
             </div>

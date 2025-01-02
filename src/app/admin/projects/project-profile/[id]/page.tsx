@@ -31,6 +31,7 @@ import { getImageClientS3URL } from "@/utils/axios";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
+  const h = useTranslations('ToastMessages');
   const { id } = useParams();
   const { data, error, mutate, isLoading } = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data;
@@ -92,14 +93,13 @@ const Page = () => {
       const statusValue = step / 25; // Assuming 4 steps total
       const response = await updateSingleProjectData(`/admin/project/${id}`, { status: statusValue });
       if (response?.status === 200) {
-        toast.success("Project status updated successfully");
+        toast.success(h("Project status updated successfully"));
         mutate();
       } else {
-        toast.error("Failed to update project status");
+        toast.error(h("Failed to update project status"));
       }
-    } catch (error) {
-      console.error("Error updating project status:", error);
-      toast.error("An error occurred while updating the project status");
+    } catch (error) { 
+      toast.error(h("An error occurred while updating the project status"));
     }
   };
 

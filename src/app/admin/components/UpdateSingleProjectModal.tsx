@@ -37,6 +37,7 @@ interface UpdateProps {
 }
 const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, data, mutate }) => {
   const t = useTranslations('ProjectsPage');
+  const h = useTranslations('ToastMessages');
   const [notification, setNotification] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -151,16 +152,16 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
         const response = await updateSingleProjectData(`/admin/project/${id}`, payload);
 
         if (response?.status === 200) {
-          toast.success("Updated successfully");
+          toast.success(h("Updated successfully"));
           mutate();
           onClose();
         } else {
-          toast.error("Failed to add project");
+          toast.error(h("Failed to add project"));
         }
       }
       catch (error) {
-        console.error("Error adding project:", error);
-        toast.error("An error occurred while adding the project");
+        console.error("Der opstod en fejl", error);
+        toast.error("Der opstod en fejl");
       }
     })
   }

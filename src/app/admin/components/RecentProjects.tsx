@@ -20,12 +20,14 @@ interface recentProjectsProps {
 }
 
 const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, isLoading, error, setQuery}) => {
+  console.log('recentProjects:', recentProjects);
 
   const total = recentProjects?.total ?? 0;
   const router= useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const t = useTranslations('ProjectsPage'); 
+  const h = useTranslations('ToastMessages');
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
@@ -45,15 +47,14 @@ const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, 
     try {
       const response = await deleteProject(`/admin/project/${selectedId}`); 
       if (response.status === 200) {
-        toast.success("Client deleted successfully");
+       toast.success(h("Client deleted successfully"));
         setIsDeleteModalOpen(false);
         mutate()
       } else {
-        toast.error("Failed to delete Client");
+        toast.error(h("Failed To Delete Client"));
       }
     } catch (error) {
-      console.error("Error deleting Client", error);
-      toast.error("An error occurred while deleting the Client");
+       toast.error(h("an Error Occurred While Deleting The Client"));
     }
   }
 const EditProjectData =(id: string) => {
@@ -91,7 +92,7 @@ const EditProjectData =(id: string) => {
             ) : recentProjects?.length > 0 ? (
           recentProjects?.map((row: any) => (
             <tr key={row?._id}>
-              <td>{row?._id}</td>
+              <td>{row?.identifier}</td>
               <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>

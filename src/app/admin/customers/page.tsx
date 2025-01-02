@@ -17,7 +17,7 @@ import { deleteFileFromS3 } from '@/actions';
 
 const Page: React.FC = () => {
   const t = useTranslations('ProjectsPage');
-
+  const h = useTranslations('ToastMessages');
   const router = useRouter();
   const [query, setQuery] = useState('page=1&limit=10');
   const { data, error, mutate, isLoading } = useSWR(`/admin/users`, getAllUsers)
@@ -42,16 +42,15 @@ const Page: React.FC = () => {
     try {
       // const response = await deleteUsers(`/admin/users/${selectedId}`);
       if (200 > 100) {
-        toast.success("Client deleted successfully");
+        toast.success(h("Client deleted successfully"));
         await deleteFileFromS3(selectedProfilePic)
         setIsDeleteModalOpen(false);
         mutate()
       } else {
-        toast.error("Failed to delete Client");
+        toast.error(h("Failed To Delete Client"));
       }
-    } catch (error) {
-      console.error("Error deleting Client", error);
-      toast.error("An error occurred while deleting the Client");
+    } catch (error) { 
+       toast.error(h("an Error Occurred While Deleting The Client"));
     }
   }
   const openProfile = (id: string) => {
