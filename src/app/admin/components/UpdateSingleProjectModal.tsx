@@ -12,6 +12,7 @@ import Modal from "react-modal";
 import { getImageClientS3URL } from "@/utils/axios";
 import { useTranslations } from "next-intl";
 import { deleteFileFromS3, generateSignedUrlToUploadOn } from "@/actions";
+import ReactLoader from "@/components/react-loading";
 
 
 export const option = [
@@ -117,7 +118,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
         ...prev,
         [name]: name === "phoneNumber" ? Number(value) : value,
       }))
-    }    
+    }
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -244,7 +245,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
                 name="projectstartDate"
                 value={formData.projectstartDate}
                 onChange={handleInputChange}
-                placeholder= {t('startDate')}
+                placeholder={t('startDate')}
                 required
               />
             </div>
@@ -307,11 +308,8 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
             <button
               type="submit"
               className="button w-full"
-              disabled={isPending}
-            >
-              {" "}
-              <AddIcon className="w-4 h-4" />
-              {isPending ? t('updating') : t('updateProjectDetails')}
+              disabled={isPending}>
+              {isPending ? <ReactLoader /> : <> <AddIcon className="w-4 h-4" /> {t('updateProjectDetails')}</>}
             </button>
           </div>
         </form>

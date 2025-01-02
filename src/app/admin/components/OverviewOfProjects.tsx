@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { getImageClientS3URL } from '@/utils/axios';
 import { deleteFileFromS3, generateSignedUrlOfProjectAttachment } from '@/actions';
+import ReactLoader from '@/components/react-loading';
 
 interface OverViewProps {
   id: any;
@@ -63,7 +64,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
       } else {
         toast.error(h("Failed to add Note"));
       }
-    } catch (error) { 
+    } catch (error) {
       toast.error('Der opstod en fejl');
     }
     finally {
@@ -115,7 +116,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
             <input type="file" name="url" required onChange={(e) => {
               setUrl(e.target.files![0] as any)
             }} />
-            <button disabled={loading} type="submit" className='button w-full mt-5'><AddFileIcon />{!loading ? t('addAttachment') : t('adding...')}</button>
+            <button disabled={loading} type="submit" className='button w-full mt-5'>{!loading ? <><AddFileIcon /> {t('addAttachment')}</> : <ReactLoader />}</button>
           </form>
         </div>
       </Modal>

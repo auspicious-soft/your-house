@@ -6,6 +6,7 @@ import prev from "@/assets/images/img13.png"
 import { updateUserInfo } from "@/services/client/client-service";
 import { mutate } from "swr";
 import { useTranslations } from "next-intl";
+import ReactLoader from "@/components/react-loading";
 
 const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInputChange, id, handleSubmit, profilePic, setFormData, isPending
 }: {
@@ -179,7 +180,7 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
                 disabled={isPending}
                 type="submit"
                 className="w-full button !h-[44px] rounded-lg"
-              > {!isPending ? t('saveDetails') : t('saving')}
+              > {!isPending ? t('saveDetails') : <ReactLoader />}
               </button>
             </div>
           </form>

@@ -20,8 +20,6 @@ interface recentProjectsProps {
 }
 
 const RecentProjects: React.FC<recentProjectsProps> = ({recentProjects, mutate, isLoading, error, setQuery}) => {
-  console.log('recentProjects:', recentProjects);
-
   const total = recentProjects?.total ?? 0;
   const router= useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

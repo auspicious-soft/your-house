@@ -8,6 +8,7 @@ import { addNewProject } from "@/services/admin/admin-service";
 import useClients from "@/utils/useClients";
 import { useTranslations } from "next-intl";
 import { generateSignedUrlOfProjectAttachment, generateSignedUrlToUploadOn } from "@/actions";
+import ReactLoader from "@/components/react-loading";
 
 const option = [
   { label: "Associate 1", value: "Associate 1" },
@@ -23,7 +24,7 @@ const option = [
 ];
 const Page = () => {
   const t = useTranslations('ProjectsPage');
-   const h = useTranslations('ToastMessages');
+  const h = useTranslations('ToastMessages');
   const [notification, setNotification] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
@@ -267,8 +268,8 @@ const Page = () => {
               disabled={isPending}
             >
               {" "}
-              <AddIcon className="w-4 h-4" />
-              {isPending ? "Adding..." : t("addNewProject")}
+
+              {isPending ? <ReactLoader /> : <> <AddIcon className="w-4 h-4" /> {t("addNewProject")}</>}
             </button>
           </div>
         </form>
