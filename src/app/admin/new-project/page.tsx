@@ -244,7 +244,7 @@ const Page = () => {
                 <option value="">{t('selectStatus')} </option>
                 <option value="1">{t('foundation')}</option>
                 <option value="2">{t('construction')}</option>
-                <option value="3">{t('interiorWork')} Work</option>
+                <option value="3">{t('interiorWork')}</option>
                 <option value="4">{t('completed')}</option>
               </select>
             </div>

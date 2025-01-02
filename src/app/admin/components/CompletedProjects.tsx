@@ -77,13 +77,13 @@ const CompletedProjects: React.FC<CompleteProps> = ({ projectsData, mutate, isLo
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="">
+                <td colSpan={6} className="">
                   {t('loading')}...
                 </td>
               </tr>
             ) : error ? (
               <tr>
-                <td colSpan={5} className="text-center text-red-500 ">
+                <td colSpan={6} className="text-center text-red-500 ">
                   {t('errorLoadingData')}.
                 </td>
               </tr>
@@ -105,7 +105,8 @@ const CompletedProjects: React.FC<CompleteProps> = ({ projectsData, mutate, isLo
               ))
             ) : (
               <tr>
-                <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</td>
+                {/* <p>{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</p> */}
+                <td colSpan={6} className='text-left'  >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className=''>{t('noDataFound')}</p>}</td>
               </tr>
             )}
           </tbody>

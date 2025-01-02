@@ -63,8 +63,8 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
         toast.error("Failed to add Note");
       }
     } catch (error) {
-      console.error("Error adding Note", error);
-      toast.error("An error occurred while adding the Note");
+      console.error(t('errorLoadingData'), error);
+      toast.error(t("errorLoadingData"));
     }
     finally {
       setLoading(false)
@@ -110,12 +110,12 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
         overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
         ariaHideApp={false}>
         <div className='overflow-y-auto overflow-custom p-5'>
-          <h2 className="mb-2 ">Add New Attachment</h2>
+          <h2 className="mb-2 ">{t('addNewAttachment')}</h2>
           <form onSubmit={handleSubmit} className="fomm-wrapper">
             <input type="file" name="url" required onChange={(e) => {
               setUrl(e.target.files![0] as any)
             }} />
-            <button disabled={loading} type="submit" className='button w-full mt-5'><AddFileIcon />{!loading ? 'Add Attachment' : 'Loading...'}</button>
+            <button disabled={loading} type="submit" className='button w-full mt-5'><AddFileIcon />{!loading ? t('addAttachment') : t('adding...')}</button>
           </form>
         </div>
       </Modal>

@@ -22,15 +22,22 @@ const Header: React.FC = () => {
     "/admin/customers": t("customers"),
     "/admin/new-project": t("addNewProject"),
     "/admin/projects/project-profile/": t("projects")
+    
   };
-
-  const currentPageName = pageNames[pathname] || t("projects");
+  const getPageName = (path: string): string => {
+    if (path.startsWith("/admin/customers/profile/")) {
+      return t("customers");
+    }
+    return pageNames[path] || t("projects");
+  };
+  const currentPageName = getPageName(pathname);
+  // const currentPageName = pageNames[pathname] || t("projects");
 
   return (
     <header className="flex justify-between items-center p-[15px]  lg:p-[40px] ">
      
       <div className="flex items-center justify-between w-full">
-        <h1 className="main-heading">{currentPageName}</h1>  
+        <h1 className="main-heading capitalize">{currentPageName}</h1>  
         <div className="hidden lg:block"><NotifactionBar /> </div>
       </div>
     </header>

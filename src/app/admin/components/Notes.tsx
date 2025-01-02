@@ -81,10 +81,10 @@ const Notes: React.FC<Notes> = ({id}) => {
       overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
       ariaHideApp={false}>
   <div className='overflow-y-auto overflow-custom p-5'>
-    <h2 className="mb-2 ">New Note</h2>
+    <h2 className="mb-2 ">{t('newNote')}</h2>
     <form onSubmit={handleSubmit} className="fomm-wrapper">
-      <textarea name="text" value={text} onChange={(e)=>setText(e.target.value)} aria-required placeholder="Enter your note here" required></textarea>
-      <button type="submit" className='button w-full mt-5'><AddFileIcon/> Add Note</button>
+      <textarea name="text" value={text} onChange={(e)=>setText(e.target.value)} aria-required placeholder={t('enterYourNoteHere')} required></textarea>
+      <button type="submit" className='button w-full mt-5'><AddFileIcon/> {t('addNotes')}</button>
     </form>
   </div>
   </Modal>

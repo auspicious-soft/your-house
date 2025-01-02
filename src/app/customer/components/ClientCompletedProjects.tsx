@@ -72,7 +72,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
           ))
         ) : (
           <tr>
-            <td className='w-full flex justify-center p-3 items-center' colSpan={4} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p className='text-center'>{t('noDataFound')}</p>}</td>
+            <td colSpan={5} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
           </tr>
         )}
         </tbody>

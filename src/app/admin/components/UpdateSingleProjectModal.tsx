@@ -36,7 +36,7 @@ interface UpdateProps {
 
 }
 const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, data, mutate }) => {
-  const t = useTranslations('ProfilePage');
+  const t = useTranslations('ProjectsPage');
   const [notification, setNotification] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -177,21 +177,21 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
     >
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
-          <h2 className="section-projectName">About Project</h2>
+          <h2 className="section-projectName">{t('aboutProject')}</h2>
           <div className="grid md:flex flex-wrap gap-5 pb-[33px] relative ">
             <div className="md:w-[calc(66.66%-8px)]">
-              <label className="block">Title</label>
+              <label className="block">{t('title')}</label>
               <input
                 type="text"
                 name="projectName"
                 value={formData.projectName}
-                placeholder="Add projectName"
+                placeholder={t('addProjectName')}
                 onChange={handleInputChange}
                 required
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)] mb-5">
-              <label className="block">Project Image</label>
+              <label className="block">{t('projectImage')}</label>
               {!selectedFile ? (
                 <div className="relative h-full">
                   <Image
@@ -237,18 +237,18 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">Start Date</label>
+              <label className="block">{t('startDate')}</label>
               <input
                 type="date"
                 name="projectstartDate"
                 value={formData.projectstartDate}
                 onChange={handleInputChange}
-                placeholder="+12346987"
+                placeholder= {t('startDate')}
                 required
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">Expected End Date</label>
+              <label className="block">{t('expectedEndDate')}</label>
               <input
                 type="date"
                 name="projectendDate"
@@ -259,46 +259,46 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">Status</label>
+              <label className="block">{t('status')}</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
               >
-                <option value="">Select Status</option>
-                <option value="1">Foundation</option>
-                <option value="2">Construction</option>
-                <option value="3">Interior Work</option>
-                <option value="4">Completed</option>
+                <option value="">{t('selectStatus')} </option>
+                <option value="1">{t('foundation')}</option>
+                <option value="2">{t('construction')}</option>
+                <option value="3">{t('interiorWork')} </option>
+                <option value="4">{t('completed')}</option>
               </select>
             </div>
             <div className="md:w-[calc(50%-14px)]">
-              <label className="block">Assign Customer</label>
+              <label className="block">{t('assignCustomer')}</label>
               <CustomSelect
                 value={selectedUser}
                 options={userData}
                 onChange={handleUserChange}
-                placeholder="Select User"
+                placeholder={t('selectUser')}
               />
             </div>
             <div className="md:w-[calc(50%-14px)]">
-              <label className="block">Employees Associated</label>
+              <label className="block">{t('employeesAssociated')}</label>
 
               <CustomSelect
                 value={associates}
                 options={option}
                 isMulti={true}
                 onChange={handleSelectChange}
-                placeholder="Select Assoiates"
+                placeholder="{t('selectAssociates')}"
               />
             </div>
             <div className="w-full">
-              <label className="block">Description</label>
+              <label className="block">{t('description')}</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder="Description"
+                placeholder={t('description')}
               ></textarea>
             </div>
           </div>
@@ -310,7 +310,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
             >
               {" "}
               <AddIcon className="w-4 h-4" />
-              {isPending ? "Updating..." : "Update Project Details"}
+              {isPending ? t('updating') : t('updateProjectDetails')}
             </button>
           </div>
         </form>

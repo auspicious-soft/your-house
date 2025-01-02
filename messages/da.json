@@ -8,7 +8,14 @@
     "logIn": "Log ind",
     "loggingIn": "Logger ind",
     "noAccount": "Har du ikke en konto?",
-    "createAccount": "Opret en"
+    "createAccount": "Opret en",
+    "signupSuccessful": "Tilmelding succesfuld",
+    "phoneNumber": "Telefonnummer",
+  "emailAddress": "Emailadresse",
+  "fullName": "Fulde navn",
+  "yourPassword": "Dit kodeord",
+  "confirmPassword": "Bekræft kodeord",
+  "alreadyHaveAnAccount": "Har du allerede en konto?"
   },
   "ForgotPasswordPage": {
     "forgotTitle": "Glemt adgangskode?",
@@ -36,6 +43,7 @@
     "passwordsMustMatch": "Adgangskoderne skal matche"
   },
   "CustomerDashboard": {
+    "customerProfile": "Kundeprofil",
     "logOut": "Log ud",
     "projects": "Projekter",
     "myProfile": "Min profil",
@@ -77,6 +85,7 @@
     "editProjectDetails": "Rediger projektoplysninger",
     "aboutProject": "Om projektet",
     "title": "Titel",
+    "projectImage": "Projektbillede",
     "image": "Billede",
     "addProjectName": "Tilføj projektnavn",
     "startDate": "Startdato",
@@ -91,9 +100,11 @@
     "selectStatus": "Vælg status",
     "addNotes": "Tilføj noter",
     "addTitle": "Tilføj titel",
-    "loading": "Loading",
-    "errorLoadingData": "Error loading data",
-    "noDataFound": "No data found",
+    "loading": "Indlæser",
+     "updating": "Opdaterer",
+  "updateProjectDetails": "Opdater projektoplysninger",
+    "errorLoadingData": "Fejl ved indlæsning af data",
+    "noDataFound": "Ingen data fundet",
     "name": "Kundens navn",
     "email": "E-mailadresse",
     "phone": "Telefonnummer",
@@ -102,7 +113,12 @@
     "confirmButton": "Bekræft",
     "attachments deleted successfully": "Vedhæftninger slettet med succes",
     "cancelButton": "Nej, behold det",
-    "deleteMsgCustomer": "Er du sikker på, at du vil slette denne kunde?"
+    "deleteMsgCustomer": "Er du sikker på, at du vil slette denne kunde?",
+     "addNewAttachment": "Tilføj nyt vedhæftning",
+    "addAttachment": "Tilføj vedhæftning",
+     "adding": "Tilføjer",
+     "newNote": "Ny note",
+    "enterYourNoteHere": "Indtast din note her"
   },
   "ProfilePage": {
     "fullName": "Fulde Navn",
@@ -119,5 +135,8 @@
     "logOut": "Log ud",
     "clientDetails": "Kundeoplysninger",
      "associatedProjects": "Tilknyttede Projekter"
+  },
+  "ToastMessages": {
+    
   }
 }
