@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Header from "@/app/customer/components/Header";
 
-// Move HTML structure outside of conditional logic
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -19,39 +18,34 @@ export default async function RootLayout({
   }
 
   // Check if user role is not "user"
-  if ((session as any)?.user?.role !== "user") {
-    return (
-      <html lang="en">
-        <body>
+  const isNotAuthorized = (session as any)?.user?.role !== "user";
+
+  return (
+    <html lang="en">
+      <body>
+        {isNotAuthorized ? (
           <div className="p-3 bg-black min-h-screen text-white">
             <span>You are not authorized to view this page click{" "}</span>
             <Link href="/" className="p-3 text-black bg-white">
               Login
             </Link>
           </div>
-        </body>
-      </html>
-    );
-  }
-
-  // Main layout for authorized users
-  return (
-    <html lang="en">
-      <body>
-        <div className="w-full lg:h-screen lg:flex-row lg:overflow-hidden">
-          <div className="flex-none hidden h-screen lg:block float-left w-[270px]">
-            <SideNav />
+        ) : (
+          <div className="w-full lg:h-screen lg:flex-row lg:overflow-hidden">
+            <div className="flex-none hidden h-screen lg:block float-left w-[270px]">
+              <SideNav />
+            </div>
+            <div className="w-full lg:hidden">
+              <MobileHeader />
+            </div>
+            <div className="float-left w-full lg:w-[calc(100%-270px)]">
+              <Header />
+              <main className="p-4 lg:h-[calc(100vh-116px)] overflow-y-auto pb-10 lg:pb-10 lg:px-10">
+                {children}
+              </main>
+            </div>
           </div>
-          <div className="w-full lg:hidden">
-            <MobileHeader />
-          </div>
-          <div className="float-left w-full lg:w-[calc(100%-270px)]">
-            <Header />
-            <main className="p-4 lg:h-[calc(100vh-116px)] overflow-y-auto pb-10 lg:pb-10 lg:px-10">
-              {children}
-            </main>
-          </div>
-        </div>
+        )}
       </body>
     </html>
   );

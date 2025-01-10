@@ -120,13 +120,13 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
       <div className="grid md:grid-cols-2 gap-8 md:gap-3 lg:gap-0 items-center md:min-h-screen ">
         <div className="bg-white h-full rounded-[30px] m-5 md:m-0  ">
           <div className="flex flex-col justify-center h-full max-w-[465px] p-5 mx-auto ">
-            <p className="mb-5 md:mb-9 text-center">
+            <div className="mb-5 md:mb-9 text-center">
               <Image
                 src={Logo}
                 alt="animate"
                 className="mx-auto max-w-[172px]"
               />
-            </p>
+            </div>
             <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">
              {t('welcomeBack')}
             </h2>
@@ -162,12 +162,12 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
                   {!isPending ? t('logIn') : t('loggingIn')}
                   </button>
 
-                  <p className="mt-5 text-center text-[#353E6C] text-[14px]">
+                  <div className="mt-5 text-center text-[#353E6C] text-[14px]">
                    {t('noAccount')}
                     <Link href="/signup" className="text-[#1657FF] ">
                       {t('createAccount')}
                     </Link>{" "}
-                  </p>
+                  </div>
                 </form>
               </div>
             </div>

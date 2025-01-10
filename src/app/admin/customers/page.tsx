@@ -1,5 +1,5 @@
 "use client"
-import { DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
+import { AddIcon, DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import imgs from '@/assets/images/avatar.png'
@@ -57,9 +57,15 @@ const Page: React.FC = () => {
     router.push(`/admin/customers/profile/${id}`);
   };
 
+  const addNewClient = () => {
+    console.log('gknskgd');
+  }
 
   return (
     <div>
+       <div className='flex justify-end '>
+          <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />{t('addNewProject')}</button>
+        </div>
       <div className="table-common overflo-custom mt-[20px] box-shadow">
         <table>
           <thead>

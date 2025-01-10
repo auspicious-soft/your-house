@@ -48,9 +48,9 @@ const Page: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-8 md:gap-3 lg:gap-0 items-center  ">
           <div className="bg-white h-full rounded-[30px] m-5 md:m-0  ">
             <div className="flex flex-col justify-center h-full max-w-[465px] p-5 mx-auto ">
-              <p className="mb-5 md:mb-10 text-center">
+              <div className="mb-5 md:mb-10 text-center">
                 <Image src={Logo} alt="animate" className="mx-auto max-w-[172px]" />
-              </p>
+              </div>
               <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-10 ">{t('welcomeBack')}</h2>
 
               <div className="login rounded-[20px] bg-white">
@@ -98,7 +98,7 @@ const Page: React.FC = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <button className="login-button w-full cursor-pointer mt-[50px]" onClick={handleSignup}>{t('signUp')}</button>
-                  <p className="text-[#353E6C] mt-5 text-center   ">{t('alreadyHaveAnAccount')} <Link href='/' className="text-[#1657FF] ">{t('logIn')}</Link> </p>
+                  <div className="text-[#353E6C] mt-5 text-center   ">{t('alreadyHaveAnAccount')} <Link href='/' className="text-[#1657FF] ">{t('logIn')}</Link> </div>
                 </div>
               </div>
             </div>

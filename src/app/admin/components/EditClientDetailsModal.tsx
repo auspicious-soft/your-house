@@ -97,12 +97,12 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
                   alt="Preview"
                   width={200}
                   height={200}
-                  className="rounded-full h-full object-cover"
+                  className="rounded-full h-full object-cover aspect-square"
                 />
                 <button
                   type="button"
                   onClick={triggerFileInputClick}
-                  className="absolute bottom-0 right-0 bg-gray-100 p-2 rounded-full"
+                  className="absolute bottom-0 right-0 bg-gray-100 p-2 rounded-full "
                 >
                   <EditImageIcon />
                 </button>
@@ -116,9 +116,9 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
                     alt="upload"
                     width={200}
                     height={200}
-                    className="rounded-full max-h-[200px] "
+                    className="rounded-full max-h-[200px] object-cover aspect-square "
                   />}
-                  <p className="absolute bottom-[10px] right-4 pointer-events-none">
+                  <p className="absolute bottom-[10px] right-4  pointer-events-none">
                     <EditImageIcon />
                   </p>
                 </div>
