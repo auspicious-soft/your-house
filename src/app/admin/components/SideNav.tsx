@@ -10,6 +10,8 @@ import {
   CustomerIcon,
   DashboardActiveIcon,
   DashboardIcon,
+  EmployeeActiveIcon,
+  EmployeeIcon,
   ProjectActiveIcon,
   ProjectIcon,
 } from "@/utils/svgicons";
@@ -64,11 +66,16 @@ const SideNav = () => {
           <li
             className={`${isActive("/admin/customers")} ${
               currentPath?.startsWith("/admin/customers/profile") ? "active" : ""
-            }`}
-          >
+            }`}>
             <Link href="/admin/customers">
               {isActive("/admin/customers") ? <CustomerActiveIcon /> : <CustomerIcon />}
               <div>{t("customers")}</div>
+            </Link>
+          </li>
+          <li className={`${isActive("/admin/employees")}`} >
+            <Link href="/admin/employees">
+              {isActive("/admin/employees") ? <EmployeeActiveIcon /> : <EmployeeIcon />}
+              <div>{t("Employees")}</div>
             </Link>
           </li>
         </ul>

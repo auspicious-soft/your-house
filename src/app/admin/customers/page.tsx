@@ -13,6 +13,9 @@ import { useTranslations } from 'next-intl';
 import TableRowImage from '@/components/table-row-img';
 import { getImageClientS3URL } from '@/utils/axios';
 import { deleteFileFromS3 } from '@/actions';
+import AddNewClient from '../components/AddNewClient';
+import profile from "@/assets/images/profile.png";
+
 
 
 const Page: React.FC = () => {
@@ -25,6 +28,7 @@ const Page: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [selectedProfilePic, setSelectedProfilePic] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const total = data?.data?.total ?? 0;
   const rowsPerPage = 10;
@@ -58,13 +62,14 @@ const Page: React.FC = () => {
   };
 
   const addNewClient = () => {
+    setIsModalOpen(true);
     console.log('gknskgd');
   }
 
   return (
     <div>
        <div className='flex justify-end '>
-          <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />{t('addNewProject')}</button>
+          <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />Tilføj ny Kunde</button>
         </div>
       <div className="table-common overflo-custom mt-[20px] box-shadow">
         <table>
@@ -94,7 +99,7 @@ const Page: React.FC = () => {
             ) : usersData?.length > 0 ? (
               usersData.map((row: any) => (
                 <tr key={row?._id}>
-                  <td><TableRowImage image={getImageClientS3URL(row?.profilePic)} /></td>
+                  <td><TableRowImage image={row?.profilePic ? getImageClientS3URL(row.profilePic) : profile} /></td>
                   <td>{row?.fullName} </td>
                   <td>{row?.email}</td>
                   <td>{row?.phoneNumber}</td>
@@ -140,6 +145,11 @@ const Page: React.FC = () => {
         onClose={() => setIsDeleteModalOpen(false)}
         title={t('deleteMsgCustomer')}
         handleDelete={handleDelete}
+      />
+      <AddNewClient
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        mutate={mutate}
       />
     </div>
   );

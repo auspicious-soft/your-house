@@ -8,7 +8,7 @@ import { getDashboardData } from "@/services/client/client-service";
 import { useTranslations } from "next-intl";
 import TableRowImage from "@/components/table-row-img";
 import { getImageClientS3URL } from "@/utils/axios";
-
+import profile from "@/assets/images/profile.png";
 const Home = () => {
  const t = useTranslations('CustomerDashboard'); 
   const { data, error, isLoading } = useSWR(`/user/dashboard`, getDashboardData);
@@ -77,7 +77,7 @@ const Home = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                   <TableRowImage image={getImageClientS3URL(row?.projectimageLink)} />
+                   <TableRowImage image={row?.projectimageLink? getImageClientS3URL(row?.projectimageLink): profile} />
                     <span className="text-[#353E6C] ">{row?.projectName}</span>
                   </div>
                   <div className="bg-[#FF16A2] text-white px-4 py-[7px] rounded-[5px] text-base">

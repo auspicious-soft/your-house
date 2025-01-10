@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { getImageClientS3URL } from "@/utils/axios";
 import { deleteFileFromS3, generateSignedUrlForUserProfile } from "@/actions";
+import profile from "@/assets/images/profile.png";
+import ReactLoading from "react-loading";
 
 
 const Page = () => {
@@ -91,12 +93,24 @@ const Page = () => {
     });
 
   };
+
+  if (isLoading) {
+    return <div className="text-center"><ReactLoading type={'spin'} color={'#1657FF'} height={'50px'} width={'50px'} /> </div>;
+  }
   return (
     <div>
       <h2 className="section-title text-[#3C3F88]"> {t('clientDetails')}</h2>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
-          <Image unoptimized src={!(formData.profilePic instanceof File) ? getImageClientS3URL(formData.profilePic) : formData.profilePic} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square object-cover rounded-full  " />
+          <Image unoptimized 
+          src={
+            formData.profilePic 
+            ? (!(formData.profilePic instanceof File) 
+                ? getImageClientS3URL(formData.profilePic) 
+                : formData.profilePic)
+            : profile
+          }
+             alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square object-cover rounded-full  " />
           <div>
             <button onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] ">
               <EditButtonIcon /> {t('editDetails')}

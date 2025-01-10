@@ -11,6 +11,7 @@ import { useTranslations } from 'next-intl';
 import TableRowImage from '@/components/table-row-img';
 import { getImageClientS3URL } from '@/utils/axios';
 import { deleteFileFromS3 } from '@/actions';
+import profile from "@/assets/images/profile.png";
 
 interface OnGoingProps {
   projectsData: any;
@@ -50,8 +51,8 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
         toast.success(h("Client deleted successfully"));
         await deleteFileFromS3(selectedProjectImage)
 
-        setIsDeleteModalOpen(false);
         mutate()
+        setIsDeleteModalOpen(false);
       } else {
       toast.error(h("Failed To Delete Client"));
       }
@@ -94,7 +95,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
               projects?.map((row: any) => (
                 <tr key={row?._id}>
                   <td>{row?.identifier}</td>
-                  <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
+                  <td><TableRowImage image={row?.projectimageLink?  getImageClientS3URL(row?.projectimageLink) : profile} /></td>
                   <td>{row?.projectName}</td>
                   <td>{row?.projectstartDate}</td>
                   <td>{row?.projectendDate}</td>

@@ -53,7 +53,8 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
     projectendDate: "",
     assignCustomer: "",
     description: "",
-    attachments: [],
+    employeeId: "", 
+    progress: 0,
     status: "",
     notes: [],
   });
@@ -123,6 +124,11 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+     const progressRegex = /^([1-9][0-9]?|100)$/;
+        if (formData.progress && !progressRegex.test(formData.progress.toString())) {
+          toast.error("Progress must be a number between 1 and 100");
+          return;
+        }
     let imageUrl = formData.projectimageLink
     startTransition(async () => {
       try {
@@ -144,10 +150,11 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
           description: formData.description,
+          progress: formData.progress,
           status: formData.status,
           associates: associates.length > 0
             ? associates.map((associate: any) => associate.value)
-            : [],
+            : undefined,
         };
 
         const response = await updateSingleProjectData(`/admin/project/${id}`, payload);
@@ -214,7 +221,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
               ) : (
                 <div className="relative h-full">
                   <Image
-                    src={imagePreview}
+                    src={imagePreview ? imagePreview : success}
                     alt="upload"
                     width={200}
                     height={200}
@@ -246,7 +253,6 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
                 value={formData.projectstartDate}
                 onChange={handleInputChange}
                 placeholder={t('startDate')}
-                required
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">

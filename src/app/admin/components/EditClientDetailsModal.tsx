@@ -2,11 +2,12 @@ import React, { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import Modal from "react-modal";
 import Image from "next/image"; // Import Image for Next.js
 import { EditImageIcon } from "@/utils/svgicons";
-import prev from "@/assets/images/img13.png"
+import prev from "@/assets/images/profile.png"
 import { updateUserInfo } from "@/services/client/client-service";
 import { mutate } from "swr";
 import { useTranslations } from "next-intl";
 import ReactLoader from "@/components/react-loading";
+import profile from "@/assets/images/profile.png";
 
 const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInputChange, id, handleSubmit, profilePic, setFormData, isPending
 }: {
@@ -67,6 +68,7 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Edit Client Details"
+      bodyOpenClassName='overflow-hidden'
       className="modal max-w-[1081px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
       overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
       ariaHideApp={false}
@@ -112,8 +114,9 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
                 <div>
                   {profilePic && <Image
                     unoptimized
-                    src={profilePic || prev}
-                    alt="upload"
+                    // {therapist?.profilePic ? getImageUrlOfS3(therapist?.profilePic) : Therapist1}
+                    src={profilePic || prev }
+                    alt=""
                     width={200}
                     height={200}
                     className="rounded-full max-h-[200px] object-cover aspect-square "

@@ -12,6 +12,7 @@ import { getDashboardStats } from "@/services/admin/admin-service";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { getImageClientS3URL } from "@/utils/axios";
+import profile from "@/assets/images/profile.png";
 
 const Home = () => {
   const t = useTranslations('CustomerDashboard');
@@ -89,7 +90,7 @@ const Home = () => {
                 key={data?._id}
                 title={data?.projectName}
                 progress={data?.status * 25}
-                imgSrc={getImageClientS3URL(data?.projectimageLink)}
+                imgSrc={data?.projectimageLink? getImageClientS3URL(data?.projectimageLink): profile}
               />
             )
           })}

@@ -62,7 +62,8 @@
     "completed": "Færdiggjort",
     "createNewProject": "Opret et Nyt Projekt",
     "clickToAddProject": "Klik for at tilføje et nyt projekt til listen",
-    "recentProjects": "Seneste Projekter"
+    "recentProjects": "Seneste Projekter",
+    "Employees": "Medarbejdere"
   },
   "ProjectsPage": {
     "ongoingProjects": "Igangværende Projekter",
@@ -82,6 +83,7 @@
     "description": "Beskrivelse",
     "employeesAssociated": "Tilknyttede medarbejdere",
     "overview": "Oversigt",
+    "Progress": "Fremskridt",
     "notes": "Noter",
     "editProjectDetails": "Rediger projektoplysninger",
     "aboutProject": "Om projektet",
@@ -127,10 +129,12 @@
     "emailAddress": "E-mailadresse",
     "homeAddress": "Hjemmeadresse",
     "editDetails": "Rediger detaljer",
+    "Password": "Adgangskode",
     "successUserAdded": "Brugeroplysninger blev opdateret med succes",
     "errorUserAddFailed": "Kunne ikke tilføje brugerdata",
     "errorUserAddException": "Der opstod en fejl under tilføjelsen af brugerdata",
     "editClientDetails": "Rediger klientoplysninger",
+    "Add client information": "Tilføj klientoplysninger",
     "saveDetails": "Gem oplysninger",
     "saving": "Gemmer",
     "logOut": "Log ud",

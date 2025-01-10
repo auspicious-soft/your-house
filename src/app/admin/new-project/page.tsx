@@ -37,6 +37,8 @@ const Page = () => {
     projectendDate: "",
     assignCustomer: "",
     description: "",
+    employeeId: "", 
+    progress: 0,
     attachments: null, // Changed to null for file storage
     status: "",
     notes: [],
@@ -82,9 +84,16 @@ const Page = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let projectImageLink: string;
-    let attachementUrl: string;
+
+    const progressRegex = /^([1-9][0-9]?|100)$/;
+    if (formData.progress && !progressRegex.test(formData.progress.toString())) {
+      toast.error("Progress must be a number between 1 and 100");
+      return;
+    }
+    let projectImageLink: string | undefined ;
+    let attachementUrl: string | undefined;
     startTransition(async () => {
+      try {
       if (formData.projectimageLink instanceof File && formData.attachments instanceof File) {
         const { signedUrl, key } = await generateSignedUrlToUploadOn(formData.projectimageLink.name, formData.projectimageLink.type, selectedUser.email)
         await fetch(signedUrl, {
@@ -106,25 +115,27 @@ const Page = () => {
         })
         attachementUrl = attachmentKey
       }
-      else {
-        toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
-      }
-      try {
+      // else {
+      //   toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
+      // }
+     
         const payload = {
           projectName: formData.projectName,
-          userId: selectedUser ? selectedUser.id : "", // Ensure userId is from selected user
+          userId: selectedUser ? selectedUser.id : "", 
           projectimageLink: projectImageLink,
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
           description: formData.description,
-          attachments: attachementUrl, // Default attachment if none
+          progress: formData.progress,
+          attachments: attachementUrl, 
           status: formData.status,
-          notes: formData.notes, // Ensure notes is an array of strings
+          notes: formData.notes, 
           associates: associates
             ? associates.map((associate: any) => associate.value)
-            : ["james", "Micheal"] // Default associates if none selected
+            : undefined
         }
 
+        console.log('payload:', payload); 
         const response = await addNewProject("/admin/projects", payload);
 
         if (response?.status === 201) {
@@ -167,7 +178,6 @@ const Page = () => {
                 name="projectimageLink"
                 onChange={handleInputChange}
                 accept="image/*"
-                required
               />
 
             </div>
@@ -179,7 +189,6 @@ const Page = () => {
                 value={formData.projectstartDate}
                 onChange={handleInputChange}
                 placeholder={t('startDate')}
-                required
               />
             </div>
             <div className="md:w-[calc(50%-10px)]">
@@ -190,7 +199,6 @@ const Page = () => {
                 value={formData.projectendDate}
                 onChange={handleInputChange}
                 placeholder=""
-                required
               />
             </div>
             <div className="md:w-[calc(50%-14px)]">
@@ -211,6 +219,7 @@ const Page = () => {
                 isMulti={true}
                 onChange={handleSelectChange}
                 placeholder={t('selectAssociates')}
+                required={false}
               />
             </div>
             <div className="w-full">
@@ -232,23 +241,15 @@ const Page = () => {
                 name="attachments"
                 onChange={handleInputChange}
                 accept=".pdf,.doc,.docx,.zip,image/*"
-                required
               />
             </div>
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('status')}</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">{t('selectStatus')} </option>
-                <option value="1">{t('foundation')}</option>
-                <option value="2">{t('construction')}</option>
-                <option value="3">{t('interiorWork')}</option>
-                <option value="4">{t('completed')}</option>
-              </select>
+              <input type="text" name="status" value={formData.status}  onChange={handleInputChange} />
+            </div>
+            <div className="md:w-[calc(50%-10px)]">
+              <label className="block">{t('Progress')}</label>
+              <input type="number" name="progress" value={formData.progress} onChange={handleInputChange} />
             </div>
             <div className="w-full">
               <label className="block">{t('addNotes')}</label>
@@ -257,7 +258,6 @@ const Page = () => {
                 value={formData.notes}
                 onChange={handleInputChange}
                 placeholder={t('addNotes')}
-                required
               ></textarea>
             </div>
           </div>

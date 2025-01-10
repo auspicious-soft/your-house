@@ -11,6 +11,7 @@ import { useTranslations } from 'next-intl';
 import TableRowImage from '@/components/table-row-img';
 import { getImageClientS3URL } from '@/utils/axios';
 import { deleteFileFromS3 } from '@/actions';
+import profile from "@/assets/images/profile.png";
 
 interface CompleteProps {
   projectsData: any;
@@ -92,7 +93,7 @@ const CompletedProjects: React.FC<CompleteProps> = ({ projectsData, mutate, isLo
               projects?.map((row: any) => (
                 <tr key={row?._id}>
                   <td>{row?.identifier}</td>
-                  <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
+                  <td><TableRowImage image={row?.projectimageLink? getImageClientS3URL(row?.projectimageLink): profile} /></td>
                   <td>{row?.projectName}</td>
                   <td>{row?.projectstartDate}</td>
                   <td>{row?.projectendDate}</td>

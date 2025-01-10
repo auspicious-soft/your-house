@@ -35,30 +35,31 @@ const Page = () => {
   const { id } = useParams();
   const { data, error, mutate, isLoading } = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data;
+  console.log('project:', project);
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [activeTab, setActiveTab] = useState(t("overview"));
 
-  const [progress, setProgress] = useState(0);
-  const steps = [
-    { id: 1, label: t("foundation"), value: 25 },
-    { id: 2, label: t("construction"), value: 50 },
-    { id: 3, label: t("interiorWork"), value: 75 },
-    { id: 4, label: t("completed"), value: 100 },
-  ];
+  // const [progress, setProgress] = useState(0);
+  // const steps = [
+  //   { id: 1, label: t("foundation"), value: 25 },
+  //   { id: 2, label: t("construction"), value: 50 },
+  //   { id: 3, label: t("interiorWork"), value: 75 },
+  //   { id: 4, label: t("completed"), value: 100 },
+  // ];
 
-  useEffect(() => {
-    const statusToProgress = {
-      '1': 25,
-      '2': 50,
-      '3': 75,
-      '4': 100
-    };
-    const numericStatus = String(project?.status);
-    const calculatedProgress = (statusToProgress as any)[numericStatus] || 0;
-    setProgress(calculatedProgress);
-  }, [project?.status]);
+  // useEffect(() => {
+  //   const statusToProgress = {
+  //     '1': 25,
+  //     '2': 50,
+  //     '3': 75,
+  //     '4': 100
+  //   };
+  //   const numericStatus = String(project?.status);
+  //   const calculatedProgress = (statusToProgress as any)[numericStatus] || 0;
+  //   setProgress(calculatedProgress);
+  // }, [project?.status]);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -110,7 +111,7 @@ const Page = () => {
           <div className="flex items-center justify-between border-b border-[#E9EDF3] py-[20px] md:py-[30px] px-[15px] md:px-10">
             <h2 className="main-heading capitalize">{project?.projectName}</h2>
             <button onClick={() => setIsModalOpen(true)} className="!rounded-[3px] !h-[37px] button !px-4 ">
-              <AddIcon className="w-4 h-4" /> {t('editProjectDetails')}
+              <AddIcon className="w-4 h-4" /> Redigere
             </button>
           </div>
           <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
@@ -127,8 +128,6 @@ const Page = () => {
                       value={project?.projectstartDate ? dayjs(project.projectstartDate) : null}
                       views={["year", "month", "day"]}
                     />
-
-
                   </DemoContainer>
                 </LocalizationProvider>
               </div>
@@ -152,43 +151,18 @@ const Page = () => {
             </div>
             <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>
-              <div className="progress-steps grid grid-cols-4 mb-5 ">
-                {steps.map((step) => (
-                  <button
-                    key={step.id}
-                    onClick={() => {
-                      setProgress(step.value);
-                      updateProjectStatus(step.value);
-                    }}
-                    className={`progress-step ${progress >= step.value ? "active" : ""
-                      }`}
-                  >
-                    <div className="checked flex justify-center mb-2.5  ">
-                      {progress >= step.value ? (
-                        <ProgressIcon className="fill-[#FF16A2] " />
-                      ) : (
-                        <ProgressIcon />
-                      )}
-                    </div>
-                    <span
-                      className={`text-sm font-sfproDisplaymedium ${progress >= step.value
-                        ? "text-[#43527B]"
-                        : "text-[#8B8E98]"
-                        }`}
-                    >
-                      {step.label}
-                    </span>
-                  </button>
-                ))}
-              </div>
+              <p className="text-[#3C3F88] bg-[#FFF477] py-2.5 px-5 mb-10 inline-block rounded-[50px] font-sfproDisplaymedium ">{project?.status} </p>
+              <div className="text-right">
+                <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p>
               <Line
-                percent={progress}
+                percent={project?.progress}
                 strokeWidth={1.2}
                 strokeColor="#FF16A2"
                 className="rounded-xl"
                 trailWidth={2}
                 trailColor="#e4e4e4"
               />
+              </div>
             </div>
           </div>
           <div className="py-[30px] px-[15px] md:px-10">

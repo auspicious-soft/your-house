@@ -9,7 +9,9 @@ import { getUserInfo, updateUserInfo } from "@/services/client/client-service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { deleteFileFromS3, generateSignedUrlForUserProfile, getImageUrl } from "@/actions";
-import imgNew from "@/assets/images/img13.png";
+import profile from "@/assets/images/profile.png";
+import { getImageClientS3URL } from "@/utils/axios";
+import ReactLoading from "react-loading";
 const Page = () => {
   const t = useTranslations('ProfilePage');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -103,11 +105,24 @@ const Page = () => {
 
   const [profilePic, setProfilePic] = useState<string>('');
 
+  if (isLoading) {
+    return <div className="text-center"><ReactLoading type={'spin'} color={'#1657FF'} height={'50px'} width={'50px'} /> </div>;
+  }  
   return (
     <div>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
         <div className="mb-10 flex gap-[20px] justify-between ">
-          {profilePic && <Image src={profilePic || imgNew} alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />}
+          {profilePic && 
+          <Image 
+          src={
+            formData.profilePic 
+            ? (!(formData.profilePic instanceof File) 
+                ? getImageClientS3URL(formData.profilePic) 
+                : formData.profilePic)
+            : profile
+          }
+          
+          alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square rounded-full  " />}
           <div>
             <button onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] ">
               <EditButtonIcon />{t('editDetails')}

@@ -11,7 +11,7 @@ const ProjectsProgress: React.FC<ProjectProps> = ({title, progress, imgSrc }) =>
     return (
         <div className='flex gap-3 mb-7'>
             <div className='min-w-10 '>
-                <Image src={imgSrc} alt='' width={40} height={40} className='rounded-full w-12 h-12'/>
+                <Image src={imgSrc} alt='' width={40} height={40} className='object-cover rounded-full w-12 h-12'/>
             </div>
             <div className='w-full flex gap-3 items-center'>
             <div className='w-full  '>

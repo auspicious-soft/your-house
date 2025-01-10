@@ -70,6 +70,11 @@ export const updateSingleUser = async (route: string, payload: any) => {
     return axiosInstance.patch(route, payload)
 }
 
+export const addNewUser = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true);
+    return axiosInstance.post(route, payload);
+};
+
 export const addNewProject = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance(true);
     return axiosInstance.post(route, payload);

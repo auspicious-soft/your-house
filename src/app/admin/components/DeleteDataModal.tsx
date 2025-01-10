@@ -9,7 +9,7 @@ interface DeleteModalProps {
     onClose: () => void;
     isOpen: boolean;
     selectedId?: string;
-    handleDelete?: () => void;
+    handleDelete: () => void;
     title?: string;
 }
 const DeleteDataModal:React.FC<DeleteModalProps> = ({onClose, isOpen, selectedId, handleDelete, title}) => {
