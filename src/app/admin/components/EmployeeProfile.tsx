@@ -1,32 +1,40 @@
-import React, { ChangeEvent, FormEvent, useState, useTransition } from "react";
-import Modal from "react-modal";
-import Image from "next/image"; // Import Image for Next.js
-import { EditImageIcon } from "@/utils/svgicons";
-import prev from "@/assets/images/img13.png"
-import { updateUserInfo } from "@/services/client/client-service";
-import { mutate } from "swr";
+import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
+import Modal from "react-modal";  
+import useSWR, { mutate } from "swr";
 import { useTranslations } from "next-intl";
 import ReactLoader from "@/components/react-loading";
-import { addNewUser } from "@/services/admin/admin-service";
+import {getSingleEmployee, updateEmployee } from "@/services/admin/admin-service";
 import { toast } from "sonner";
 
 interface AddNewClientOptions {
     isOpen: any;
     onClose: any;
+    employeeId: string;
     mutate: any;
 }
-const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) => {
+const EmployeeProfile:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate, employeeId}) => {
   const t = useTranslations('ProfilePage');
   const h = useTranslations('ToastMessages');
+  const {data , isLoading} = useSWR(`/admin/employee/${employeeId}`, getSingleEmployee)
+  const profile = data?.data?.data;
+
   const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<any>({
     fullName: "",
     phoneNumber: "",
-    email: "",
-    password: "",
-    address: "", 
+    email: "",  
   })
 
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        fullName: profile.fullName || "",
+        phoneNumber: profile.phoneNumber || "",
+        email: profile.email || "",
+        password: profile.address || "",
+      });
+    }
+  }, [profile]);  
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -42,8 +50,8 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
     let updatedFormData = { ...formData }
     startTransition(async () => {
       try { 
-        const response = await addNewUser(`/admin/users/`, updatedFormData); 
-        if (response?.status === 201) {
+        const response = await updateEmployee(`/admin/employee/${employeeId}`, updatedFormData); 
+        if (response?.status === 200) {
           onClose();
           mutate();
           toast.success(h("User details updated successfully"));
@@ -69,7 +77,7 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
     >
       <div className="bg-white rounded-lg p-8 relative">
         <div className="flex items-center justify-between mb-10 ">
-          <h2 className="main-heading">{t('Add client information')}</h2>
+          <h2 className="main-heading">{t('Update Employee Details')}</h2>
           <button
             onClick={onClose}
             className="bg-[#3B3F88] text-white p-1 px-2 rounded-3xl  "
@@ -101,19 +109,7 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
                 onChange={handleInputChange}
                 className="w-full p-2 border rounded"
               />
-            </div>
-            <div className="md:w-[calc(50%-10px)]">
-              <label className="block">
-                {t('Password')}
-              </label>
-              <input
-                type="text"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
+            </div> 
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">
                 {t('phoneNumber')}
@@ -122,18 +118,6 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
                 type="text"
                 name="phoneNumber"
                 value={formData.phoneNumber}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
-            <div className="md:w-[calc(50%-10px)]">
-              <label className="block">
-                {t('homeAddress')}
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
                 onChange={handleInputChange}
                 className="w-full p-2 border rounded"
               />
@@ -151,6 +135,6 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
       </div>
     </Modal>
   );
-}; 
+};  
 
-export default AddNewClient;
+export default EmployeeProfile;

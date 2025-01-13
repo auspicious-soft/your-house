@@ -7,7 +7,7 @@ import { updateUserInfo } from "@/services/client/client-service";
 import { mutate } from "swr";
 import { useTranslations } from "next-intl";
 import ReactLoader from "@/components/react-loading";
-import { addNewUser } from "@/services/admin/admin-service";
+import { addNewEmployee, addNewUser } from "@/services/admin/admin-service";
 import { toast } from "sonner";
 
 interface AddNewClientOptions {
@@ -15,16 +15,15 @@ interface AddNewClientOptions {
     onClose: any;
     mutate: any;
 }
-const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) => {
+const AddNewEmployee:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) => {
   const t = useTranslations('ProfilePage');
   const h = useTranslations('ToastMessages');
   const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<any>({
     fullName: "",
     phoneNumber: "",
-    email: "",
     password: "",
-    address: "", 
+    email: "", 
   })
 
   const handleInputChange = (
@@ -42,10 +41,11 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
     let updatedFormData = { ...formData }
     startTransition(async () => {
       try { 
-        const response = await addNewUser(`/admin/users/`, updatedFormData); 
+        const response = await addNewEmployee(`/admin/employee/`, updatedFormData); 
         if (response?.status === 201) {
           onClose();
           mutate();
+          setFormData("");
           toast.success(h("User details updated successfully"));
         } else {
           toast.error(h("Failed to add User Data"));
@@ -69,7 +69,7 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
     >
       <div className="bg-white rounded-lg p-8 relative">
         <div className="flex items-center justify-between mb-10 ">
-          <h2 className="main-heading">{t('Add client information')}</h2>
+          <h2 className="main-heading">{t('Add Employee Details')}</h2>
           <button
             onClick={onClose}
             className="bg-[#3B3F88] text-white p-1 px-2 rounded-3xl  "
@@ -126,24 +126,12 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
                 className="w-full p-2 border rounded"
               />
             </div>
-            <div className="md:w-[calc(50%-10px)]">
-              <label className="block">
-                {t('homeAddress')}
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                className="w-full p-2 border rounded"
-              />
-            </div>
             <div className="w-full ">
               <button
                 disabled={isPending}
                 type="submit"
                 className="w-full button !h-[44px] rounded-lg"
-              > {!isPending ? t('saveDetails') : <ReactLoader />}
+              > {!isPending ? t('Add Details') : <ReactLoader />}
               </button>
             </div>
           </form>
@@ -153,4 +141,4 @@ const AddNewClient:React.FC<AddNewClientOptions> = ({ isOpen, onClose, mutate}) 
   );
 }; 
 
-export default AddNewClient;
+export default AddNewEmployee;

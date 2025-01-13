@@ -104,8 +104,8 @@
     "addNotes": "Tilføj noter",
     "addTitle": "Tilføj titel",
     "loading": "Indlæser",
-     "updating": "Opdaterer",
-  "updateProjectDetails": "Opdater projektoplysninger",
+    "updating": "Opdaterer",
+    "updateProjectDetails": "Opdater projektoplysninger",
     "errorLoadingData": "Fejl ved indlæsning af data",
     "noDataFound": "Ingen data fundet",
     "name": "Kundens navn",
@@ -117,11 +117,14 @@
     "attachments deleted successfully": "Vedhæftninger slettet med succes",
     "cancelButton": "Nej, behold det",
     "deleteMsgCustomer": "Er du sikker på, at du vil slette denne kunde?",
-     "addNewAttachment": "Tilføj nyt vedhæftning",
+    "addNewAttachment": "Tilføj nyt vedhæftning",
     "addAttachment": "Tilføj vedhæftning",
-     "adding": "Tilføjer",
-     "newNote": "Ny note",
-    "enterYourNoteHere": "Indtast din note her"
+    "adding": "Tilføjer",
+    "newNote": "Ny note",
+    "enterYourNoteHere": "Indtast din note her",
+    "Name of the employee": "Navn på medarbejderen",
+    "Add New Employee" : "Tilføj ny medarbejder"
+  
   },
   "ProfilePage": {
     "fullName": "Fulde Navn",
@@ -139,10 +142,13 @@
     "saving": "Gemmer",
     "logOut": "Log ud",
     "clientDetails": "Kundeoplysninger",
-     "associatedProjects": "Tilknyttede Projekter"
+    "associatedProjects": "Tilknyttede Projekter",
+    "Add Details": "Tilføj detaljer",
+    "Add Employee Details": "Tilføj medarbejderoplysninger",
+    "Update Employee Details" : "Opdater medarbejderoplysninger"
   },
   "ToastMessages": {
-    "Client deleted successfully": "Klient slettet succesfuldt",
+    "deleted successfully": "slettet succesfuldt",
     "Failed To Delete Client": "Kunne ikke slette klient",
     "an Error Occurred While Deleting The Client": "Der opstod en fejl under sletning af klienten",
     "Note deleted successfully": "Note slettet succesfuldt",

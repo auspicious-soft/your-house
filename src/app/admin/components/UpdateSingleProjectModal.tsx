@@ -1,5 +1,11 @@
 "use client";
-import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import Image from "next/image";
 import success from "@/assets/images/succes.png";
 import Notification from "../components/Notification";
@@ -13,7 +19,6 @@ import { getImageClientS3URL } from "@/utils/axios";
 import { useTranslations } from "next-intl";
 import { deleteFileFromS3, generateSignedUrlToUploadOn } from "@/actions";
 import ReactLoader from "@/components/react-loading";
-
 
 export const option = [
   { label: "Associate 1", value: "Associate 1" },
@@ -34,18 +39,23 @@ interface UpdateProps {
   data: any;
   mutate: any;
   onClose: () => void;
-
 }
-const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, data, mutate }) => {
-  const t = useTranslations('ProjectsPage');
-  const h = useTranslations('ToastMessages');
-  const [notification, setNotification] = useState<string | null>(null)
+const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
+  isOpen,
+  onClose,
+  id,
+  data,
+  mutate,
+}) => {
+  const t = useTranslations("ProjectsPage");
+  const h = useTranslations("ToastMessages");
+  const [notification, setNotification] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
   const { userData, isLoading } = useClients(true);
-  const [selectedUser, setSelectedUser] = useState<any>(null)
-  const oldProjectImage = data.projectimageLink
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const oldProjectImage = data.projectimageLink;
   const [formData, setFormData] = useState<any>({
     projectName: "",
     projectimageLink: "",
@@ -53,7 +63,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
     projectendDate: "",
     assignCustomer: "",
     description: "",
-    employeeId: "", 
+    employeeId: "",
     progress: 0,
     status: "",
     notes: [],
@@ -64,10 +74,11 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
     if (data) {
       setFormData({
         projectName: data.projectName || "",
-        projectimageLink: (data.projectimageLink) || "",
+        projectimageLink: data.projectimageLink || "",
         projectstartDate: data.projectstartDate || "",
         projectendDate: data.projectendDate || "",
         description: data.description || "",
+        progress: data.progress || "",
         attachments: data.attachments?.map((att: any) => att.filePath) || [],
         status: data.status || "",
         notes: data.notes || [],
@@ -87,7 +98,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
       if (data.associates && data.associates.length > 0) {
         const selectedAssociates = data.associates.map((assoc: string) => ({
           label: assoc,
-          value: assoc
+          value: assoc,
         }));
         setAssociates(selectedAssociates);
       }
@@ -98,51 +109,61 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
     setSelectedUser(selected);
     setFormData((prev: any) => ({
       ...prev,
-      userId: selected ? selected.id : ""
+      userId: selected ? selected.id : "",
     }));
   };
 
   const handleSelectChange = (selected: any) => {
     setAssociates(selected);
-  }
+  };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, files } = e.target as HTMLInputElement & { files: FileList };
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value, files } = e.target as HTMLInputElement & {
+      files: FileList;
+    };
 
     if (files && files.length > 0 && name === "projectimageLink") {
       const file = files[0];
       setSelectedFile(file);
       setImagePreview(URL.createObjectURL(file));
-    }
-    else {
+    } else {
       setFormData((prev: any) => ({
         ...prev,
         [name]: name === "phoneNumber" ? Number(value) : value,
-      }))
+      }));
     }
-  }
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-     const progressRegex = /^([1-9][0-9]?|100)$/;
-        if (formData.progress && !progressRegex.test(formData.progress.toString())) {
-          toast.error("Progress must be a number between 1 and 100");
-          return;
-        }
-    let imageUrl = formData.projectimageLink
+    const progressRegex = /^([1-9][0-9]?|100)$/;
+    if (
+      formData.progress &&
+      !progressRegex.test(formData.progress.toString())
+    ) {
+      toast.error("Progress must be a number between 1 and 100");
+      return;
+    }
+    let imageUrl = formData.projectimageLink;
     startTransition(async () => {
       try {
         if (selectedFile) {
-          const { signedUrl, key } = await generateSignedUrlToUploadOn(selectedFile.name, selectedFile.type, selectedUser.email)
+          const { signedUrl, key } = await generateSignedUrlToUploadOn(
+            selectedFile.name,
+            selectedFile.type,
+            selectedUser.email
+          );
           await fetch(signedUrl, {
-            method: 'PUT',
+            method: "PUT",
             body: selectedFile,
             headers: {
-              'Content-Type': selectedFile.type,
+              "Content-Type": selectedFile.type,
             },
-          })
-          oldProjectImage && await deleteFileFromS3(oldProjectImage)
-          imageUrl = key
+          });
+          oldProjectImage && (await deleteFileFromS3(oldProjectImage));
+          imageUrl = key;
         }
         const payload = {
           projectName: formData.projectName,
@@ -152,12 +173,16 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
           description: formData.description,
           progress: formData.progress,
           status: formData.status,
-          associates: associates.length > 0
-            ? associates.map((associate: any) => associate.value)
-            : undefined,
+          associates:
+            associates.length > 0
+              ? associates.map((associate: any) => associate.value)
+              : undefined,
         };
 
-        const response = await updateSingleProjectData(`/admin/project/${id}`, payload);
+        const response = await updateSingleProjectData(
+          `/admin/project/${id}`,
+          payload
+        );
 
         if (response?.status === 200) {
           toast.success(h("Updated successfully"));
@@ -166,19 +191,18 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
         } else {
           toast.error(h("Failed to add project"));
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.error("Der opstod en fejl", error);
         toast.error("Der opstod en fejl");
       }
-    })
-  }
+    });
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
-      bodyOpenClassName='overflow-hidden'
+      bodyOpenClassName="overflow-hidden"
       contentLabel="Edit Client Details"
       className="modal max-w-[1081px] mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
       overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
@@ -186,21 +210,21 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
     >
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
-          <h2 className="section-projectName">{t('aboutProject')}</h2>
+          <h2 className="section-projectName">{t("aboutProject")}</h2>
           <div className="grid md:flex flex-wrap gap-5 pb-[33px] relative ">
             <div className="md:w-[calc(66.66%-8px)]">
-              <label className="block">{t('title')}</label>
+              <label className="block">{t("title")}</label>
               <input
                 type="text"
                 name="projectName"
                 value={formData.projectName}
-                placeholder={t('addProjectName')}
+                placeholder={t("addProjectName")}
                 onChange={handleInputChange}
                 required
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)] mb-5">
-              <label className="block">{t('projectImage')}</label>
+              <label className="block">{t("projectImage")}</label>
               {!selectedFile ? (
                 <div className="relative h-full">
                   <Image
@@ -212,7 +236,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
                   />
                   <button
                     type="button"
-                    onClick={() => document.getElementById('fileInput')?.click()}
+                    onClick={() =>
+                      document.getElementById("fileInput")?.click()
+                    }
                     className="absolute bottom-5 right-24 p-2 rounded-full bg-[#1657ff] text-white"
                   >
                     <EditButtonIcon />
@@ -229,7 +255,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
                   />
                   <button
                     type="button"
-                    onClick={() => document.getElementById('fileInput')?.click()}
+                    onClick={() =>
+                      document.getElementById("fileInput")?.click()
+                    }
                     className="absolute bottom-5 right-24 p-2 rounded-full bg-[#1657ff] text-white"
                   >
                     <EditButtonIcon />
@@ -245,68 +273,72 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
                 accept="image/*"
               />
             </div>
-            <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">{t('startDate')}</label>
+            <div className="md:w-[calc(50%-14px)]">
+              <label className="block">{t("startDate")}</label>
               <input
                 type="date"
                 name="projectstartDate"
                 value={formData.projectstartDate}
                 onChange={handleInputChange}
-                placeholder={t('startDate')}
+                placeholder={t("startDate")}
               />
             </div>
-            <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">{t('expectedEndDate')}</label>
+            <div className="md:w-[calc(50%-14px)]">
+              <label className="block">{t("expectedEndDate")}</label>
               <input
                 type="date"
                 name="projectendDate"
                 value={formData.projectendDate}
                 onChange={handleInputChange}
                 placeholder=""
-                required
               />
             </div>
-            <div className="md:w-[calc(33.33%-14px)]">
-              <label className="block">{t('status')}</label>
-              <select
+            <div className="md:w-[calc(50%-14px)]">
+              <label className="block">{t("status")}</label>
+              <input
+                type="text"
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-              >
-                <option value="">{t('selectStatus')} </option>
-                <option value="1">{t('foundation')}</option>
-                <option value="2">{t('construction')}</option>
-                <option value="3">{t('interiorWork')} </option>
-                <option value="4">{t('completed')}</option>
-              </select>
+              />
             </div>
             <div className="md:w-[calc(50%-14px)]">
-              <label className="block">{t('assignCustomer')}</label>
+              <label className="block">{t("Progress")}</label>
+              <input
+                type="number"
+                name="progress"
+                value={formData.progress}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="md:w-[calc(50%-14px)]">
+              <label className="block">{t("assignCustomer")}</label>
               <CustomSelect
                 value={selectedUser}
                 options={userData}
                 onChange={handleUserChange}
-                placeholder={t('selectUser')}
+                placeholder={t("selectUser")}
               />
             </div>
             <div className="md:w-[calc(50%-14px)]">
-              <label className="block">{t('employeesAssociated')}</label>
+              <label className="block">{t("employeesAssociated")}</label>
 
               <CustomSelect
                 value={associates}
+                required={false}
                 options={option}
                 isMulti={true}
                 onChange={handleSelectChange}
-                placeholder="{t('selectAssociates')}"
+                placeholder={t('selectAssociates')}
               />
             </div>
             <div className="w-full">
-              <label className="block">{t('description')}</label>
+              <label className="block">{t("description")}</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder={t('description')}
+                placeholder={t("description")}
               ></textarea>
             </div>
           </div>
@@ -314,8 +346,16 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
             <button
               type="submit"
               className="button w-full"
-              disabled={isPending}>
-              {isPending ? <ReactLoader /> : <> <AddIcon className="w-4 h-4" /> {t('updateProjectDetails')}</>}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <ReactLoader />
+              ) : (
+                <>
+                  {" "}
+                  <AddIcon className="w-4 h-4" /> {t("updateProjectDetails")}
+                </>
+              )}
             </button>
           </div>
         </form>

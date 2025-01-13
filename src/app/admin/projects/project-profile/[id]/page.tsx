@@ -34,8 +34,7 @@ const Page = () => {
   const h = useTranslations('ToastMessages');
   const { id } = useParams();
   const { data, error, mutate, isLoading } = useSWR(`/admin/project/${id}`, getSingleProject);
-  const project = data?.data?.data;
-  console.log('project:', project);
+  const project = data?.data?.data; 
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 

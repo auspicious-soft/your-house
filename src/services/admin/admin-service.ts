@@ -79,3 +79,23 @@ export const addNewProject = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance(true);
     return axiosInstance.post(route, payload);
 };
+export const getAllEmployees = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.get(route)
+}
+export const deleteEmployee = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.delete(route)
+}
+export const addNewEmployee = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true);
+    return axiosInstance.post(route, payload);
+};
+export const getSingleEmployee = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.get(route)
+}
+export const updateEmployee = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.patch(route, payload)
+}

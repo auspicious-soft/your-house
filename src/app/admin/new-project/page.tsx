@@ -134,8 +134,7 @@ const Page = () => {
             ? associates.map((associate: any) => associate.value)
             : undefined
         }
-
-        console.log('payload:', payload); 
+ 
         const response = await addNewProject("/admin/projects", payload);
 
         if (response?.status === 201) {

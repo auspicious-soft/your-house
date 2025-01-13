@@ -44,7 +44,7 @@ const Page: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      // const response = await deleteUsers(`/admin/users/${selectedId}`);
+       const response = await deleteUsers(`/admin/users/${selectedId}`);
       if (200 > 100) {
         toast.success(h("Client deleted successfully"));
         await deleteFileFromS3(selectedProfilePic)
@@ -62,8 +62,7 @@ const Page: React.FC = () => {
   };
 
   const addNewClient = () => {
-    setIsModalOpen(true);
-    console.log('gknskgd');
+    setIsModalOpen(true); 
   }
 
   return (
