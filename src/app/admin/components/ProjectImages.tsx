@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
-import pdfImg from '@/assets/images/PDF.png';
+import doc from '@/assets/images/documents.png';
 import { AddFileIcon, DeleteIcon, DownloadIcon, EditButtonIcon, EditIcon } from '@/utils/svgicons';
 import useSWR from 'swr';
 import { addAttachmentsData, deleteAttachmentsData, getAttachmentsData } from '@/services/admin/admin-service';
@@ -81,7 +81,7 @@ const ProjectImages: React.FC<OverViewProps> = ({ id, userEmail }) => {
         return (
           <div key={index?._id} className="flex justify-between items-center mb-5">
             <div className='flex items-center gap-3 '>
-              <div><Image src={pdfImg} alt='' /> </div>
+              <div><Image src={doc} alt='' width={35} height={35}/> </div>
               <div>
                 <p className="text-[#43527B] text-sm  ">{fileName}</p>
                 <p className="text-[#8B8E98] text-xs mt-1  ">
