@@ -37,6 +37,8 @@ const Page = () => {
     projectendDate: "",
     assignCustomer: "",
     description: "",
+    homeAddress: "",
+    constructionAddress: "",
     employeeId: "", 
     progress: 0,
     attachments: null, // Changed to null for file storage
@@ -127,6 +129,8 @@ const Page = () => {
           projectendDate: formData.projectendDate,
           description: formData.description,
           progress: formData.progress,
+          constructionAddress: formData.constructionAddress,
+          homeAddress: formData.homeAddress,
           attachments: attachementUrl, 
           status: formData.status,
           notes: formData.notes, 
@@ -180,7 +184,7 @@ const Page = () => {
               />
 
             </div>
-            <div className="md:w-[calc(50%-10px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block"> {t('startDate')}</label>
               <input
                 type="date"
@@ -190,7 +194,7 @@ const Page = () => {
                 placeholder={t('startDate')}
               />
             </div>
-            <div className="md:w-[calc(50%-10px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t('expectedEndDate')}</label>
               <input
                 type="date"
@@ -200,7 +204,7 @@ const Page = () => {
                 placeholder=""
               />
             </div>
-            <div className="md:w-[calc(50%-14px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t('assignCustomer')}</label>
               <CustomSelect
                 value={selectedUser}
@@ -209,9 +213,8 @@ const Page = () => {
                 placeholder={t('selectUser')}
               />
             </div>
-            <div className="md:w-[calc(50%-14px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t('employeesAssociated')}</label>
-
               <CustomSelect
                 value={associates}
                 options={option}
@@ -219,6 +222,26 @@ const Page = () => {
                 onChange={handleSelectChange}
                 placeholder={t('selectAssociates')}
                 required={false}
+              />
+            </div>
+            <div className="md:w-[calc(33.33%-14px)]">
+              <label className="block">{t('Construction Address')}</label>
+              <input
+                type="text"
+                name="constructionAddress"
+                value={formData.constructionAddress}
+                onChange={handleInputChange}
+                placeholder=""
+              />
+            </div>
+            <div className="md:w-[calc(33.33%-14px)]">
+              <label className="block">{t('Home Address')}</label>
+              <input
+                type="text"
+                name="homeAddress"
+                value={formData.homeAddress}
+                onChange={handleInputChange}
+                placeholder=""
               />
             </div>
             <div className="w-full">

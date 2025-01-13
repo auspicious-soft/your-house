@@ -3,18 +3,11 @@ import CompletedProjects from "@/app/admin/components/CompletedProjects";
 import Notes from "@/app/admin/components/Notes";
 import OnGoingProjects from "@/app/admin/components/OnGoingProjects";
 import OverviewOfProjects from "@/app/admin/components/OverviewOfProjects";
-import {
-  AddIcon,
-  CallIcon,
-  MailIcon,
-  MapIcon,
-  ProgressIcon,
-} from "@/utils/svgicons";
+import {AddIcon,CallIcon,MailIcon, MapIcon, ProgressIcon,} from "@/utils/svgicons";
 import Image from "next/image";
 import { Line } from "rc-progress";
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-//import DatePicker from "react-date-picker";
 
 import imgNew from "@/assets/images/img13.png";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
@@ -24,10 +17,10 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { getSingleProject, updateSingleProjectData } from "@/services/admin/admin-service";
 import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProjectModal";
-import dayjs from "dayjs";
-import { toast } from "sonner";
+import dayjs from "dayjs"; 
 import { useTranslations } from "next-intl";
 import { getImageClientS3URL } from "@/utils/axios";
+import ProjectImages from "@/app/admin/components/ProjectImages";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -38,47 +31,21 @@ const Page = () => {
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [activeTab, setActiveTab] = useState(t("overview"));
-
-  // const [progress, setProgress] = useState(0);
-  // const steps = [
-  //   { id: 1, label: t("foundation"), value: 25 },
-  //   { id: 2, label: t("construction"), value: 50 },
-  //   { id: 3, label: t("interiorWork"), value: 75 },
-  //   { id: 4, label: t("completed"), value: 100 },
-  // ];
-
-  // useEffect(() => {
-  //   const statusToProgress = {
-  //     '1': 25,
-  //     '2': 50,
-  //     '3': 75,
-  //     '4': 100
-  //   };
-  //   const numericStatus = String(project?.status);
-  //   const calculatedProgress = (statusToProgress as any)[numericStatus] || 0;
-  //   setProgress(calculatedProgress);
-  // }, [project?.status]);
+  const [activeTab, setActiveTab] = useState(t("Drawings"));
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case t("overview"):
+      case t("Drawings"):
         return (
-          <div>
-            <OverviewOfProjects id={id} userEmail = {userData?.email} />
-          </div>
+          <div><OverviewOfProjects id={id} userEmail = {userData?.email} /></div>
         );
-      case "Status":
+      case t("Progress"):
         return (
-          <div>
-            {/* <CompletedProjects /> */}
-          </div>
+          <div><ProjectImages id={id} userEmail = {userData?.email} /></div>
         );
       case t("notes"):
         return (
-          <div>
-            <Notes id={id} />
-          </div>
+          <div><Notes id={id} /></div>
         );
       default:
         return null;
@@ -87,21 +54,6 @@ const Page = () => {
 
   useEffect(() => {
   }, [activeTab]);
-
-  const updateProjectStatus = async (step: number) => {
-    try {
-      const statusValue = step / 25; // Assuming 4 steps total
-      const response = await updateSingleProjectData(`/admin/project/${id}`, { status: statusValue });
-      if (response?.status === 200) {
-        toast.success(h("Project status updated successfully"));
-        mutate();
-      } else {
-        toast.error(h("Failed to update project status"));
-      }
-    } catch (error) { 
-      toast.error(h("An error occurred while updating the project status"));
-    }
-  };
 
   return (
     <div>
@@ -114,7 +66,7 @@ const Page = () => {
             </button>
           </div>
           <div className="pt-[20px] px-[15px] md:px-10 pb-[15px] md:pb-[40px] border-b border-[#E9EDF3] ">
-            <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px] md:mb-[40px]">
+            <div className=" flex gap-3 flex-col justify-between md:flex-row mb-[20px]">
               <div className="">
                 <label className="block text-[#8B8E98] text-[14px] ">
                   {t('startDate')}
@@ -148,6 +100,20 @@ const Page = () => {
                 </LocalizationProvider>
               </div>
             </div>
+        <div className="mb-[20px] md:mb-[40px]">
+            <label className="block text-[#3C3F88]  ">
+            {t('Home Address')}
+            </label>
+          <p className="text-base  text-[#8B8E98] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+            {project?.homeAddress}</p>
+           
+            <label className="block text-[#3C3F88] mt-5">
+                {t('Construction Address')}
+            </label>
+          <p className="text-base text-[#8B8E98]  border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+            {project?.constructionAddress}</p>
+            
+            </div>
             <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>
               <p className="text-[#3C3F88] bg-[#FFF477] py-2.5 px-5 mb-10 inline-block rounded-[50px] font-sfproDisplaymedium ">{project?.status} </p>
@@ -167,7 +133,7 @@ const Page = () => {
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
               <div className="flex gap-2.5">
-                {[t("overview"), t("notes")].map((tab) => (
+                {[t("Drawings"), t('Progress'),  t("notes")].map((tab) => (
                   <button
                     key={tab}
                     className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab
@@ -175,10 +141,7 @@ const Page = () => {
                       : "text-[#8B8E98] bg-[#F4F5F7] "
                       }`}
                     onClick={() => setActiveTab(tab)}
-                  >
-                    {" "}
-                    {tab}
-                  </button>
+                  >{tab}</button>
                 ))}
               </div>
               <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5 ">
@@ -242,13 +205,13 @@ const Page = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && <UpdateSingleProjectModal
+    <UpdateSingleProjectModal
         id={id}
         data={project}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mutate={mutate}
-      />}
+      />
     </div>
   );
 };

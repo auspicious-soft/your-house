@@ -48,7 +48,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
     try {
       const response = await deleteProject(`/admin/project/${selectedId}`);
       if (response.status === 200) {
-        toast.success(h("Client deleted successfully"));
+        toast.success(h("deleted successfully"));
         await deleteFileFromS3(selectedProjectImage)
 
         mutate()
@@ -75,6 +75,8 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
               <th>{t('projectName')}</th>
               <th>{t('startDate')}</th>
               <th>{t('expectedEndDate')}</th>
+              <th>{t('Construction Address')}</th>
+              <th>{t('Home Address')}</th>
               <th>{t('action')}</th>
             </tr>
           </thead>
@@ -99,6 +101,8 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
                   <td>{row?.projectName}</td>
                   <td>{row?.projectstartDate}</td>
                   <td>{row?.projectendDate}</td>
+                  <td>{row?.constructionAddress}</td>
+                  <td>{row?.homeAddress}</td>
                   <td>
                     <div className='flex items-center gap-[6px] '>
                       <button onClick={() => EditProjectData(row?._id)}><EditIcon /> </button>

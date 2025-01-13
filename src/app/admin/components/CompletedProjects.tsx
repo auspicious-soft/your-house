@@ -73,6 +73,8 @@ const CompletedProjects: React.FC<CompleteProps> = ({ projectsData, mutate, isLo
               <th>{t('projectName')}</th>
               <th>{t('startDate')}</th>
               <th>{t('expectedEndDate')}</th>
+              <th>{t('Construction Address')}</th>
+              <th>{t('Home Address')}</th>
               <th>{t('action')}</th>
             </tr>
           </thead>
@@ -97,6 +99,8 @@ const CompletedProjects: React.FC<CompleteProps> = ({ projectsData, mutate, isLo
                   <td>{row?.projectName}</td>
                   <td>{row?.projectstartDate}</td>
                   <td>{row?.projectendDate}</td>
+                  <td>{row?.constructionAddress}</td>
+                  <td>{row?.homeAddress}</td>
                   <td>
                     <div className='flex items-center gap-[6px] '>
                       <button onClick={() => EditProjectData(row?._id)}><EditIcon /> </button>

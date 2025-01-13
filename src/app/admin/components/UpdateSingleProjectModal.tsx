@@ -55,7 +55,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
   const [associates, setAssociates] = useState<any>("");
   const { userData, isLoading } = useClients(true);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const oldProjectImage = data.projectimageLink;
+  const oldProjectImage = data?.projectimageLink;
   const [formData, setFormData] = useState<any>({
     projectName: "",
     projectimageLink: "",
@@ -64,6 +64,8 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     assignCustomer: "",
     description: "",
     employeeId: "",
+    homeAddress: "",
+    constructionAddress: "",
     progress: 0,
     status: "",
     notes: [],
@@ -79,6 +81,8 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
         projectendDate: data.projectendDate || "",
         description: data.description || "",
         progress: data.progress || "",
+        homeAddress: data.homeAddress || "",
+        constructionAddress: data.constructionAddress || "",
         attachments: data.attachments?.map((att: any) => att.filePath) || [],
         status: data.status || "",
         notes: data.notes || [],
@@ -103,7 +107,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
         setAssociates(selectedAssociates);
       }
     }
-  }, []);
+  }, [data]);
 
   const handleUserChange = (selected: any) => {
     setSelectedUser(selected);
@@ -171,6 +175,8 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
           description: formData.description,
+          homeAddress: formData.homeAddress,
+          constructionAddress: formData.constructionAddress,
           progress: formData.progress,
           status: formData.status,
           associates:
@@ -210,20 +216,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     >
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
-          <h2 className="section-projectName">{t("aboutProject")}</h2>
+          <h2 className="section-projectName mb-5">{t("aboutProject")}</h2>
           <div className="grid md:flex flex-wrap gap-5 pb-[33px] relative ">
-            <div className="md:w-[calc(66.66%-8px)]">
-              <label className="block">{t("title")}</label>
-              <input
-                type="text"
-                name="projectName"
-                value={formData.projectName}
-                placeholder={t("addProjectName")}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="md:w-[calc(33.33%-14px)] mb-5">
+          <div className="md:w-[calc(33.33%-14px)] mb-5">
               <label className="block">{t("projectImage")}</label>
               {!selectedFile ? (
                 <div className="relative h-full">
@@ -273,6 +268,18 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
                 accept="image/*"
               />
             </div>
+            <div className="w-full">
+              <label className="block">{t("title")}</label>
+              <input
+                type="text"
+                name="projectName"
+                value={formData.projectName}
+                placeholder={t("addProjectName")}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+           
             <div className="md:w-[calc(50%-14px)]">
               <label className="block">{t("startDate")}</label>
               <input
@@ -293,7 +300,27 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
                 placeholder=""
               />
             </div>
-            <div className="md:w-[calc(50%-14px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
+              <label className="block">{t('Construction Address')}</label>
+              <input
+                type="text"
+                name="constructionAddress"
+                value={formData.constructionAddress}
+                onChange={handleInputChange}
+                placeholder=""
+              />
+            </div>
+            <div className="md:w-[calc(33.33%-14px)]">
+              <label className="block">{t('Home Address')}</label>
+              <input
+                type="text"
+                name="homeAddress"
+                value={formData.homeAddress}
+                onChange={handleInputChange}
+                placeholder=""
+              />
+            </div>
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t("status")}</label>
               <input
                 type="text"
@@ -302,7 +329,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
                 onChange={handleInputChange}
               />
             </div>
-            <div className="md:w-[calc(50%-14px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t("Progress")}</label>
               <input
                 type="number"
@@ -311,7 +338,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
                 onChange={handleInputChange}
               />
             </div>
-            <div className="md:w-[calc(50%-14px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t("assignCustomer")}</label>
               <CustomSelect
                 value={selectedUser}
@@ -320,7 +347,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
                 placeholder={t("selectUser")}
               />
             </div>
-            <div className="md:w-[calc(50%-14px)]">
+            <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t("employeesAssociated")}</label>
 
               <CustomSelect

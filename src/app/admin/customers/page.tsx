@@ -15,6 +15,7 @@ import { getImageClientS3URL } from '@/utils/axios';
 import { deleteFileFromS3 } from '@/actions';
 import AddNewClient from '../components/AddNewClient';
 import profile from "@/assets/images/profile.png";
+import SearchBar from '../components/SearchBar';
 
 
 
@@ -67,7 +68,8 @@ const Page: React.FC = () => {
 
   return (
     <div>
-       <div className='flex justify-end '>
+       <div className='flex gap-2.5 justify-end '>
+       <SearchBar setQuery={setQuery}/>
           <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />Tilføj ny Kunde</button>
         </div>
       <div className="table-common overflo-custom mt-[20px] box-shadow">

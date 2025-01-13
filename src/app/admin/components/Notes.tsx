@@ -88,7 +88,7 @@ const Notes: React.FC<Notes> = ({id}) => {
   </div>
   </Modal>
 
-    </div>
+  </div>
     );
 }
 

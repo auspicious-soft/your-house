@@ -8,6 +8,7 @@ import CompletedProjects from "../components/CompletedProjects";
 import { AddIcon } from "@/utils/svgicons";
 import { getAllProjects } from "@/services/admin/admin-service";
 import { useTranslations } from "next-intl";
+import SearchBar from '../components/SearchBar';
 
 const Page = () => {
   const t = useTranslations('ProjectsPage'); 
@@ -47,7 +48,8 @@ const Page = () => {
               </button>
             ))}
           </div>
-          <div>
+          <div className='flex gap-2.5 justify-end '>
+          <SearchBar setQuery={setQuery}/>
             <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={openNewProject}><AddIcon className="w-4 h-4" />{t('addNewProject')}</button>
           </div>
         </div>

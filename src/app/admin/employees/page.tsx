@@ -16,6 +16,7 @@ import { deleteFileFromS3 } from '@/actions';
 import profile from "@/assets/images/profile.png";
 import AddNewEmployee from '../components/AddNewEmployee';
 import EmployeeProfile from '../components/EmployeeProfile';
+import SearchBar from '../components/SearchBar';
 
 
 
@@ -70,7 +71,8 @@ const Page: React.FC = () => {
 
   return (
     <div>
-       <div className='flex justify-end '>
+       <div className='flex gap-2.5 justify-end '>
+        <SearchBar setQuery={setQuery}/>
           <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />{t('Add New Employee')}</button>
         </div>
       <div className="table-common overflo-custom mt-[20px] box-shadow">
