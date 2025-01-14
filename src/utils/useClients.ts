@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { getAllUsers } from '@/services/admin/admin-service';
 
-const useClients = (isOnboarding?: boolean) => {
+const useClients = () => {
     const { data, error, isLoading } = useSWR(`/admin/users`, getAllUsers);
     
 

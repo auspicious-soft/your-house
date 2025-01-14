@@ -9,27 +9,18 @@ import useClients from "@/utils/useClients";
 import { useTranslations } from "next-intl";
 import { generateSignedUrlOfProjectAttachment, generateSignedUrlToUploadOn } from "@/actions";
 import ReactLoader from "@/components/react-loading";
+import UseEmployees from "@/utils/useEmployees";
 
-const option = [
-  { label: "Associate 1", value: "Associate 1" },
-  { label: "Associate 2", value: "Associate 2" },
-  { label: "Associate 3", value: "Associate 3" },
-  { label: "Associate 4", value: "Associate 4" },
-  { label: "Associate 5", value: "Associate 5" },
-  { label: "Associate 6", value: "Associate 6" },
-  { label: "Associate 7", value: "Associate 7" },
-  { label: "Associate 8", value: "Associate 8" },
-  { label: "Associate 9", value: "Associate 9" },
-  { label: "Associate 10", value: "Associate 10" },
-];
 const Page = () => {
   const t = useTranslations('ProjectsPage');
   const h = useTranslations('ToastMessages');
   const [notification, setNotification] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const [associates, setAssociates] = useState<any>("");
-  const { userData, isLoading } = useClients(true);
+  const [employees, setEmployees] = useState<any>("");
+  const { userData, isLoading } = useClients();
+  const {employeeData} = UseEmployees();
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  
   const [formData, setFormData] = useState<any>({
     projectName: "",
     projectimageLink: null, // Changed to null for file storage
@@ -57,7 +48,7 @@ const Page = () => {
   };
 
   const handleSelectChange = (selected: any) => {
-    setAssociates(selected);
+    setEmployees(selected);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -134,8 +125,8 @@ const Page = () => {
           attachments: attachementUrl, 
           status: formData.status,
           notes: formData.notes, 
-          associates: associates
-            ? associates.map((associate: any) => associate.value)
+          employees: employees
+            ? employees.map((associate: any) => associate.value)
             : undefined
         }
  
@@ -216,8 +207,8 @@ const Page = () => {
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t('employeesAssociated')}</label>
               <CustomSelect
-                value={associates}
-                options={option}
+                value={employees}
+                options={employeeData}
                 isMulti={true}
                 onChange={handleSelectChange}
                 placeholder={t('selectAssociates')}
