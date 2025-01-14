@@ -19,6 +19,7 @@ import { getImageClientS3URL } from "@/utils/axios";
 import { useTranslations } from "next-intl";
 import { deleteFileFromS3, generateSignedUrlToUploadOn } from "@/actions";
 import ReactLoader from "@/components/react-loading";
+import UseEmployees from "@/utils/useEmployees";
 
 export const option = [
   { label: "Associate 1", value: "Associate 1" },
@@ -53,7 +54,11 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
-  const { userData, isLoading } = useClients(true);
+
+
+  console.log('associates:', associates);
+  const { userData, isLoading } = useClients();
+  const {employeeData} = UseEmployees();
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const oldProjectImage = data?.projectimageLink;
   const [formData, setFormData] = useState<any>({
@@ -71,41 +76,50 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     notes: [],
   });
   const [imagePreview, setImagePreview] = useState<string>("");
+  console.log('data:', data);
+
+  const transformEmployeeData = (employeeIds: string[], employeeList: any[]) => {
+    return employeeIds.map((empId: string) => {
+      const employee = employeeList.find((emp: any) => emp.value === empId);
+      return {
+        label: employee ? employee.label : empId,
+        value: empId
+      };
+    });
+  };
 
   useEffect(() => {
-    if (data) {
-      setFormData({
-        projectName: data.projectName || "",
-        projectimageLink: data.projectimageLink || "",
-        projectstartDate: data.projectstartDate || "",
-        projectendDate: data.projectendDate || "",
-        description: data.description || "",
-        progress: data.progress || "",
-        homeAddress: data.homeAddress || "",
-        constructionAddress: data.constructionAddress || "",
-        attachments: data.attachments?.map((att: any) => att.filePath) || [],
-        status: data.status || "",
-        notes: data.notes || [],
-      });
-      setImagePreview(getImageClientS3URL(data.projectimageLink));
-      // Set selected user if user data exists
-      if (data.userId) {
-        setSelectedUser({
-          id: data.userId._id,
-          label: data.userId.fullName,
-          value: data.userId._id,
-          email: data.userId.email,
-        });
-      }
+    if (!data) return;
 
-      // Set associates if they exist
-      if (data.associates && data.associates.length > 0) {
-        const selectedAssociates = data.associates.map((assoc: string) => ({
-          label: assoc,
-          value: assoc,
-        }));
-        setAssociates(selectedAssociates);
-      }
+    setFormData({
+      projectName: data.projectName || "",
+      projectimageLink: data.projectimageLink || "",
+      projectstartDate: data.projectstartDate || "",
+      projectendDate: data.projectendDate || "",
+      description: data.description || "",
+      progress: data.progress || "",
+      homeAddress: data.homeAddress || "",
+      constructionAddress: data.constructionAddress || "",
+      attachments: data.attachments?.map((att: any) => att.filePath) || [],
+      status: data.status || "",
+      notes: data.notes || [],
+    });
+    
+    setImagePreview(getImageClientS3URL(data.projectimageLink));
+    
+    if (data.userId) {
+      setSelectedUser({
+        id: data.userId._id,
+        label: data.userId.fullName,
+        value: data.userId._id,
+        email: data.userId.email,
+      });
+    }
+
+    // Only transform employee data if both data.employeeId and employeeData are available
+    if (data.employeeId?.length > 0 && employeeData?.length > 0) {
+      const selectedAssociates = transformEmployeeData(data.employeeId, employeeData);
+      setAssociates(selectedAssociates);
     }
   }, [data]);
 
@@ -179,7 +193,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
           constructionAddress: formData.constructionAddress,
           progress: formData.progress,
           status: formData.status,
-          associates:
+          employeeId:
             associates.length > 0
               ? associates.map((associate: any) => associate.value)
               : undefined,
@@ -353,7 +367,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
               <CustomSelect
                 value={associates}
                 required={false}
-                options={option}
+                options={employeeData}
                 isMulti={true}
                 onChange={handleSelectChange}
                 placeholder={t('selectAssociates')}

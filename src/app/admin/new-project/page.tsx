@@ -19,6 +19,7 @@ const Page = () => {
   const [employees, setEmployees] = useState<any>("");
   const { userData, isLoading } = useClients();
   const {employeeData} = UseEmployees();
+  console.log('employeeData:', employeeData);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   
   const [formData, setFormData] = useState<any>({
@@ -26,7 +27,7 @@ const Page = () => {
     projectimageLink: null, // Changed to null for file storage
     projectstartDate: "",
     projectendDate: "",
-    assignCustomer: "",
+    userId: "",
     description: "",
     homeAddress: "",
     constructionAddress: "",
@@ -41,10 +42,10 @@ const Page = () => {
   const handleUserChange = (selected: any) => {
     setSelectedUser(selected);
     // Set the userId when a user is selected
-    setFormData((prev: any) => ({
-      ...prev,
-      userId: selected ? selected.id : ""
-    }));
+    // setFormData((prev: any) => ({
+    //   ...prev,
+    //   userId: selected ? selected.id : ""
+    // }));
   };
 
   const handleSelectChange = (selected: any) => {
@@ -111,10 +112,13 @@ const Page = () => {
       // else {
       //   toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
       // }
-     
+      // userId: selectedUser ? {
+      //   value: selectedUser.value,
+      //   label: selectedUser.label
+      // } : "",
         const payload = {
           projectName: formData.projectName,
-          userId: selectedUser ? selectedUser.id : "", 
+          userId: selectedUser ? selectedUser.value : "", 
           projectimageLink: projectImageLink,
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
@@ -125,10 +129,17 @@ const Page = () => {
           attachments: attachementUrl, 
           status: formData.status,
           notes: formData.notes, 
-          employees: employees
-            ? employees.map((associate: any) => associate.value)
-            : undefined
-        }
+          employeeId: employees
+          ? employees.map((associate: any) => associate.value)
+          : undefined
+      }
+        //   employeeId: employees
+        //     ? employees.map((associate: any) => ({
+        //         value: associate.value,
+        //         label: associate.label
+        //       }))
+        //     : undefined
+        // }
  
         const response = await addNewProject("/admin/projects", payload);
 

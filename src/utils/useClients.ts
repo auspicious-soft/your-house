@@ -7,8 +7,7 @@ const useClients = () => {
 
     const userData = data?.data?.data?.map((user: any) => ({
         label: `${user?.fullName}`,
-        id: user._id,
-        email : user.email,
+        value: user._id,
     })) || []; 
 
     return {

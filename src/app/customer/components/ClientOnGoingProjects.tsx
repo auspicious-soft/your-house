@@ -43,6 +43,8 @@ const ClientOnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, is
             <th>{t('projectName')}</th>
             <th>{t('startDate')}</th>
             <th>{t('expectedEndDate')}</th>
+            <th>{t('Construction Address')}</th>
+            <th>{t('Home Address')}</th>
             <th>{t('action')}</th>
           </tr>
         </thead>
@@ -67,7 +69,9 @@ const ClientOnGoingProjects: React.FC<OnGoingProps> = ({projectsData, mutate, is
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>
-              <td><button onClick={()=>EditProjectData(row?._id)}><EditIcon /> </button></td>
+              <td>{row?.constructionAddress}</td>
+              <td>{row?.homeAddress}</td>
+              <td><button onClick={()=>EditProjectData(row?._id)}><ViewIcon /> </button></td>
             </tr>
           ))
         ) : (

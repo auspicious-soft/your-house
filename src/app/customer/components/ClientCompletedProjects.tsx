@@ -67,7 +67,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
               <td>{row?.projectName}</td>
               <td>{row?.projectstartDate}</td>
               <td>{row?.projectendDate}</td>
-              <td><button onClick={()=>EditProjectData(row?._id)}><EditIcon /> </button></td>
+              <td><button onClick={()=>EditProjectData(row?._id)}><ViewIcon /> </button></td>
             </tr>
           ))
         ) : (

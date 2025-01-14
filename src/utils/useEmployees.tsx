@@ -5,9 +5,8 @@ import useSWR from 'swr';
 const UseEmployees = () => {
     const { data, error, mutate, isLoading } = useSWR(`/admin/employee`, getAllEmployees)
     const employeeData = data?.data?.data?.map((user: any) => ({
-        label: `${user?.fullName}`,
-        id: user._id,
-        email : user.email,
+        label: user?.fullName,
+        value: user?._id,
     })) || []; 
     return { 
         employeeData,

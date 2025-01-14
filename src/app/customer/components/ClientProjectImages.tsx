@@ -12,11 +12,11 @@ interface OverViewProps {
   id: any;
 }
 
-const ClientAttachments: React.FC<OverViewProps> = ({ id }) => {
+const ClientProjectImages: React.FC<OverViewProps> = ({ id }) => {
   const { data, isLoading, error, mutate } = useSWR(`/user/attachments/${id}`, getClientAttachments);
   const arrays = data?.data?.data 
 
-  const attachments = arrays?.filter((attachment: any) => attachment?.type === "Drawings");
+  const attachments = arrays?.filter((attachment: any) => attachment?.type === "Progress");
 
   const session = useSession();
   const email = (session as any)?.data?.user?.username;
@@ -66,5 +66,5 @@ const ClientAttachments: React.FC<OverViewProps> = ({ id }) => {
     </div>
   );
 };
-
-export default ClientAttachments;
+ 
+export default ClientProjectImages;

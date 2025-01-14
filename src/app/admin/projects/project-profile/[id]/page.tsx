@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { getImageClientS3URL } from "@/utils/axios";
 import ProjectImages from "@/app/admin/components/ProjectImages";
+import UseEmployees from "@/utils/useEmployees";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -28,6 +29,8 @@ const Page = () => {
   const { id } = useParams();
   const { data, error, mutate, isLoading } = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data; 
+  const {employeeData} = UseEmployees();
+  console.log('project:', project);
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -54,6 +57,17 @@ const Page = () => {
 
   useEffect(() => {
   }, [activeTab]);
+
+  const getEmployeeNames = () => {
+    if (!project?.employeeId || !employeeData) return [];
+    
+    return project.employeeId
+      .map((id: any) => {
+        const employee = employeeData.find((emp: any) => emp.value === id);
+        return employee?.label || '';
+      })
+      .filter((name: any) => name !== ''); // Remove empty names
+  };
 
   return (
     <div>
@@ -197,9 +211,9 @@ const Page = () => {
                 {t('employeesAssociated')}
                 {/* <EditProfile /> */}
               </h3>
-              {project?.associates?.map((index: any) => (
-                <p className="text-[#8B8E98] text-sm capitalize " key={index}>{index} </p>
-              ))}
+             <p className="text-[#8B8E98] text-sm capitalize">
+          {getEmployeeNames().join(', ')}
+        </p>
 
             </div>
           </div>

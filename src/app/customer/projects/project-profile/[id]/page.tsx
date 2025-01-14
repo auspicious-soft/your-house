@@ -10,6 +10,7 @@ import ClientNotes from "@/app/customer/components/ClientNotes";
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
 import { getClientSingleProject } from "@/services/client/client-service";
+import ClientProjectImages from "@/app/customer/components/ClientProjectImages";
 
 interface FileItem {
   name: string;
@@ -19,7 +20,7 @@ interface FileItem {
 const Page = () => {
   const t = useTranslations('ProjectsPage'); 
   const {id} = useParams();
-  const [activeTab, setActiveTab] = useState(t("overview"));
+  const [activeTab, setActiveTab] = useState(t("Drawings"));
   const {data, error, mutate, isLoading} = useSWR(`/user/project/${id}`, getClientSingleProject);
   const project = data?.data?.data;
 
@@ -47,16 +48,16 @@ const Page = () => {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case t("overview"): 
+      case t("Drawings"): 
         return (
           <div>
            <ClientAttachments id={id} />
         </div>
         );
-      case "Status":
+      case t("Progress"):
         return (
           <div>
-            {/* <CompletedProjects /> */}
+            <ClientProjectImages id={id} />
           </div>
         );
       case t("notes"):
@@ -97,44 +98,40 @@ const Page = () => {
                 <p className="text-base text-[#3C3F88] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">{project?.projectendDate}</p>
               </div>
             </div>
-            <div className="progress-container pb-4">
-              <h2 className="section-title">{t('progress')}</h2>
-              <div className="progress-steps grid grid-cols-4 mb-5 ">
-                {steps.map((step) => (
-                  <button
-                    key={step.id}
-                    // onClick={() => setProgress(step.value)}
-                    className={`progress-step ${
-                      progress >= step.value ? "active" : ""
-                    }`}
-                  >
-                    <div className="checked flex justify-center mb-2.5  ">
-                      {progress >= step.value ? (
-                        <ProgressIcon className="fill-[#FF16A2] " />
-                      ) : (
-                        <ProgressIcon />
-                      )}
-                    </div>
-                    <span className="text-[#43527B] text-[12px] md:text-sm font-sfproDisplaymedium  ">
-                      {step.label}
-                    </span>
-                  </button>
-                ))}
-              </div>
-              <Line
-                percent={progress}
-                strokeWidth={1.2}
-                strokeColor="#FF16A2"
-                className="rounded-xl"
-                trailWidth={2}
-                trailColor="#e4e4e4"
-              /> 
+            <div className="mb-[20px] md:mb-[40px]">
+            <label className="block text-[#3C3F88]  ">
+            {t('Home Address')}
+            </label>
+          <p className="text-base  text-[#8B8E98] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+            {project?.homeAddress}</p>
+           
+            <label className="block text-[#3C3F88] mt-5">
+                {t('Construction Address')}
+            </label>
+          <p className="text-base text-[#8B8E98]  border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+            {project?.constructionAddress}</p>
+            
             </div>
+     <div className="progress-container pb-4">
+                  <h2 className="section-title"> {t('progress')}</h2>
+                  <p className="text-[#3C3F88] bg-[#FFF477] py-2.5 px-5 mb-10 inline-block rounded-[50px] font-sfproDisplaymedium ">{project?.status} </p>
+                  <div className="text-right">
+                    <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p>
+                  <Line
+                    percent={project?.progress}
+                    strokeWidth={1.2}
+                    strokeColor="#FF16A2"
+                    className="rounded-xl"
+                    trailWidth={2}
+                    trailColor="#e4e4e4"
+                  />
+                  </div>
+                </div>
           </div>
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
               <div className="flex gap-2.5">
-                {[t("overview"), t("notes")].map((tab) => (
+                {[t("Drawings"), t('Progress'), t("notes")].map((tab) => (
                   <button
                     key={tab}
                     className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${
