@@ -21,6 +21,7 @@ const Home = () => {
   const [query, setQuery] = useState('');
   const { data, error, isLoading, mutate } = useSWR(`/admin/dashboard`, getDashboardStats);
   const dashboardData = data?.data?.data;
+  console.log('dashboardData:', dashboardData);
   const OverviewData = [
     {
       id: "1",
@@ -89,7 +90,7 @@ const Home = () => {
               <ProjectsProgress
                 key={data?._id}
                 title={data?.projectName}
-                progress={data?.status * 25}
+                progress={data?.progress}
                 imgSrc={data?.projectimageLink? getImageClientS3URL(data?.projectimageLink): profile}
               />
             )

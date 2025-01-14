@@ -25,7 +25,7 @@ const Page: React.FC = () => {
   const h = useTranslations('ToastMessages');
   const router = useRouter();
   const [query, setQuery] = useState('page=1&limit=10');
-  const { data, error, mutate, isLoading } = useSWR(`/admin/employee`, getAllEmployees)
+  const { data, error, mutate, isLoading } = useSWR(`/admin/employee?${query}`, getAllEmployees)
   const employeeData = data?.data?.data;
 
   const [selectedProfileModal, setSelectedProfileModal] = useState(false); 

@@ -54,9 +54,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
-
-
-  console.log('associates:', associates);
+ 
   const { userData, isLoading } = useClients();
   const {employeeData} = UseEmployees();
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -76,7 +74,6 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     notes: [],
   });
   const [imagePreview, setImagePreview] = useState<string>("");
-  console.log('data:', data);
 
   const transformEmployeeData = (employeeIds: string[], employeeList: any[]) => {
     return employeeIds.map((empId: string) => {

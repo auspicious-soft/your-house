@@ -20,7 +20,6 @@ const Page = () => {
   const [query, setQuery] = useState('');
   const {data, error, isLoading, mutate} = useSWR(`/user/${id}/projects?state=${activeTab === t('ongoingProjects') ? "ongoing" : 'completed'}&${query}`, getClientsAllProjects)
   const projectsData = data?.data;
-  console.log('projectsData:', projectsData);
  
   
   const renderTabContent = () => {

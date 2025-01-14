@@ -24,7 +24,7 @@ const Page: React.FC = () => {
   const h = useTranslations('ToastMessages');
   const router = useRouter();
   const [query, setQuery] = useState('page=1&limit=10');
-  const { data, error, mutate, isLoading } = useSWR(`/admin/users`, getAllUsers)
+  const { data, error, mutate, isLoading } = useSWR(`/admin/users?${query}` , getAllUsers)
   const usersData = data?.data?.data;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');

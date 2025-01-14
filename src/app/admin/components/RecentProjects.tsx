@@ -71,6 +71,7 @@ const EditProjectData =(id: string) => {
             <th>{t('projectName')}</th>
             <th>{t('startDate')}</th>
             <th>{t('expectedEndDate')}</th>
+            
             <th>{t('action')}</th>
           </tr>
         </thead>

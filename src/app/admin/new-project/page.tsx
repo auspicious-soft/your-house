@@ -18,8 +18,7 @@ const Page = () => {
   const [isPending, startTransition] = useTransition();
   const [employees, setEmployees] = useState<any>("");
   const { userData, isLoading } = useClients();
-  const {employeeData} = UseEmployees();
-  console.log('employeeData:', employeeData);
+  const {employeeData} = UseEmployees(); 
   const [selectedUser, setSelectedUser] = useState<any>(null);
   
   const [formData, setFormData] = useState<any>({
@@ -30,10 +29,11 @@ const Page = () => {
     userId: "",
     description: "",
     homeAddress: "",
+    type: "", 
     constructionAddress: "",
     employeeId: "", 
     progress: 0,
-    attachments: null, // Changed to null for file storage
+    url: null, // Changed to null for file storage
     status: "",
     notes: [],
   })
@@ -62,10 +62,10 @@ const Page = () => {
           projectimageLink: files[0]
         }))
 
-      } else if (name === "attachments") {
+      } else if (name === "url") {
         setFormData((prev: any) => ({
           ...prev,
-          attachments: files[0]
+          url: files[0]
         }))
       }
     } else {
@@ -75,7 +75,6 @@ const Page = () => {
       }));
     }
   };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -84,11 +83,21 @@ const Page = () => {
       toast.error("Progress must be a number between 1 and 100");
       return;
     }
+
+    if (formData.type && !formData.url) {
+      toast.error(h("Please select attachments when specifying a type"));
+      return;
+    }
+    if (formData.url && !formData.type) {
+      toast.error(h("Please select a type when adding attachments"));
+      return;
+    }
+
     let projectImageLink: string | undefined ;
     let attachementUrl: string | undefined;
     startTransition(async () => {
       try {
-      if (formData.projectimageLink instanceof File && formData.attachments instanceof File) {
+      if (formData.projectimageLink instanceof File && formData.url instanceof File) {
         const { signedUrl, key } = await generateSignedUrlToUploadOn(formData.projectimageLink.name, formData.projectimageLink.type, selectedUser.email)
         await fetch(signedUrl, {
           method: 'PUT',
@@ -99,12 +108,12 @@ const Page = () => {
         })
         projectImageLink = key
 
-        const { signedUrl: attachmentUrl, key: attachmentKey } = await generateSignedUrlOfProjectAttachment(formData.attachments.name, formData.attachments.type, selectedUser.email)
+        const { signedUrl: attachmentUrl, key: attachmentKey } = await generateSignedUrlOfProjectAttachment(formData.url.name, formData.url.type, selectedUser.email)
         await fetch(attachmentUrl, {
           method: 'PUT',
-          body: formData.attachments,
+          body: formData.url,
           headers: {
-            'Content-Type': formData.attachments.type,
+            'Content-Type': formData.url.type,
           },
         })
         attachementUrl = attachmentKey
@@ -112,10 +121,7 @@ const Page = () => {
       // else {
       //   toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
       // }
-      // userId: selectedUser ? {
-      //   value: selectedUser.value,
-      //   label: selectedUser.label
-      // } : "",
+     
         const payload = {
           projectName: formData.projectName,
           userId: selectedUser ? selectedUser.value : "", 
@@ -128,18 +134,12 @@ const Page = () => {
           homeAddress: formData.homeAddress,
           attachments: attachementUrl, 
           status: formData.status,
+          type: formData.type,
           notes: formData.notes, 
           employeeId: employees
           ? employees.map((associate: any) => associate.value)
           : undefined
       }
-        //   employeeId: employees
-        //     ? employees.map((associate: any) => ({
-        //         value: associate.value,
-        //         label: associate.label
-        //       }))
-        //     : undefined
-        // }
  
         const response = await addNewProject("/admin/projects", payload);
 
@@ -157,7 +157,6 @@ const Page = () => {
       }
     });
   };
-
 
   return (
     <>
@@ -258,11 +257,19 @@ const Page = () => {
           </div>
           <h2 className="section-projectName">{t('projectProgress')}</h2>
           <div className="grid md:flex flex-wrap gap-5 ">
+          <div className="md:w-[calc(50%-10px)]">
+              <label className="block">{t('Category')}</label>
+              <select name="type" value={formData.type} onChange={handleInputChange}>
+                <option value="" disabled>{t('Select')}</option>
+                <option value={t('Progress')}>{t('Progress')}</option>
+                <option value={t("Drawings")}>{t("Drawings")}</option>
+              </select>
+            </div>
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('attachments')}</label>
               <input
                 type="file"
-                name="attachments"
+                name="url"
                 onChange={handleInputChange}
                 accept=".pdf,.doc,.docx,.zip,image/*"
               />
@@ -290,10 +297,7 @@ const Page = () => {
               type="submit"
               className="button w-full"
               disabled={isPending}
-            >
-              {" "}
-
-              {isPending ? <ReactLoader /> : <> <AddIcon className="w-4 h-4" /> {t("addNewProject")}</>}
+            >{isPending ? <ReactLoader /> : <> <AddIcon className="w-4 h-4" /> {t("addNewProject")}</>}
             </button>
           </div>
         </form>

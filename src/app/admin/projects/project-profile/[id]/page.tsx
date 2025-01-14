@@ -29,8 +29,7 @@ const Page = () => {
   const { id } = useParams();
   const { data, error, mutate, isLoading } = useSWR(`/admin/project/${id}`, getSingleProject);
   const project = data?.data?.data; 
-  const {employeeData} = UseEmployees();
-  console.log('project:', project);
+  const {employeeData} = UseEmployees(); 
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -84,7 +84,9 @@
     "employeesAssociated": "Tilknyttede medarbejdere",
     "overview": "Oversigt",
     "Drawings": "Tegninger",
+    "Category": "Kategori",
     "Progress": "Fremskridt",
+    "Select": "Vælge",
     "notes": "Noter",
     "editProjectDetails": "Rediger projektoplysninger",
     "aboutProject": "Om projektet",
@@ -167,6 +169,9 @@
     "Updated successfully": "Opdateret succesfuldt",
     "Failed to add project": "Kunne ikke tilføje projekt",
     "Project Added Successfully": "Projekt tilføjet succesfuldt",
-    "An error occurred while adding the project": "Der opstod en fejl under tilføjelse af projektet"
+    "An error occurred while adding the project": "Der opstod en fejl under tilføjelse af projektet",
+    "Please select a type when adding attachments": "Vælg venligst en type, når du tilføjer vedhæftede filer",
+    "Please select attachments when specifying a type": "Vælg venligst vedhæftede filer, når du angiver en type",
+    "Progress must be a number between 1 and 100": "Fremskridt skal være et tal mellem 1 og 100"
   }
 }

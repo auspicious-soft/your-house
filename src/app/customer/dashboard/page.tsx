@@ -30,12 +30,6 @@ const Home = () => {
     },
   ];
 
-  const steps = [
-    { id: 1, label: t("foundation") },
-    { id: 2, label: t("construction") },
-    { id: 3, label: t("interiorWork") },
-    { id: 4, label: t("completed") },
-  ];
 
   return (
     <>
@@ -82,35 +76,13 @@ const Home = () => {
                     <span className="text-[#353E6C] ">{row?.projectName}</span>
                   </div>
                   <div className="bg-[#FF16A2] text-white px-4 py-[7px] rounded-[5px] text-base">
-                    {row?.status*25}%
+                    {row?.progress}%
                   </div>
                 </div>
-
-                <div className="progress-steps grid grid-cols-4 items-center ">
-                  {steps.map((step) => (
-                    <div key={step.id} className="progress-step text-center">
-                      <div className="checked flex justify-center mb-2.5">
-                        {row?.status >= step.id ? (
-                          <ProgressIcon className="fill-[#FF16A2]" />
-                        ) : (
-                          <ProgressIcon className="fill-[#E4E4E4]" />
-                        )}
-                      </div>
-                      <span
-                        className={`text-sm font-sfproDisplaymedium ${
-                          row?.completedSteps >= step.id
-                            ? "text-[#43527B]"
-                            : "text-[#8B8E98]"
-                        }`}
-                      >
-                        {step.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
+                <p className="text-[#3C3F88] bg-[#FFF477] py-2.5 px-5 mb-10 inline-block rounded-[50px] font-sfproDisplaymedium ">
+                  {row?.status} </p>          
                 <Line
-                  percent={row?.status*25}
+                  percent={row?.progress}
                   strokeWidth={0.8}
                   strokeColor="#FF16A2"
                   className="rounded-xl mt-3"
