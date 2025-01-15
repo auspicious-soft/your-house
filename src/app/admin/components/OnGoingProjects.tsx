@@ -83,13 +83,13 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="">
+                <td colSpan={8} className="">
                   {t('loading')}...
                 </td>
               </tr>
             ) : error ? (
               <tr>
-                <td colSpan={5} className="text-center text-red-500 ">
+                <td colSpan={8} className="text-center text-red-500 ">
                   {t('errorLoadingData')}.
                 </td>
               </tr>
@@ -113,7 +113,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
               ))
             ) : (
               <tr>
-                <td colSpan={5} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
+                <td colSpan={8} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
               </tr>
             )}
           </tbody>

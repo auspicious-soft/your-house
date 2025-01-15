@@ -85,6 +85,14 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     });
   };
 
+  const transformUserData = (userData: any) => {
+    if (!userData) return null; 
+    return { 
+      label: userData.fullName,
+      value: userData._id, 
+    };
+  };
+
   useEffect(() => {
     if (!data) return;
 
@@ -105,12 +113,8 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     setImagePreview(getImageClientS3URL(data.projectimageLink));
     
     if (data.userId) {
-      setSelectedUser({
-        id: data.userId._id,
-        label: data.userId.fullName,
-        value: data.userId._id,
-        email: data.userId.email,
-      });
+      const selectedUserData = transformUserData(data.userId);
+      setSelectedUser(selectedUserData);
     }
 
     // Only transform employee data if both data.employeeId and employeeData are available
@@ -190,6 +194,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
           constructionAddress: formData.constructionAddress,
           progress: formData.progress,
           status: formData.status,
+          userId: selectedUser?.value || undefined,
           employeeId:
             associates.length > 0
               ? associates.map((associate: any) => associate.value)

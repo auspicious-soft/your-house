@@ -31,7 +31,8 @@
     "confirm": "Bekræft",
     "emailSentSuccess": "Email sendt til dig med OTP",
     "somethingWentWrong": "Noget gik galt",
-    "invalidOtpOrExpired": "Ugyldig OTP eller udløbet"
+    "invalidOtpOrExpired": "Ugyldig OTP eller udløbet",
+    "Search": "Søge"
   },
   "ChangePasswordPage": {
     "title": "Skift Adgangskode",
