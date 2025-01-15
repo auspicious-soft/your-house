@@ -54,9 +54,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
- 
+
   const { userData, isLoading } = useClients();
-  const {employeeData} = UseEmployees();
+  const { employeeData } = UseEmployees();
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const oldProjectImage = data?.projectimageLink;
   const [formData, setFormData] = useState<any>({
@@ -86,10 +86,10 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
   };
 
   const transformUserData = (userData: any) => {
-    if (!userData) return null; 
-    return { 
+    if (!userData) return null;
+    return {
       label: userData.fullName,
-      value: userData._id, 
+      value: userData._id,
     };
   };
 
@@ -109,9 +109,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
       status: data.status || "",
       notes: data.notes || [],
     });
-    
+
     setImagePreview(getImageClientS3URL(data.projectimageLink));
-    
+
     if (data.userId) {
       const selectedUserData = transformUserData(data.userId);
       setSelectedUser(selectedUserData);
@@ -234,17 +234,17 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
         <form onSubmit={handleSubmit} className="fomm-wrapper">
           <h2 className="section-projectName mb-5">{t("aboutProject")}</h2>
           <div className="grid md:flex flex-wrap gap-5 pb-[33px] relative ">
-          <div className="md:w-[calc(33.33%-14px)] mb-5">
+            <div className="md:w-[calc(33.33%-14px)] mb-5">
               <label className="block">{t("projectImage")}</label>
               {!selectedFile ? (
                 <div className="relative h-full">
-                  <Image
+                  {imagePreview && <Image
                     src={imagePreview}
                     alt="Preview"
                     width={200}
                     height={200}
                     className="rounded-full object-cover w-[200px] h-[200px]"
-                  />
+                  />}
                   <button
                     type="button"
                     onClick={() =>
@@ -295,7 +295,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
                 required
               />
             </div>
-           
+
             <div className="md:w-[calc(50%-14px)]">
               <label className="block">{t("startDate")}</label>
               <input

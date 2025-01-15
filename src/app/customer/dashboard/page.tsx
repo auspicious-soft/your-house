@@ -14,7 +14,6 @@ const Home = () => {
   const { data, error, isLoading } = useSWR(`/user/dashboard`, getDashboardData);
   const finalData: any = data?.data?.data;
  const onGoingProjects = finalData?.workingProjectDetails;
- console.log('onGoingProjects:', onGoingProjects);
   const OverviewData = [
     {
       id: "1",
