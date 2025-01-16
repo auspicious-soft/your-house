@@ -3,48 +3,52 @@ import Image from "next/image";
 import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
 import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
-import AssociatedProjects from "@/app/admin/components/AssociatedProjects";
-import { useParams } from "next/navigation";
-import { getSingleUser, updateSingleUser } from "@/services/admin/admin-service";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
+import { getUserInfo, updateUserInfo } from "@/services/client/client-service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { getImageClientS3URL } from "@/utils/axios";
-import { deleteFileFromS3, generateSignedUrlForUserProfile } from "@/actions";
+import { deleteFileFromS3, generateSignedUrlForUserProfile, getImageUrl } from "@/actions";
 import profile from "@/assets/images/profile.png";
+import { getImageClientS3URL } from "@/utils/axios";
 import ReactLoading from "react-loading";
-
 
 const Page = () => {
   const t = useTranslations('ProfilePage');
-  const h = useTranslations('ToastMessages');
-  const { id } = useParams();
-  const [query, setQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, error, mutate, isLoading } = useSWR(`/admin/users/${id}`, getSingleUser)
-  const customerData = data?.data?.data;
-  const oldImage = customerData?.user?.profilePic
-  const associatedProjects = customerData?.projects
+  const session = useSession();
+  const [isPending, startTransition] = useTransition();
+  const userId = session?.data?.user?.id
+  const { data, error, mutate, isLoading } = useSWR(userId ? `/employee/${userId}` : null, getUserInfo)
+
+  const employeeData = data?.data?.data?.employee;
   const [formData, setFormData] = useState<any>({
     fullName: "",
     phoneNumber: "",
     email: "",
     address: "",
     profilePic: "",
-  })
-  const [isPending, startTransition] = useTransition();
+  });
 
   useEffect(() => {
-    if (customerData?.user) {
+    if (employeeData) {
       setFormData({
-        fullName: customerData.user.fullName || "",
-        phoneNumber: customerData.user.phoneNumber || "",
-        email: customerData.user.email || "",
-        address: customerData.user.address || "",
-        profilePic: !(formData.profilePic instanceof File) ? customerData?.user?.profilePic || "" : formData.profilePic,
-      });
+        fullName: employeeData.fullName || "",
+        phoneNumber: employeeData.phoneNumber || "",
+        email: employeeData.email || "",
+        address: employeeData.address || "",
+        profilePic: !(formData.profilePic instanceof File) ? employeeData.profilePic || "" : formData.profilePic,
+      })
     }
-  }, [customerData, formData.profilePic, customerData?.profilePic]);
+    const getImage = async (image: string) => {
+      if (typeof image === 'string') {
+        const url = await getImageUrl(image);
+        setProfilePic(url)
+      }
+    }
+    getImage(formData.profilePic)
+
+  }, [employeeData, formData.profilePic]);
 
 
   const handleInputChange = (
@@ -59,13 +63,16 @@ const Page = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let updatedFormData = { ...formData }
+
     startTransition(async () => {
       try {
+        let updatedFormData = { ...formData }
+
+        //is image uploaded
         if (formData.profilePic instanceof File) {
           const fileName = formData.profilePic.name + '-' + new Date().getTime()
-          const email = formData.email
-          const uploadUrl = await generateSignedUrlForUserProfile(fileName, formData.profilePic.type, email, false)
+          const email = (session as any)?.data?.user?.username
+          const uploadUrl = await generateSignedUrlForUserProfile(fileName, formData.profilePic.type, email, true)
           await fetch(uploadUrl, {
             method: 'PUT',
             body: formData.profilePic,
@@ -73,47 +80,42 @@ const Page = () => {
               'Content-Type': formData.profilePic.type,
             },
           })
-          if (oldImage) {
-            await deleteFileFromS3(oldImage)
+          const oldImage = employeeData.profilePic
+          if (oldImage.includes('employees')) {
+            await deleteFileFromS3(employeeData.profilePic)
           }
-          updatedFormData.profilePic = `users/${email}/${fileName}`
+          updatedFormData.profilePic = `employees/${email}/${fileName}`
         }
-        const response = await updateSingleUser(`/admin/users/${id}`, updatedFormData);
+        const response = await updateUserInfo(`/employee/${session?.data?.user?.id}`, updatedFormData);
         if (response?.status === 200) {
           setIsModalOpen(false);
-          toast.success(h("User details updated successfully"), { position: 'bottom-left' });
-          formData.profilePic instanceof File ? window.location.reload() : mutate()
+          //setNotification("User Added Successfully");
+          toast.success(t("successUserAdded"));
+          window.location.reload();
+
         } else {
-          toast.error(h("Failed to add User Data"));
+          toast.error(t("errorUserAddFailed"));
         }
       } catch (error) {
-        console.error("Der opstod en fejl", error);
-        toast.error("Der opstod en fejl");
+
+        toast.error(t("errorUserAddException"));
       }
     });
 
   };
 
+  const [profilePic, setProfilePic] = useState<string>('');
+
   if (isLoading) {
     return <div className="text-center"><ReactLoading type={'spin'} color={'#1657FF'} height={'50px'} width={'50px'} /> </div>;
-  }
+  }  
   return (
     <div>
-      <h2 className="section-title text-[#3C3F88]"> {t('clientDetails')}</h2>
       <div className=" bg-white rounded-[10px] md:rounded-[30px] w-full py-[30px] px-[15px] md:p-10 ">
-        <div className="mb-10 flex gap-[20px] justify-between ">
-          <Image unoptimized 
-          src={
-            formData.profilePic 
-            ? (!(formData.profilePic instanceof File) 
-                ? getImageClientS3URL(formData.profilePic) 
-                : formData.profilePic)
-            : profile
-          }
-             alt="hjfg" height={200} width={200} className="max-w-[100px] md:max-w-[200px] aspect-square object-cover rounded-full  " />
+        <div className="mb-10 flex gap-[20px] justify-between  !flex-row-reverse">
           <div>
-            <button onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px] ">
-              <EditButtonIcon /> {t('editDetails')}
+            <button onClick={() => setIsModalOpen(true)} className="w-full !rounded-[3px] button !h-[40px]">
+              <EditButtonIcon />{t('editDetails')}
             </button></div>
         </div>
         <div className="fomm-wrapper grid md:flex flex-wrap gap-5 ">
@@ -132,10 +134,10 @@ const Page = () => {
             <label className="block">{t('phoneNumber')}</label>
             <input
               type="text"
-              name={t('phoneNumber')}
+              name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleInputChange}
-              placeholder="Phone Number"
+              placeholder={t('phoneNumber')}
               readOnly
             />
           </div>
@@ -165,22 +167,26 @@ const Page = () => {
       </div>
 
       {isModalOpen && <EditClientDetailsModal
-        isPending={isPending}
-        profilePic={getImageClientS3URL(formData.profilePic)}
-        setFormData={setFormData}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         formData={formData}
+        profilePic={profilePic}
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
+        setFormData={setFormData}
+        id={session?.data?.user?.id}
         mutate={mutate}
-      />}
-      <section className="mt-10">
-        <h2 className="section-title">{t('associatedProjects')} </h2>
-        <AssociatedProjects setQuery={setQuery} mutate={mutate} data={associatedProjects} />
-      </section>
+        isPending={isPending}
+        isEmployee={true}
+      />
+      }
+      {/* <section className="mt-10">
+        <h2 className="section-title">My Projects</h2>
+        <ClientProfileProjects />
+      </section> */}
     </div>
   );
 };
 
 export default Page;
+

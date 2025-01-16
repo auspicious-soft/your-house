@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import ReactLoader from "@/components/react-loading";
 import profile from "@/assets/images/profile.png";
 
-const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInputChange, id, handleSubmit, profilePic, setFormData, isPending
+const EditClientDetailsModal = ({ isEmployee = false, isOpen, onClose, formData, mutate, handleInputChange, id, handleSubmit, profilePic, setFormData, isPending
 }: {
   isOpen: boolean;
   id?: string;
@@ -29,6 +29,7 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
   ) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
   isPending: boolean
+  isEmployee?: boolean
 }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const t = useTranslations('ProfilePage');
@@ -84,50 +85,56 @@ const EditClientDetailsModal = ({ isOpen, onClose, formData, mutate, handleInput
         </div>
         <div className=" fomm-wrapper">
           {/* Image Upload Section */}
-          <div className="custom relative w-[200px] h-[200px] mb-5">
-            <input
-              className="absolute top-0 left-0 h-full w-full opacity-0 !p-0 cursor-pointer"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-            {imagePreview ? (
-              <div className="relative h-full">
-                <Image
-                  unoptimized
-                  src={imagePreview}
-                  alt="Preview"
-                  width={200}
-                  height={200}
-                  className="rounded-full h-full object-cover aspect-square"
-                />
-                <button
-                  type="button"
-                  onClick={triggerFileInputClick}
-                  className="absolute bottom-0 right-0 bg-gray-100 p-2 rounded-full "
-                >
-                  <EditImageIcon />
-                </button>
-              </div>
-            ) : (
-              <div className="grid place-items-center h-full w-full bg-[#f1f1f1] rounded-full">
-                <div>
-                  {profilePic && <Image
+          {!isEmployee && <div>
+            <div className="custom relative w-[200px] h-[200px] mb-5">
+
+              <input
+                className="absolute top-0 left-0 h-full w-full opacity-0 !p-0 cursor-pointer"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+
+
+              {(imagePreview) ? (
+                <div className="relative h-full">
+                  <Image
                     unoptimized
-                    // {therapist?.profilePic ? getImageUrlOfS3(therapist?.profilePic) : Therapist1}
-                    src={profilePic || prev }
-                    alt=""
+                    src={imagePreview}
+                    alt="Preview"
                     width={200}
                     height={200}
-                    className="rounded-full max-h-[200px] object-cover aspect-square "
-                  />}
-                  <p className="absolute bottom-[10px] right-4  pointer-events-none">
+                    className="rounded-full h-full object-cover aspect-square"
+                  />
+                  <button
+                    type="button"
+                    onClick={triggerFileInputClick}
+                    className="absolute bottom-0 right-0 bg-gray-100 p-2 rounded-full "
+                  >
                     <EditImageIcon />
-                  </p>
+                  </button>
                 </div>
-              </div>
-            )}
-          </div>
+              ) : (
+                <div className="grid place-items-center h-full w-full bg-[#f1f1f1] rounded-full">
+                  <div>
+                    {profilePic && <Image
+                      unoptimized
+                      // {therapist?.profilePic ? getImageUrlOfS3(therapist?.profilePic) : Therapist1}
+                      src={profilePic || prev}
+                      alt=""
+                      width={200}
+                      height={200}
+                      className="rounded-full max-h-[200px] object-cover aspect-square "
+                    />}
+                    <p className="absolute bottom-[10px] right-4  pointer-events-none">
+                      <EditImageIcon />
+                    </p>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>}
           <form onSubmit={handleSubmit} className="grid md:flex flex-wrap gap-5">
             {/* Form Fields */}
             <div className="w-full">

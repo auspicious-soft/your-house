@@ -71,7 +71,7 @@ const Page = () => {
         if (formData.profilePic instanceof File) {
           const fileName = formData.profilePic.name + '-' + new Date().getTime()
           const email = (session as any)?.data?.user?.username
-          const uploadUrl = await generateSignedUrlForUserProfile(fileName, formData.profilePic.type, email)
+          const uploadUrl = await generateSignedUrlForUserProfile(fileName, formData.profilePic.type, email, false)
           await fetch(uploadUrl, {
             method: 'PUT',
             body: formData.profilePic,

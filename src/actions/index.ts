@@ -74,10 +74,10 @@ export const generateSignedUrlOfProjectAttachment = async (fileName: string, fil
 }
 
 
-export const generateSignedUrlForUserProfile = async (fileName: string, fileType: string, userEmail: string) => {
+export const generateSignedUrlForUserProfile = async (fileName: string, fileType: string, userEmail: string, isEmployee: boolean) => {
     const uploadParams = {
         Bucket: process.env.AWS_BUCKET_NAME,
-        Key: `users/${userEmail}/${fileName}`,
+        Key: `${isEmployee ? "employees" : "users"}/${userEmail}/${fileName}`,
         ContentType: fileType,
     }
     try {
