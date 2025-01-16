@@ -30,49 +30,49 @@ export default function Page() {
     }
   }, [router, session]);
 
-//   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
-//     event
-//   ) => {
-//     event.preventDefault();
+  //   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+  //     event
+  //   ) => {
+  //     event.preventDefault();
 
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     const phoneRegex = /^\+45\s?\d{2}(\s?\d{2}){3}$/;
+  //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //     const phoneRegex = /^\+45\s?\d{2}(\s?\d{2}){3}$/;
 
-//     let loginFieldType = "";
-//     if (emailRegex.test(email)) {
-//       loginFieldType = "email";
-//     } else if (phoneRegex.test(email)) {
-//       loginFieldType = "phone";
-//     } else {
-//       return toast.error(
-//         "Please enter a valid email or Danish phone number (+45)."
-//       );
-//     }
+  //     let loginFieldType = "";
+  //     if (emailRegex.test(email)) {
+  //       loginFieldType = "email";
+  //     } else if (phoneRegex.test(email)) {
+  //       loginFieldType = "phone";
+  //     } else {
+  //       return toast.error(
+  //         "Please enter a valid email or Danish phone number (+45)."
+  //       );
+  //     }
 
-//     if (!password) return toast.error("Password is required");
-//     // if (!email || !password) return toast.error('All fields are required')
-//     startTransition(async () => {
-//       const resss = await loginAction({ input: email, password });
+  //     if (!password) return toast.error("Password is required");
+  //     // if (!email || !password) return toast.error('All fields are required')
+  //     startTransition(async () => {
+  //       const resss = await loginAction({ input: email, password });
 
-//       if (resss?.success) {
-//         toast.success("Logged in successfully");
-//         if (resss?.data?.role === "user") {
-//           window.location.href = "/customer/dashboard";
-//         } else {
-//           window.location.href = "/admin/dashboard";
-//         }
-//       } else {
-//         toast.error(
-//           Array.isArray(resss?.message)
-//             ? resss?.message[0].message
-//             : resss?.message
-//         );
-//       }
-//     });
-//   };
-const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+  //       if (resss?.success) {
+  //         toast.success("Logged in successfully");
+  //         if (resss?.data?.role === "user") {
+  //           window.location.href = "/customer/dashboard";
+  //         } else {
+  //           window.location.href = "/admin/dashboard";
+  //         }
+  //       } else {
+  //         toast.error(
+  //           Array.isArray(resss?.message)
+  //             ? resss?.message[0].message
+  //             : resss?.message
+  //         );
+  //       }
+  //     });
+  //   };
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-  
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     // const phoneRegex = /^\+45\s?\d{2}(\s?\d{2}){3}$/;
     const phoneRegex = /^\d{8}$/;
@@ -85,7 +85,7 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
       toast.error('Please enter a valid email or Danish phone number (+45).');
       return;
     }
-  
+
     if (!password) {
       toast.error('Password is required.');
       return;
@@ -93,12 +93,16 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     try {
       startTransition(async () => {
         const response = await loginAction({ [loginFieldType]: username, password });
-  
+
         if (response?.success) {
           toast.success('Logged in successfully');
           if (response?.data?.user?.role === 'user') {
             window.location.href = '/customer/dashboard';
-          } else {
+          }
+          else if (response?.data?.user?.role === 'employee') {
+            window.location.href = '/employee/dashboard';
+          }
+          else {
             window.location.href = '/admin/dashboard';
           }
         } else {
@@ -114,7 +118,7 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
       toast.error('Something went wrong! Please try again.');
     }
   };
-  
+
   return (
     <div className="bg-[#D4DFF4] pt-5 md:pt-0">
       <div className="grid md:grid-cols-2 gap-8 md:gap-3 lg:gap-0 items-center md:min-h-screen ">
@@ -128,7 +132,7 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
               />
             </div>
             <h2 className="text-[#3C3F88] text-center font-[700] text-[30px] mb-5 md:mb-9 ">
-             {t('welcomeBack')}
+              {t('welcomeBack')}
             </h2>
             <div className="login rounded-[20px] bg-white">
               <div className="">
@@ -154,16 +158,16 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
                       href="/forgotpassword"
                       className="text-[#1657FF] text-[14px]  "
                     >
-                    {t('forgotPassword')}
+                      {t('forgotPassword')}
                     </Link>
                   </div>
 
                   <button type="submit" className="login-button w-full">
-                  {!isPending ? t('logIn') : t('loggingIn')}
+                    {!isPending ? t('logIn') : t('loggingIn')}
                   </button>
 
                   <div className="mt-5 text-center text-[#353E6C] text-[14px]">
-                   {t('noAccount')}
+                    {t('noAccount')}
                     <Link href="/signup" className="text-[#1657FF] ">
                       {t('createAccount')}
                     </Link>{" "}

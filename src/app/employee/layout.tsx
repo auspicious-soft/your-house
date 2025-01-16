@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import SideNav from "@/app/admin/components/SideNav";
+import SideNav from "@/app/employee/_components/SideNav";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import Header from "./components/Header";
-import AdminMobileHeader from "./components/AdminMobileHeader";
+import AdminMobileHeader from "../admin/components/AdminMobileHeader";
+import Header from "../admin/components/Header";
+
 
 export default async function RootLayout({
   children,
@@ -18,7 +19,7 @@ export default async function RootLayout({
   }
 
   const userRole = (session as any)?.user?.role;
-  const restrictedRoles = ['user', 'employee']; // Add other restricted roles as needed
+  const restrictedRoles = ['admin', 'user']; // Add other restricted roles as needed
   
   // Check if user has restricted role
   if (restrictedRoles.includes(userRole)) {
