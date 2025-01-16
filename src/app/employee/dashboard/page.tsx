@@ -9,14 +9,20 @@ import { useRouter } from "next/navigation";
 import { getDashboardStats } from "@/services/admin/admin-service";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import ClientOnGoingProjects from "@/app/customer/components/ClientOnGoingProjects";
+import ClientCompletedProjects from "@/app/customer/components/ClientCompletedProjects";
+import { getClientsAllProjects } from "@/services/client/client-service";
 
 const Home = () => {
   const t = useTranslations('CustomerDashboard');
   const session = useSession();
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState(t('ongoingProjects'));
+  const id = session?.data?.user?.id
   const [query, setQuery] = useState('');
-  const { data, error, isLoading, mutate } = useSWR(`/employee/${session?.data?.user?.id}/dashboard`, getDashboardStats);
-  const dashboardData = data?.data?.data;
+  const { data, error, isLoading, mutate } = useSWR(id ? `/employee/${id}/dashboard?state=${activeTab === t('ongoingProjects') ? "ongoing" : 'completed'}&${query}` : null, getDashboardStats)
+  const dashboardData = data?.data?.data
+
   const OverviewData = [
     {
       id: "1",
@@ -30,11 +36,18 @@ const Home = () => {
       value: dashboardData?.completedProjectCount,
       bgColor: "#FF9A3E",
     },
-  ];
+  ]
 
-  const openNewProject = () => {
-    router.push(`/admin/new-project`);
-  };
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case t('ongoingProjects'):
+        return <div><ClientOnGoingProjects isEmployee setQuery={setQuery} projectsData={dashboardData} error={error} isLoading={isLoading} mutate={mutate} /> </div>;
+      case t('completedProjects'):
+        return <div><ClientCompletedProjects isEmployee setQuery={setQuery} projectsData={dashboardData} error={error} isLoading={isLoading} mutate={mutate} /> </div>;
+      default: dashboardData
+        return null;
+    }
+  }
 
   return (
     <>
@@ -58,6 +71,24 @@ const Home = () => {
               bgColor={card.bgColor}
             />
           ))}
+        </div>
+      </div>
+      <div className="mt-10">
+        <div className='flex  justify-between mb-5 gap-3 flex-col-reverse md:flex-row md:items-center '>
+          <div className="tabs flex flex-wrap gap-[5px] lg:gap-[5px]">
+            {[t('ongoingProjects'), t('completedProjects')].map((tab) => (
+              <button
+                key={tab}
+                className={`tab-button ${activeTab === tab ? 'active' : '  rounded-[28px] bg-[#96A3C6] text-white'} bg-[#1657FF] text-white rounded-[28px]  mt-0 text-[14px] px-[16px] py-[10px] `}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="tab-content">
+          {renderTabContent()}
         </div>
       </div>
 

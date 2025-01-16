@@ -17,9 +17,10 @@ interface CompletedProps {
   isLoading: boolean;
   setQuery: any;
   error: any;
+  isEmployee?: boolean;
 }
 
-const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate, isLoading, setQuery, error}) => {
+const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate, isLoading, setQuery, error, isEmployee = false}) => {
   const projects = projectsData?.data;
   const total = projectsData?.total ?? 0;
   const router = useRouter();
@@ -30,7 +31,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
   }
   const EditProjectData =(id: string) => {
-    router.push(`/customer/projects/project-profile/${id}`);
+    router.push(`/${isEmployee ? 'employee' : 'customer'}/projects/project-profile/${id}`);
   }
   return (
     <div>
@@ -71,8 +72,8 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
             </tr>
           ))
         ) : (
-          <tr>
-            <td colSpan={6} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
+          <tr >
+            <td className='bg-white' colSpan={6} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
           </tr>
         )}
         </tbody>
