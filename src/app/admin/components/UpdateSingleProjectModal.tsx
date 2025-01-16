@@ -21,18 +21,6 @@ import { deleteFileFromS3, generateSignedUrlToUploadOn } from "@/actions";
 import ReactLoader from "@/components/react-loading";
 import UseEmployees from "@/utils/useEmployees";
 
-export const option = [
-  { label: "Associate 1", value: "Associate 1" },
-  { label: "Associate 2", value: "Associate 2" },
-  { label: "Associate 3", value: "Associate 3" },
-  { label: "Associate 4", value: "Associate 4" },
-  { label: "Associate 5", value: "Associate 5" },
-  { label: "Associate 6", value: "Associate 6" },
-  { label: "Associate 7", value: "Associate 7" },
-  { label: "Associate 8", value: "Associate 8" },
-  { label: "Associate 9", value: "Associate 9" },
-  { label: "Associate 10", value: "Associate 10" },
-];
 
 interface UpdateProps {
   isOpen: boolean;
@@ -75,27 +63,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
   });
   const [imagePreview, setImagePreview] = useState<string>("");
 
-  const transformEmployeeData = (employeeIds: string[], employeeList: any[]) => {
-    return employeeIds.map((empId: string) => {
-      const employee = employeeList.find((emp: any) => emp.value === empId);
-      return {
-        label: employee ? employee.label : empId,
-        value: empId
-      };
-    });
-  };
-
-  const transformUserData = (userData: any) => {
-    if (!userData) return null;
-    return {
-      label: userData.fullName,
-      value: userData._id,
-    };
-  };
 
   useEffect(() => {
     if (!data) return;
-
     setFormData({
       projectName: data.projectName || "",
       projectimageLink: data.projectimageLink || "",
@@ -109,18 +79,28 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
       status: data.status || "",
       notes: data.notes || [],
     });
-
+  
     setImagePreview(getImageClientS3URL(data.projectimageLink));
-
+  
+    // Format the selected user data
     if (data.userId) {
-      const selectedUserData = transformUserData(data.userId);
-      setSelectedUser(selectedUserData);
+      setSelectedUser({
+        label: data.userId.fullName || "",
+        value: data.userId._id || "",
+      });
+    } else {
+      setSelectedUser(null);
     }
-
-    // Only transform employee data if both data.employeeId and employeeData are available
-    if (data.employeeId?.length > 0 && employeeData?.length > 0) {
-      const selectedAssociates = transformEmployeeData(data.employeeId, employeeData);
-      setAssociates(selectedAssociates);
+  
+    // Format the associates data
+    if (data.employeeId?.length > 0) {
+      const formattedAssociates = data.employeeId.map((emp: any) => ({
+        label: emp.fullName || emp.email || "",
+        value: emp._id || "",
+      }));
+      setAssociates(formattedAssociates);
+    } else {
+      setAssociates([]);
     }
   }, [data]);
 

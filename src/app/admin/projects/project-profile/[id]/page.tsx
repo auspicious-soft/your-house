@@ -15,7 +15,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { getSingleProject, updateSingleProjectData } from "@/services/admin/admin-service";
+import { getSingleProject } from "@/services/admin/admin-service";
 import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProjectModal";
 import dayjs from "dayjs"; 
 import { useTranslations } from "next-intl";
