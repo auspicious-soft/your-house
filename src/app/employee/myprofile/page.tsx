@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import React, { ChangeEvent, FormEvent, useEffect, useState, useTransition } from "react";
 import { EditButtonIcon } from "@/utils/svgicons";
 import EditClientDetailsModal from "@/app/admin/components/EditClientDetailsModal";
@@ -9,8 +8,6 @@ import { getUserInfo, updateUserInfo } from "@/services/client/client-service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { deleteFileFromS3, generateSignedUrlForUserProfile, getImageUrl } from "@/actions";
-import profile from "@/assets/images/profile.png";
-import { getImageClientS3URL } from "@/utils/axios";
 import ReactLoading from "react-loading";
 
 const Page = () => {

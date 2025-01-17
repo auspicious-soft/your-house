@@ -5,25 +5,13 @@ import Link from "next/link";
 import NavLogo from "@/assets/images/logo.png";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  CustomerActiveIcon,
-  CustomerIcon,
-  DashboardActiveIcon,
-  DashboardIcon,
-  EmployeeActiveIcon,
-  EmployeeIcon,
-  ProjectActiveIcon,
-  ProjectIcon,
-} from "@/utils/svgicons";
+import { DashboardActiveIcon, DashboardIcon, ProjectActiveIcon, ProjectIcon } from "@/utils/svgicons";
 import { useTranslations } from "next-intl";
 
 const SideNav = () => {
-  const router = useRouter();
   const t = useTranslations("CustomerDashboard");
-
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentPath, setCurrentPath] = useState<string | null>(null);
-
   const pathname = usePathname();
 
   useEffect(() => {
@@ -47,16 +35,14 @@ const SideNav = () => {
           <button onClick={toggleSidebar} className="hamburgerButton"></button>
         </div>
         <ul className="navList">
-          <li className={isActive("/employee/dashboard")}>
+          <li className={`${isActive('/employee/dashboard')} ${pathname.startsWith('/employee/dashboard/projects/project-profile') ? 'active' : ''}`}>
             <Link href="/employee/dashboard">
               {isActive("/employee/dashboard") ? <DashboardActiveIcon /> : <DashboardIcon />}
               <div>{t("dashboard")}</div>
             </Link>
           </li>
           <li
-            className={`${isActive("/employee/myprofile")} ${
-              currentPath?.includes("/new-project") ? "active" : ""
-            } ${currentPath?.includes("/project-profile") ? "active" : ""}`}
+            className={`${isActive("/employee/myprofile") ? "active" : ""}`}
           >
             <Link href="/employee/myprofile">
               {isActive("/employee/myprofile") ? <ProjectActiveIcon /> : <ProjectIcon />}

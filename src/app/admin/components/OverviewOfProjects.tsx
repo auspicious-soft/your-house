@@ -20,7 +20,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
   const t = useTranslations('ProjectsPage');
   const h = useTranslations('ToastMessages');
   const { data, isLoading, error, mutate } = useSWR(`/admin/attachments/${id}`, getAttachmentsData)
-  const arrays = data?.data?.data 
+  const arrays = data?.data?.data
 
   const attachments = arrays?.filter((attachment: any) => attachment?.type === "Drawings");
 
@@ -59,7 +59,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
         },
       })
       const url = `projects/${userEmail}/attachments/${file.name as string}`
-      const attachments = { url, type: "Drawings"};
+      const attachments = { url, type: "Drawings" };
       const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
       if (response?.status === 201) {
         toast.success(h("Note added successfully"));
@@ -81,8 +81,10 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
         const fileName = index.url.replace('users/', '').replace(`${userEmail}/`, '').replace('projects/', '').replace(`attachments/`, '')
         return (
           <div key={index?._id} className="flex justify-between items-center mb-5">
-            <div className='flex items-center gap-3 '>
-              <div><Image src={doc} alt='' width={35} height={35}/> </div>
+            <div className='flex items-center gap-3 ' onClick={() => {
+              window.open(getImageClientS3URL(index?.url), '_blank')
+            }}>
+              <div><Image src={doc} alt='' width={35} height={35} /> </div>
               <div>
                 <p className="text-[#43527B] text-sm  ">{fileName}</p>
                 <p className="text-[#8B8E98] text-xs mt-1  ">

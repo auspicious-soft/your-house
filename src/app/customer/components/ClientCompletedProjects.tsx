@@ -31,7 +31,7 @@ const ClientCompletedProjects: React.FC<CompletedProps> = ({projectsData, mutate
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
   }
   const EditProjectData =(id: string) => {
-    router.push(`/${isEmployee ? 'employee' : 'customer'}/projects/project-profile/${id}`);
+    router.push(`/${isEmployee ? 'employee' : 'customer'}/${isEmployee && 'dashboard/'}projects/project-profile/${id}`);
   }
   return (
     <div>
