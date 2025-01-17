@@ -1,7 +1,5 @@
 "use client";
-import {
-  ProgressIcon,
-} from "@/utils/svgicons";
+
 import { Line } from "rc-progress";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -11,6 +9,7 @@ import { useTranslations } from "next-intl";
 import useSWR from "swr";
 import { getClientSingleProject } from "@/services/client/client-service";
 import ClientProjectImages from "@/app/customer/components/ClientProjectImages";
+import DynamicTabs from "@/components/dynamic-tabs";
 
 interface FileItem {
   name: string;
@@ -20,8 +19,8 @@ interface FileItem {
 const Page = () => {
   const t = useTranslations('ProjectsPage');
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState(t("Drawings"));
-  const { data, error, mutate, isLoading } = useSWR(`/user/project/${id}`, getClientSingleProject);
+  const [activeTab, setActiveTab] = useState(("Drawings"));
+  const { data, error, mutate, isLoading } = useSWR(id ? `/user/project/${id}` : null, getClientSingleProject);
   const project = data?.data?.data;
 
   const [progress, setProgress] = useState(0);
@@ -45,37 +44,38 @@ const Page = () => {
     setProgress(calculatedProgress);
   }, [project?.status]);
 
+  const handleTabChange = (tab: any) => {
+    setActiveTab(tab);
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case t("Drawings"):
+      case ("Drawings"):
+        console.log(1)
         return (
           <div>
-            <ClientAttachments id={id} />
+            <ClientAttachments id={id} type={activeTab} />
           </div>
         );
-      case t("Progress"):
+      case ("Progress"):
         return (
           <div>
             <ClientProjectImages id={id} />
           </div>
         );
-      case t("notes"):
+      case ("notes"):
         return (
           <div>
             <ClientNotes id={id} />
           </div>
         );
       default:
-        return null;
+        console.log(2)
+        return <div>
+          <ClientAttachments id={id} type={activeTab} />
+        </div>
     }
-  };
-
-  useEffect(() => {
-    // Any additional logic based on activeTab can go here if needed
-  }, [activeTab]);
-
-
+  }
   return (
     <div>
       <div className="grid grid-cols-[1fr] gap-5">
@@ -134,22 +134,8 @@ const Page = () => {
           </div>
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
-              <div className="flex gap-2.5">
-                {[t("Drawings"), t('Progress'), t("notes")].map((tab) => (
-                  <button
-                    key={tab}
-                    className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab
-                      ? "text-white bg-[#3C3F88] "
-                      : "text-[#8B8E98] bg-[#F4F5F7] "
-                      }`}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {" "}
-                    {tab}
-                  </button>
-                ))}
-              </div>
-              <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5 ">
+              <DynamicTabs onTabChange={handleTabChange} disableAdd />
+              <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5">
                 {renderTabContent()}
               </div>
             </div>

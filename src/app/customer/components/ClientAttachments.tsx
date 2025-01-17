@@ -10,13 +10,14 @@ import Link from 'next/link';
 
 interface OverViewProps {
   id: any;
+  type: string;
 }
 
-const ClientAttachments: React.FC<OverViewProps> = ({ id }) => {
-  const { data, isLoading, error, mutate } = useSWR(`/user/attachments/${id}`, getClientAttachments);
+const ClientAttachments: React.FC<OverViewProps> = ({ id, type }) => {
+  const { data, isLoading, error, mutate } = useSWR(id ? `/user/attachments/${id}` : null, getClientAttachments);
   const arrays = data?.data?.data 
 
-  const attachments = arrays?.filter((attachment: any) => attachment?.type === "Drawings");
+  const attachments = arrays?.filter((attachment: any) => attachment?.type === type);
 
   const session = useSession();
   const email = (session as any)?.data?.user?.username;
@@ -34,7 +35,7 @@ const ClientAttachments: React.FC<OverViewProps> = ({ id }) => {
       }
     };
     fetchLinks();
-  }, [attachments]);
+  }, [type]);
 
   return (
     <div className=''>

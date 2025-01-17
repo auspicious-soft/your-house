@@ -6,7 +6,7 @@ import { getTabsData } from '@/services/admin/admin-service';
 import { CrossIcon } from '@/utils/svgicons';
 import { useTranslations } from 'next-intl';
 
-const DynamicTabs = ({ onTabChange }: any) => {
+const DynamicTabs = ({ onTabChange, disableAdd = false }: any) => {
     const t = useTranslations('ProjectsPage');
     const { data: dynamicTabs, error, mutate } = useSWR('/tabs', getTabsData);
     const [isAddingTab, setIsAddingTab] = useState(false);
@@ -47,26 +47,26 @@ const DynamicTabs = ({ onTabChange }: any) => {
         <div className="w-full">
             <div className="flex flex-wrap gap-2.5 items-center">
                 {allTabs.map((tab, index) => {
-                   return (
+                    return (
                         <button
                             key={tab}
-                            className={`text-base flex justify-between items-center gap-3 rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab 
+                            className={`text-base flex justify-between items-center gap-3 rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab
                                 ? "text-white bg-[#3C3F88]"
                                 : "text-[#8B8E98] bg-[#F4F5F7]"
                                 }`}
                             onClick={() => handleTabClick(tab)}
                         >
-                            {index < 2 ? t(tab) :  tab} 
+                            {index < 2 ? t(tab) : tab}
                         </button>
                     )
                 })}
 
-                <button
+                {!disableAdd && <button
                     onClick={() => setIsAddingTab(true)}
                     className="text-base rounded-[5px] py-2 px-4 bg-[#F4F5F7] text-[#8B8E98] hover:bg-[#E4E4E4] transition-all duration-300"
                 >
                     +
-                </button>
+                </button>}
             </div>
 
             {isAddingTab && (
