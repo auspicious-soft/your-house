@@ -20,6 +20,7 @@ import { useTranslations } from "next-intl";
 import { getImageClientS3URL } from "@/utils/axios";
 import ProjectImages from "@/app/admin/components/ProjectImages";
 import UseEmployees from "@/utils/useEmployees";
+import DynamicTabs from "@/components/dynamic-tabs";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -31,24 +32,29 @@ const Page = () => {
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [activeTab, setActiveTab] = useState(t("Drawings"));
+  const [activeTab, setActiveTab] = useState(("Drawings"));
+  const handleTabChange = (tab: any) => {
+    setActiveTab(tab);
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case t("Drawings"):
+      case ("Drawings"):
         return (
-          <div><OverviewOfProjects id={id} userEmail={userData?.email} /></div>
+          <div><OverviewOfProjects id={id} userEmail={userData?.email} type={activeTab} /></div>
         );
-      case t("Progress"):
+      case ("Progress"):
         return (
           <div><ProjectImages id={id} userEmail={userData?.email} /></div>
         );
-      case t("notes"):
+      case ("notes"):
         return (
           <div><Notes id={id} /></div>
         );
       default:
-        return null;
+        return (
+          <div><OverviewOfProjects id={id} userEmail={userData?.email} type={activeTab} /></div>
+        );
     }
   };
 
@@ -148,19 +154,8 @@ const Page = () => {
           </div>
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
-              <div className="flex gap-2.5">
-                {[t("Drawings"), t('Progress'), t("notes")].map((tab) => (
-                  <button
-                    key={tab}
-                    className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab
-                      ? "text-white bg-[#3C3F88] "
-                      : "text-[#8B8E98] bg-[#F4F5F7] "
-                      }`}
-                    onClick={() => setActiveTab(tab)}
-                  >{tab}</button>
-                ))}
-              </div>
-              <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5 ">
+              <DynamicTabs onTabChange={handleTabChange} />
+              <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5">
                 {renderTabContent()}
               </div>
             </div>

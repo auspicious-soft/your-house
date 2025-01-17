@@ -99,3 +99,8 @@ export const updateEmployee = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.patch(route, payload)
 }
+
+export const getTabsData = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.get(route)
+}

@@ -15,14 +15,15 @@ import ReactLoader from '@/components/react-loading';
 interface OverViewProps {
   id: any;
   userEmail: any;
+  type: string;
 }
-const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
+const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Drawings' }) => {
   const t = useTranslations('ProjectsPage');
   const h = useTranslations('ToastMessages');
   const { data, isLoading, error, mutate } = useSWR(`/admin/attachments/${id}`, getAttachmentsData)
   const arrays = data?.data?.data
 
-  const attachments = arrays?.filter((attachment: any) => attachment?.type === "Drawings");
+  const attachments = arrays?.filter((attachment: any) => attachment?.type === type);
 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +60,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail }) => {
         },
       })
       const url = `projects/${userEmail}/attachments/${file.name as string}`
-      const attachments = { url, type: "Drawings" };
+      const attachments = { url, type };
       const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
       if (response?.status === 201) {
         toast.success(h("Note added successfully"));
