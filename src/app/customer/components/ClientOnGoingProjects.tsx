@@ -30,7 +30,7 @@ const ClientOnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, i
     setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
   }
   const EditProjectData = (id: string) => {
-    router.push(`/${isEmployee ? 'employee' : 'customer'}/${isEmployee && 'dashboard/'}projects/project-profile/${id}`);
+    router.push(`/${isEmployee ? 'employee' : 'customer'}/${isEmployee ? 'dashboard/' : ''}projects/project-profile/${id}`);
   }
 
   return (

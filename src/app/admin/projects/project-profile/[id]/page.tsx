@@ -111,19 +111,24 @@ const Page = () => {
                 </LocalizationProvider>
               </div>
             </div>
-        <div className="mb-[20px] md:mb-[40px]">
+        <div className="mb-[20px] md:mb-[40px flex flex-col gap-2">
             <label className="block text-[#3C3F88]  ">
             {t('Home Address')}
             </label>
           <p className="text-base  text-[#8B8E98] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
             {project?.homeAddress}</p>
-           
+  
             <label className="block text-[#3C3F88] mt-5">
                 {t('Construction Address')}
             </label>
           <p className="text-base text-[#8B8E98]  border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
             {project?.constructionAddress}</p>
             
+            <label className="block text-[#3C3F88]  ">
+            {t('description')}
+            </label>
+          <p className="text-base  text-[#8B8E98] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+            {project?.description}</p>
             </div>
             <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>

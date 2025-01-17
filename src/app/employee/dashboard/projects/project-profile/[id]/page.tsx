@@ -1,7 +1,7 @@
 "use client";
 import Notes from "@/app/admin/components/Notes";
 import OverviewOfProjects from "@/app/admin/components/OverviewOfProjects";
-import {AddIcon,CallIcon,MailIcon, MapIcon, ProgressIcon,} from "@/utils/svgicons";
+import { AddIcon, CallIcon, MailIcon, MapIcon, ProgressIcon, } from "@/utils/svgicons";
 import Image from "next/image";
 import { Line } from "rc-progress";
 import React, { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { getSingleProject } from "@/services/admin/admin-service";
 import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProjectModal";
-import dayjs from "dayjs"; 
+import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { getImageClientS3URL } from "@/utils/axios";
 import ProjectImages from "@/app/admin/components/ProjectImages";
@@ -26,8 +26,8 @@ const Page = () => {
   const h = useTranslations('ToastMessages');
   const { id } = useParams();
   const { data, error, mutate, isLoading } = useSWR(`/admin/project/${id}`, getSingleProject);
-  const project = data?.data?.data; 
-  const {employeeData} = UseEmployees(); 
+  const project = data?.data?.data;
+  const { employeeData } = UseEmployees();
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,11 +37,11 @@ const Page = () => {
     switch (activeTab) {
       case t("Drawings"):
         return (
-          <div><OverviewOfProjects id={id} userEmail = {userData?.email} /></div>
+          <div><OverviewOfProjects id={id} userEmail={userData?.email} /></div>
         );
       case t("Progress"):
         return (
-          <div><ProjectImages id={id} userEmail = {userData?.email} /></div>
+          <div><ProjectImages id={id} userEmail={userData?.email} /></div>
         );
       case t("notes"):
         return (
@@ -57,7 +57,7 @@ const Page = () => {
 
   const getEmployeeNames = () => {
     if (!project?.employeeId || !employeeData) return [];
-    
+
     return project.employeeId
       .map((id: any) => {
         const employee = employeeData.find((emp: any) => emp.value === id);
@@ -111,40 +111,45 @@ const Page = () => {
                 </LocalizationProvider>
               </div>
             </div>
-        <div className="mb-[20px] md:mb-[40px]">
-            <label className="block text-[#3C3F88]  ">
-            {t('Home Address')}
-            </label>
-          <p className="text-base  text-[#8B8E98] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
-            {project?.homeAddress}</p>
-           
-            <label className="block text-[#3C3F88] mt-5">
+            <div className="mb-[20px] md:mb-[40px] flex flex-col gap-2">
+              <label className="block text-[#3C3F88]  ">
+                {t('Home Address')}
+              </label>
+              <p className="text-base  text-[#8B8E98] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+                {project?.homeAddress}</p>
+
+              <label className="block text-[#3C3F88] mt-5">
                 {t('Construction Address')}
-            </label>
-          <p className="text-base text-[#8B8E98]  border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
-            {project?.constructionAddress}</p>
-            
+              </label>
+              <p className="text-base text-[#8B8E98]  border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+                {project?.constructionAddress}</p>
+
+              <label className="block text-[#3C3F88]  ">
+                {t('description')}
+              </label>
+              <p className="text-base  text-[#8B8E98] border border-[#E9EDF3] py-[9px] px-3 rounded-[6px] mt-[6px] ">
+                {project?.description}</p>
             </div>
             <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>
               <p className="text-[#3C3F88] bg-[#FFF477] py-2.5 px-5 mb-10 inline-block rounded-[50px] font-sfproDisplaymedium ">{project?.status} </p>
               <div className="text-right">
                 <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p>
-              <Line
-                percent={project?.progress}
-                strokeWidth={1.2}
-                strokeColor="#FF16A2"
-                className="rounded-xl"
-                trailWidth={2}
-                trailColor="#e4e4e4"
-              />
+                <Line
+                  percent={project?.progress}
+                  strokeWidth={1.2}
+                  strokeColor="#FF16A2"
+                  className="rounded-xl"
+                  trailWidth={2}
+                  trailColor="#e4e4e4"
+                />
               </div>
             </div>
           </div>
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
               <div className="flex gap-2.5">
-                {[t("Drawings"), t('Progress'),  t("notes")].map((tab) => (
+                {[t("Drawings"), t('Progress'), t("notes")].map((tab) => (
                   <button
                     key={tab}
                     className={`text-base rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab
@@ -208,15 +213,15 @@ const Page = () => {
                 {t('employeesAssociated')}
                 {/* <EditProfile /> */}
               </h3>
-             <p className="text-[#8B8E98] text-sm capitalize">
-          {getEmployeeNames().join(', ')}
-        </p>
+              <p className="text-[#8B8E98] text-sm capitalize">
+                {getEmployeeNames().join(', ')}
+              </p>
 
             </div>
           </div>
         </div>
       </div>
-    <UpdateSingleProjectModal
+      <UpdateSingleProjectModal
         id={id}
         data={project}
         isOpen={isModalOpen}
