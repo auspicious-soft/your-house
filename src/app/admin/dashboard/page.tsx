@@ -1,7 +1,5 @@
 "use client";
 import DashboardCard from "@/app/admin/components/DashboardCard";
-import projectImg from '@/assets/images/cardImg1.png'
-import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import ReactLoading from "react-loading";
 import { AddIcon } from "@/utils/svgicons";
@@ -16,7 +14,6 @@ import profile from "@/assets/images/profile.png";
 
 const Home = () => {
   const t = useTranslations('CustomerDashboard');
-  const session = useSession();
   const router = useRouter();
   const [query, setQuery] = useState('');
   const { data, error, isLoading, mutate } = useSWR(`/admin/dashboard`, getDashboardStats);
