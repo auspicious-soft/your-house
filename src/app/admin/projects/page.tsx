@@ -22,7 +22,7 @@ const Page = () => {
   const projectsData = data?.data;
 
   // Handle tab change
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab:any) => {
     const tabValue = tab === t('ongoingProjects') ? 'ongoing' : 'completed';
     setActiveTab(tab);
     
