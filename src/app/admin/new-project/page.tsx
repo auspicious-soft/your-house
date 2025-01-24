@@ -34,7 +34,7 @@ const Page = () => {
     employeeId: "", 
     progress: 0,
     url: null, // Changed to null for file storage
-    status: "",
+    status: [""],
     notes: [],
   })
 
@@ -133,7 +133,7 @@ const Page = () => {
           constructionAddress: formData.constructionAddress,
           homeAddress: formData.homeAddress,
           attachments: attachementUrl, 
-          status: formData.status,
+          status: [formData.status],
           type: formData.type,
           notes: formData.notes, 
           employeeId: employees
