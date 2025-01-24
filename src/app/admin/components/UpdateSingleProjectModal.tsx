@@ -29,13 +29,7 @@ interface UpdateProps {
   mutate: any;
   onClose: () => void;
 }
-const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
-  isOpen,
-  onClose,
-  id,
-  data,
-  mutate,
-}) => {
+const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, data, mutate, }) => {
   const t = useTranslations("ProjectsPage");
   const h = useTranslations("ToastMessages");
   const [notification, setNotification] = useState<string | null>(null);
@@ -79,9 +73,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
       status: data.status || "",
       notes: data.notes || [],
     });
-  
+
     setImagePreview(getImageClientS3URL(data.projectimageLink));
-  
+
     // Format the selected user data
     if (data.userId) {
       setSelectedUser({
@@ -91,7 +85,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     } else {
       setSelectedUser(null);
     }
-  
+
     // Format the associates data
     if (data.employeeId?.length > 0) {
       const formattedAssociates = data.employeeId.map((emp: any) => ({
@@ -116,9 +110,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     setAssociates(selected);
   };
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, files } = e.target as HTMLInputElement & {
       files: FileList;
     };
@@ -138,10 +130,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const progressRegex = /^([1-9][0-9]?|100)$/;
-    if (
-      formData.progress &&
-      !progressRegex.test(formData.progress.toString())
-    ) {
+    if (formData.progress && !progressRegex.test(formData.progress.toString())) {
       toast.error("Progress must be a number between 1 and 100");
       return;
     }
@@ -149,11 +138,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
     startTransition(async () => {
       try {
         if (selectedFile) {
-          const { signedUrl, key } = await generateSignedUrlToUploadOn(
-            selectedFile.name,
-            selectedFile.type,
-            selectedUser.email
-          );
+          const { signedUrl, key } = await generateSignedUrlToUploadOn(selectedFile.name, selectedFile.type, selectedUser.email);
           await fetch(signedUrl, {
             method: "PUT",
             body: selectedFile,
@@ -175,16 +160,10 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({
           progress: formData.progress,
           status: formData.status,
           userId: selectedUser?.value || undefined,
-          employeeId:
-            associates.length > 0
-              ? associates.map((associate: any) => associate.value)
-              : undefined,
+          employeeId: associates.length > 0 ? associates.map((associate: any) => associate.value) : undefined,
         };
 
-        const response = await updateSingleProjectData(
-          `/admin/project/${id}`,
-          payload
-        );
+        const response = await updateSingleProjectData(`/admin/project/${id}`, payload)
 
         if (response?.status === 200) {
           toast.success(h("Updated successfully"));
