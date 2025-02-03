@@ -104,3 +104,8 @@ export const getTabsData = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)
 }
+
+export const deleteTabData = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.delete(route)
+}
