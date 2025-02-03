@@ -63,7 +63,7 @@ const DynamicTabs = ({ onTabChange, disableAdd = false }: any) => {
 
                 {!disableAdd && <button
                     onClick={() => setIsAddingTab(true)}
-                    className="text-base rounded-[5px] py-2 px-4 bg-[#F4F5F7] text-[#8B8E98] hover:bg-[#E4E4E4] transition-all duration-300"
+                    className={`${isAddingTab ? 'bg-gray-400' : ''} text-base rounded-[5px] py-2 px-4 bg-[#F4F5F7] text-[#8B8E98] hover:bg-[#E4E4E4] transition-all duration-300`}
                 >
                     +
                 </button>}

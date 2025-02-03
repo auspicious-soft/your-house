@@ -1,4 +1,5 @@
 "use client";
+import { FaHourglassEnd } from "react-icons/fa6";
 import Notes from "@/app/admin/components/Notes";
 import OverviewOfProjects from "@/app/admin/components/OverviewOfProjects";
 import { AddIcon, CallIcon, MailIcon, MapIcon, ProgressIcon, } from "@/utils/svgicons";
@@ -6,7 +7,7 @@ import Image from "next/image";
 import { Line } from "rc-progress";
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import { FaCheckCircle } from 'react-icons/fa';
 import imgNew from "@/assets/images/img13.png";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -135,8 +136,20 @@ const Page = () => {
             </div>
             <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>
-              <p className="text-[#3C3F88] bg-[#FFF477] py-2.5 px-5 mb-10 inline-block rounded-[50px] font-sfproDisplaymedium ">{project?.status} </p>
+              <div className="flex gap-3">
+
+                {project?.status.map((status: any, index: any) => (
+                  <div key={index} className={`flex items-center py-2.5 px-5 mb-10 rounded-[50px]  ${index === project.status.length - 1 ? 'text-black bg-[#FFF477]' : 'text-white bg-green-600'}`}
+                  >
+                    {index !== project.status.length - 1 && <FaCheckCircle className="mr-2" />}
+                    {index === project.status.length - 1 && <FaHourglassEnd className="mr-2" />}
+                    {status}
+                  </div>
+                ))}
+              </div>
               <div className="text-right">
+                {/* <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p> */}
+              </div>              <div className="text-right">
                 <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p>
                 <Line
                   percent={project?.progress}

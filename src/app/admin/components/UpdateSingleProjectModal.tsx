@@ -70,7 +70,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
       homeAddress: data.homeAddress || "",
       constructionAddress: data.constructionAddress || "",
       attachments: data.attachments?.map((att: any) => att.filePath) || [],
-      status: data.status || "",
+      status: data?.status[data?.status.length - 1] || "",
       notes: data.notes || [],
     });
 
