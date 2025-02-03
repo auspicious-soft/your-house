@@ -61,6 +61,7 @@ const DynamicTabs = ({ onTabChange, disableAdd = false }: any) => {
                 }
                 toast.success('Tab deleted successfully');
                 setDeleteOpen(false)
+                setActiveTab(fixedTabs[0]);
                 mutate()
             } catch (error) {
                 toast.error('Error deleting tab');

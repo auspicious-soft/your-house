@@ -70,7 +70,6 @@ const Page = () => {
           </div>
         );
       default:
-        console.log(2)
         return <div>
           <ClientAttachments id={id} type={activeTab} />
         </div>
