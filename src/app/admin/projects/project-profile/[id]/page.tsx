@@ -22,6 +22,7 @@ import { getImageClientS3URL } from "@/utils/axios";
 import ProjectImages from "@/app/admin/components/ProjectImages";
 import UseEmployees from "@/utils/useEmployees";
 import DynamicTabs from "@/components/dynamic-tabs";
+import TimeframeEditor from "@/components/timeframe";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -33,7 +34,6 @@ const Page = () => {
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Drawings");
-
   const handleTabChange = (tab: any) => {
     setActiveTab(tab);
   }
@@ -136,7 +136,7 @@ const Page = () => {
             </div>
             <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>
-              <div className="flex gap-3">
+              <div className="flex gap-x-3 flex-wrap">
 
                 {project?.status.map((status: any, index: any) => (
                   <div key={index} className={`flex items-center py-2.5 px-5 mb-10 rounded-[50px]  ${index === project.status.length - 1 ? 'text-black bg-[#FFF477]' : 'text-white bg-green-600'}`}
@@ -162,7 +162,7 @@ const Page = () => {
               </div>
             </div>
           </div>
-          <div className="py-[30px] px-[15px] md:px-10">
+          <div className="py-[30px] px-[15px] md:px-10 w-full">
             <div className="">
               <DynamicTabs onTabChange={handleTabChange} />
               <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5">
@@ -174,7 +174,7 @@ const Page = () => {
         <div className="right-grid bg-white rounded-[10px] md:rounded-[30px] box-shadow">
           <div className="border-b border-[#E9EDF3] pb-5 pt-9 ">
             <div className="custom relative w-[120px] h-[120px] mx-auto mb-5">
-              <div className="grid place-items-center h-full w-full">
+              <div className="grid place-items-center h-full">
                 <div>
                   <Image
                     src={getImageClientS3URL(userData?.profilePic) || imgNew}
@@ -225,6 +225,10 @@ const Page = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="p-6 w-full bg-white rounded-3xl mt-5 font-semibold text-[#3c3f88]">
+        <p className="pb-4 text-lg">Projekter Timeframe</p>
+        <TimeframeEditor project={project} />
       </div>
       <UpdateSingleProjectModal
         id={id}

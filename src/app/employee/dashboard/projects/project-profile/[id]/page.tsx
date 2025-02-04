@@ -21,6 +21,9 @@ import { getImageClientS3URL } from "@/utils/axios";
 import ProjectImages from "@/app/admin/components/ProjectImages";
 import UseEmployees from "@/utils/useEmployees";
 import DynamicTabs from "@/components/dynamic-tabs";
+import { FaHourglassEnd } from "react-icons/fa6";
+import { FaCheckCircle } from "react-icons/fa";
+import TimeframeEditor from "@/components/timeframe";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -138,8 +141,17 @@ const Page = () => {
             </div>
             <div className="progress-container pb-4">
               <h2 className="section-title"> {t('progress')}</h2>
-              <p className="text-[#3C3F88] bg-[#FFF477] py-2.5 px-5 mb-10 inline-block rounded-[50px] font-sfproDisplaymedium ">{project?.status} </p>
-              <div className="text-right">
+              <div className="flex gap-x-3 flex-wrap">
+
+                {project?.status.map((status: any, index: any) => (
+                  <div key={index} className={`flex items-center py-2.5 px-5 mb-10 rounded-[50px]  ${index === project.status.length - 1 ? 'text-black bg-[#FFF477]' : 'text-white bg-green-600'}`}
+                  >
+                    {index !== project.status.length - 1 && <FaCheckCircle className="mr-2" />}
+                    {index === project.status.length - 1 && <FaHourglassEnd className="mr-2" />}
+                    {status}
+                  </div>
+                ))}
+              </div>              <div className="text-right">
                 <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p>
                 <Line
                   percent={project?.progress}
@@ -215,6 +227,10 @@ const Page = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="p-6 w-full bg-white rounded-3xl mt-5 font-semibold text-[#3c3f88]">
+        <p className="pb-4 text-lg">Projektets tidsramme</p>
+        <TimeframeEditor project={project} />
       </div>
       <UpdateSingleProjectModal
         id={id}
