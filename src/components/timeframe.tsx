@@ -25,7 +25,7 @@ export const options = {
             color: '#333',
         },
     },
-};
+}
 
 export default function TimeframeEditor(props: any) {
     const { project, mutate } = props;
@@ -49,6 +49,7 @@ export default function TimeframeEditor(props: any) {
         { type: "number", label: "Duration" },
         { type: "number", label: "Percent Complete" },
         { type: "string", label: "Dependencies" },
+        { type: "string", label: "Color" },
     ];
 
     const rowsOfTimeframe = (project?.timeframe ?? []).map((timeframe: any) => {
@@ -61,10 +62,12 @@ export default function TimeframeEditor(props: any) {
             null,
             100,
             null,
+            timeframe.color
         ];
     });
 
     const data = [columns, ...rowsOfTimeframe];
+    console.log('data: ', data);
 
     const handleChartClick = (chartWrapper: any) => {
         const chart = chartWrapper.getChart();
@@ -167,11 +170,11 @@ export default function TimeframeEditor(props: any) {
             {(project.timeframe ?? []).length > 0 && <Chart
                 chartType="Gantt"
                 width="100%"
-                height="50%"
+                height="100%"
                 data={data}
                 options={options}
                 chartEvents={chartEvents}
-                className="w-full"
+                className="w-full h-full"
             />}
             {isModalOpen && <Modal
                 isOpen={isModalOpen}
