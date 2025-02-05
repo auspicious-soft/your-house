@@ -55,8 +55,8 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <NextIntlClientProvider messages={messages}>
             <Providers>
-              <Toaster richColors />
               {children}
+            <Toaster richColors />
             </Providers>
           </NextIntlClientProvider>
         </SessionProvider>

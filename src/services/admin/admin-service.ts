@@ -109,3 +109,13 @@ export const deleteTabData = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.delete(route)
 }
+
+export const addTimeframe = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true);
+    return axiosInstance.post(route, payload);
+}
+
+export const updateTimeframe = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true);
+    return axiosInstance.patch(route, payload);
+}
