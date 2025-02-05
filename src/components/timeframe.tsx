@@ -15,8 +15,12 @@ export const options = {
         criticalPathStyle: {
             stroke: '#e64a19',
         },
-        innerGridTrack: { fill: '#f5f5f5' },
-        innerGridDarkTrack: { fill: '#e6e6e6' },
+        innerGridTrack: {
+            fill: 'white'
+        },
+        innerGridDarkTrack: {
+            fill: '#e6e6e6'
+        },
         barCornerRadius: 5,
         barHeight: 30,
         labelStyle: {
@@ -24,19 +28,14 @@ export const options = {
             fontSize: 12,
             color: '#333',
         },
-    },
+    }
 }
 
 export default function TimeframeEditor(props: any) {
     const { project, mutate } = props;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<any>(null);
-    const [formState, setFormState] = useState({
-        name: '',
-        color: '',
-        startDate: '',
-        endDate: ''
-    });
+    const [formState, setFormState] = useState({ name: '', progress: '', startDate: '', endDate: '' });
     const [isPending, startTransition] = useTransition();
     const projectId = useParams().id;
 
@@ -49,25 +48,24 @@ export default function TimeframeEditor(props: any) {
         { type: "number", label: "Duration" },
         { type: "number", label: "Percent Complete" },
         { type: "string", label: "Dependencies" },
-        { type: "string", label: "Color" },
+        { type: "string", label: "Color", role: "style" }, // Add this line
     ];
 
     const rowsOfTimeframe = (project?.timeframe ?? []).map((timeframe: any) => {
         return [
             timeframe._id,
             timeframe.name,
-            'Project Timeframe',
+            Math.random().toString(36).substring(7),
             new Date(timeframe.startDate),
             new Date(timeframe.endDate),
             null,
-            100,
+            timeframe.progress,
             null,
-            timeframe.color
+            timeframe.color // Ensure this is the correct property for the color
         ];
     });
 
     const data = [columns, ...rowsOfTimeframe];
-    console.log('data: ', data);
 
     const handleChartClick = (chartWrapper: any) => {
         const chart = chartWrapper.getChart();
@@ -79,16 +77,16 @@ export default function TimeframeEditor(props: any) {
             const taskWithColor = [...task, color];
             setFormState({
                 name: task[1],
-                color: color || '',
+                progress: task[6] || '',
                 startDate: new Date(task[3]).toISOString().split('T')[0],
-                endDate: new Date(task[4]).toISOString().split('T')[0]
+                endDate: new Date(task[4]).toISOString().split('T')[0],
             });
             setSelectedTask(taskWithColor);
         } else {
             setSelectedTask(null);
             setFormState({
                 name: '',
-                color: '',
+                progress: '',
                 startDate: '',
                 endDate: ''
             });
@@ -156,7 +154,7 @@ export default function TimeframeEditor(props: any) {
                         setIsModalOpen(true);
                         setFormState({
                             name: '',
-                            color: '',
+                            progress: '',
                             startDate: '',
                             endDate: ''
                         });
@@ -197,7 +195,7 @@ export default function TimeframeEditor(props: any) {
                                 required
                             />
                         </div>
-                        <div className="space-y-2">
+                        {/* <div className="space-y-2">
                             <label className="mb-2 font-medium">Farve:</label>
                             <div className="flex gap-3 items-end">
                                 <HexColorPicker color={formState.color} onChange={(color) => setFormState(prevState => ({ ...prevState, color }))} className="h-20" />
@@ -205,28 +203,44 @@ export default function TimeframeEditor(props: any) {
                                     {formState.color}
                                 </div>}
                             </div>
-                        </div>
+                        </div> */}
+                        {/* add  a progress field a number */}
                         <div className="flex flex-col">
-                            <label className="mb-2 font-medium">Startdato:</label>
+                            <label className="mb-2 font-medium">Fremskridt (%):</label>
                             <input
-                                type="date"
-                                name="startDate"
-                                value={formState.startDate}
+                                type="number"
+                                name="progress"
+                                value={formState.progress}
                                 onChange={handleInputChange}
                                 className="p-2 border border-gray-300 rounded"
+                                min="0"
+                                max="100"
                                 required
                             />
                         </div>
-                        <div className="flex flex-col">
-                            <label className="mb-2 font-medium">Slutdato:</label>
-                            <input
-                                type="date"
-                                name="endDate"
-                                value={formState.endDate}
-                                onChange={handleInputChange}
-                                className="p-2 border border-gray-300 rounded"
-                                required
-                            />
+                        <div className="flex gap-2">
+                            <div className="flex flex-col">
+                                <label className="mb-2 font-medium">Startdato:</label>
+                                <input
+                                    type="date"
+                                    name="startDate"
+                                    value={formState.startDate}
+                                    onChange={handleInputChange}
+                                    className="p-2 border border-gray-300 rounded"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <label className="mb-2 font-medium">Slutdato:</label>
+                                <input
+                                    type="date"
+                                    name="endDate"
+                                    value={formState.endDate}
+                                    onChange={handleInputChange}
+                                    className="p-2 border border-gray-300 rounded"
+                                    required
+                                />
+                            </div>
                         </div>
                         {!isPending ? <button disabled={isPending} type="submit" className="px-4 py-2 bg-[#1657ff] text-white rounded hover:bg-blue-600">
                             Gem
