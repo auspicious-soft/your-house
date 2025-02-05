@@ -77,7 +77,7 @@ const DynamicTabs = ({ onTabChange, disableAdd = false }: any) => {
                             <button
                                 key={tab}
                                 className={`text-base flex justify-between items-center gap-3 rounded-[5px] py-2 px-4 font-sfproDisplaymedium transition-all duration-300 ${activeTab === tab
-                                    ? "text-white bg-[#3C3F88]"
+                                    ? "text-white bg-[#1657ff]"
                                     : "text-[#8B8E98] bg-[#F4F5F7]"
                                     }`}
                                 onClick={() => handleTabClick(tab)}
@@ -119,7 +119,7 @@ const DynamicTabs = ({ onTabChange, disableAdd = false }: any) => {
                         />
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-[#3C3F88] text-white rounded-[5px]"
+                            className="px-4 py-2 bg-[#1657ff] text-white rounded-[5px]"
                         >
                             Add Tab
                         </button>
