@@ -114,7 +114,7 @@ export default function TimeframeEditor(props: any) {
                 return;
             }
         }
-        if(new Date(payload.startDate) > new Date(payload.endDate)) {
+        if (new Date(payload.startDate) > new Date(payload.endDate)) {
             toast.error('Startdatoen kan ikke være efter slutdatoen', { position: 'top-right', })
             return;
         }
@@ -164,7 +164,7 @@ export default function TimeframeEditor(props: any) {
                 </button>
             </div>
 
-            <Chart
+            {(project.timeframe ?? []).length > 0 && <Chart
                 chartType="Gantt"
                 width="100%"
                 height="50%"
@@ -172,7 +172,7 @@ export default function TimeframeEditor(props: any) {
                 options={options}
                 chartEvents={chartEvents}
                 className="w-full"
-            />
+            />}
             {isModalOpen && <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
