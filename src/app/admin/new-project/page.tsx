@@ -85,7 +85,7 @@ const Page = () => {
     }
 
     if (formData.type && !formData.url) {
-      toast.error(h("Please select attachments when specifying a type"));
+      toast.warning(h("Please select attachments when specifying a type"));
       return;
     }
     if (formData.url && !formData.type) {
@@ -162,7 +162,7 @@ const Page = () => {
     <>
       <div className=" bg-white rounded-t-[10px] md:rounded-t-[30px] w-full py-[30px] px-[15px] md:p-10  ">
         <form onSubmit={handleSubmit} className="fomm-wrapper">
-          <h2 className="section-projectName">{t('aboutProject')}</h2>
+          <h2 className="pb-4 section-projectName">{t('aboutProject')}</h2>
           <div className="grid md:flex flex-wrap gap-5 mb-[20px] md:mb-[33px] pb-[33px] relative progress-line">
             <div className="md:w-[calc(66.66%-8px)]">
               <label className="block">{t('title')}</label>
@@ -260,7 +260,7 @@ const Page = () => {
           <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('Category')}</label>
               <select name="type" value={formData.type} onChange={handleInputChange}>
-                <option value="" disabled>{t('Select')}</option>
+                <option value="" >{t('Select')}</option>
                 <option value={t('Progress')}>{t('Progress')}</option>
                 <option value={t("Drawings")}>{t("Drawings")}</option>
               </select>

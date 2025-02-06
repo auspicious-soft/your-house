@@ -7,32 +7,32 @@ import { HexColorPicker } from "react-colorful";
 import { useParams } from "next/navigation";
 import { addTimeframe, updateTimeframe } from "@/services/admin/admin-service";
 
-export const options = {
-    height: 400,
-    gantt: {
-        trackHeight: 50,
-        criticalPathEnabled: true,
-        criticalPathStyle: {
-            stroke: '#e64a19',
-        },
-        innerGridTrack: {
-            fill: 'white'
-        },
-        innerGridDarkTrack: {
-            fill: '#e6e6e6'
-        },
-        barCornerRadius: 5,
-        barHeight: 30,
-        labelStyle: {
-            fontName: 'Arial',
-            fontSize: 12,
-            color: '#333',
-        },
-    }
-}
 
 export default function TimeframeEditor(props: any) {
-    const { project, mutate } = props;
+    const { project, mutate } = props
+    const options = {
+        height: (project?.timeframe?.length ?? 0) * 55,
+        gantt: {
+            trackHeight: 50,
+            criticalPathEnabled: true,
+            criticalPathStyle: {
+                stroke: '#e64a19',
+            },
+            innerGridTrack: {
+                fill: 'white'
+            },
+            innerGridDarkTrack: {
+                fill: '#e6e6e6'
+            },
+            barCornerRadius: 5,
+            barHeight: 30,
+            labelStyle: {
+                fontName: 'Arial',
+                fontSize: 12,
+                color: '#333',
+            },
+        }
+    }
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<any>(null);
     const [formState, setFormState] = useState({ name: '', progress: '', startDate: '', endDate: '' });
@@ -105,16 +105,18 @@ export default function TimeframeEditor(props: any) {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
+        let flag = 1
         const payload = {
             ...formState,
             projectId,
         }
         for (const i of project.timeframe) {
-            if (i.name === payload.name && i._id !== selectedTask[0]) {
+            if (i.name === payload.name && selectedTask && i._id !== selectedTask[0]) {
                 toast.error('Navnet på milepælen skal være unikt', { position: 'top-right', });
                 return;
             }
         }
+        if (flag === 0) return
         if (new Date(payload.startDate) > new Date(payload.endDate)) {
             toast.error('Startdatoen kan ikke være efter slutdatoen', { position: 'top-right', })
             return;
@@ -247,7 +249,7 @@ export default function TimeframeEditor(props: any) {
                         </button>
                             :
                             <div className="flex justify-center">
-                                <ReactLoader color={'#1657ff'} />
+                                <ReactLoader color='#1657ff' />
                             </div>}
                     </form>
                 </div>
