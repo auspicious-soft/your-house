@@ -11,7 +11,7 @@ import { addTimeframe, updateTimeframe } from "@/services/admin/admin-service";
 export default function TimeframeEditor(props: any) {
     const { project, mutate } = props
     const options = {
-        height: (project?.timeframe?.length ?? 0) * 55,
+        height: (project?.timeframe?.length ?? 0) * 80,
         gantt: {
             trackHeight: 50,
             criticalPathEnabled: true,
