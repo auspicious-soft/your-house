@@ -49,15 +49,15 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
       const response = await deleteProject(`/admin/project/${selectedId}`);
       if (response.status === 200) {
         toast.success(h("deleted successfully"));
-        await deleteFileFromS3(selectedProjectImage)
+        selectedProjectImage && await deleteFileFromS3(selectedProjectImage)
 
         mutate()
         setIsDeleteModalOpen(false);
       } else {
-      toast.error(h("Failed To Delete Client"));
+        toast.error(h("Failed To Delete Client"));
       }
     } catch (error) {
-    toast.error(h("an Error Occurred While Deleting The Client"));
+      toast.error(h("an Error Occurred While Deleting The Client"));
     }
   }
 
@@ -97,7 +97,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
               projects?.map((row: any) => (
                 <tr key={row?._id}>
                   <td>{row?.identifier}</td>
-                  <td><TableRowImage image={row?.projectimageLink?  getImageClientS3URL(row?.projectimageLink) : profile} /></td>
+                  <td><TableRowImage image={row?.projectimageLink ? getImageClientS3URL(row?.projectimageLink) : profile} /></td>
                   <td>{row?.projectName}</td>
                   <td>{row?.projectstartDate}</td>
                   <td>{row?.projectendDate}</td>

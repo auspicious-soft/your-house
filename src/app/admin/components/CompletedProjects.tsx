@@ -48,7 +48,7 @@ const CompletedProjects: React.FC<CompleteProps> = ({ projectsData, mutate, isLo
       const response = await deleteProject(`/admin/project/${selectedId}`);
       if (response.status === 200) {
         toast.success(h("Client deleted successfully"));
-        await deleteFileFromS3(selectedProjectImage)
+        selectedProjectImage && await deleteFileFromS3(selectedProjectImage)
         setIsDeleteModalOpen(false);
         mutate()
       } else {
