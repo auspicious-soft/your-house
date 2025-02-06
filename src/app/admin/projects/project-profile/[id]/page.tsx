@@ -23,6 +23,7 @@ import ProjectImages from "@/app/admin/components/ProjectImages";
 import UseEmployees from "@/utils/useEmployees";
 import DynamicTabs from "@/components/dynamic-tabs";
 import TimeframeEditor from "@/components/timeframe";
+import ReactLoader from "@/components/react-loading";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -69,7 +70,7 @@ const Page = () => {
       })
       .filter((name: any) => name !== '');
   };
-
+  if (isLoading) return <ReactLoader />
   return (
     <div>
       <div className="grid grid-cols-[1fr] md:grid-cols-[2fr_1fr] lg:grid-cols-[1fr_309px] gap-5">
@@ -108,7 +109,7 @@ const Page = () => {
                     <DatePicker
                       disabled
                       defaultValue={project?.projectendDate ? dayjs(project.projectendDate) : null}
-                      value={project?.projectendDate ? dayjs(project.projectendDate) : null}  
+                      value={project?.projectendDate ? dayjs(project.projectendDate) : null}
                       views={["year", "month", "day"]}
                     />
                   </DemoContainer>
@@ -228,7 +229,7 @@ const Page = () => {
       </div>
       <div className="p-6 w-full bg-white rounded-3xl mt-5 font-semibold text-[#3c3f88]">
         <p className="pb-4 text-lg">Projekter Timeframe</p>
-        <TimeframeEditor project={project} mutate = {mutate} />
+        <TimeframeEditor project={project} mutate={mutate} />
       </div>
       <UpdateSingleProjectModal
         id={id}

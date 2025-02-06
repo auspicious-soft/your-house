@@ -154,7 +154,7 @@
     "Update Employee Details" : "Opdater medarbejderoplysninger"
   },
   "ToastMessages": {
-    "deleted successfully": "slettet succesfuldt",
+    "deleted successfully": "Slettet succesfuldt",
     "Failed To Delete Client": "Kunne ikke slette klient",
     "an Error Occurred While Deleting The Client": "Der opstod en fejl under sletning af klienten",
     "Note deleted successfully": "Note slettet succesfuldt",
