@@ -1,6 +1,6 @@
 "use client"
 import { DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
-import Image, {StaticImageData} from 'next/image';
+import profile from "@/assets/images/profile.png";
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import imgs from '@/assets/images/avatar.png'
@@ -13,12 +13,12 @@ import TableRowImage from '@/components/table-row-img';
 import { getImageClientS3URL } from '@/utils/axios';
 
 interface ProjectsProps {
- data: any;
- setQuery: any;
- mutate: any;
+  data: any;
+  setQuery: any;
+  mutate: any;
 }
-const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) => {
-  const t = useTranslations('ProjectsPage'); 
+const AssociatedProjects: React.FC<ProjectsProps> = ({ data, setQuery, mutate }) => {
+  const t = useTranslations('ProjectsPage');
   const h = useTranslations('ToastMessages');
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -27,70 +27,70 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
   const total = data?.length ?? 0;
   const rowsPerPage = 10;
   const handlePageClick = (selectedItem: { selected: number }) => {
-  setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
-}
-   const EditProjectData =(id: string) => {
+    setQuery(`page=${selectedItem.selected + 1}&limit=${rowsPerPage}`)
+  }
+  const EditProjectData = (id: string) => {
     router.push(`/admin/projects/project-profile/${id}`);
-   }
- const openDeleteModal = (id: string) => {
+  }
+  const openDeleteModal = (id: string) => {
     setIsDeleteModalOpen(true);
     setSelectedId(id);
   };
- 
+
   const handleDelete = async () => {
     try {
-      const response = await deleteProject(`/admin/project/${selectedId}`); 
+      const response = await deleteProject(`/admin/project/${selectedId}`);
       if (response.status === 200) {
-        toast.success(h("Client deleted successfully")); 
+        toast.success(h("Client deleted successfully"));
         setIsDeleteModalOpen(false);
         mutate()
       } else {
         toast.error(h("Failed To Delete Client"));
       }
-    } catch (error) { 
+    } catch (error) {
       toast.error(h("an Error Occurred While Deleting The Client"));
     }
   }
 
   return (
     <div>
-    <div className="table-common overflo-custom mt-[20px] box-shadow">
-      <table>
-        <thead>
-          <tr>
-            <th>{t('projectId')}</th>
-            <th>{t('image')}</th>
-            <th>{t('projectName')}</th>
-            <th>{t('startDate')}</th>
-            <th>{t('expectedEndDate')}</th>
-            <th>{t('action')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-          data?.map((row: any) => (
-            <tr key={row?._id}>
-              <td>{row?.identifier} </td>
-              <td><TableRowImage image={getImageClientS3URL(row?.projectimageLink)} /></td>
-              <td>{row?.projectName}</td>
-              <td>{row?.projectstartDate}</td>
-              <td>{row?.projectendDate}</td>
-              <td>
-                <div className='flex items-center gap-[6px] '>
-                  <button onClick={()=>EditProjectData(row?._id)}><EditIcon /> </button>
-                  <button onClick={() => openDeleteModal(row?._id)}><DeleteIcon/> </button>
-                </div>
-              </td>
+      <div className="table-common overflo-custom mt-[20px] box-shadow">
+        <table>
+          <thead>
+            <tr>
+              <th>{t('projectId')}</th>
+              <th>{t('image')}</th>
+              <th>{t('projectName')}</th>
+              <th>{t('startDate')}</th>
+              <th>{t('expectedEndDate')}</th>
+              <th>{t('action')}</th>
             </tr>
-          ))
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {
+              data?.map((row: any) => (
+                <tr key={row?._id}>
+                  <td>{row?.identifier} </td>
+                  <td><TableRowImage image={row?.projectimageLink ? getImageClientS3URL(row?.projectimageLink) : profile} /> </td>
+                  <td>{row?.projectName}</td>
+                  <td>{row?.projectstartDate}</td>
+                  <td>{row?.projectendDate}</td>
+                  <td>
+                    <div className='flex items-center gap-[6px] '>
+                      <button onClick={() => EditProjectData(row?._id)}><EditIcon /> </button>
+                      <button onClick={() => openDeleteModal(row?._id)}><DeleteIcon /> </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
       </div>
       <div className="text-right mt-4">
         <ReactPaginate
-          previousLabel={<PreviousLabel/>}
-          nextLabel={<NextLabel/>}
+          previousLabel={<PreviousLabel />}
+          nextLabel={<NextLabel />}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={Math.ceil(total / rowsPerPage)}
@@ -99,7 +99,7 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
           onPageChange={handlePageClick}
           containerClassName={'inline-flex mt-[34px] gap-1'}
           pageClassName={' text-[#3C3F88] border border-{#F1F1F1} bg-white rounded-full'}  // anchor tag
-          pageLinkClassName={'grid place-items-center h-10 w-10  inline-block'} 
+          pageLinkClassName={'grid place-items-center h-10 w-10  inline-block'}
           activeClassName={'!bg-[#1657FF] active rounded-full text-white'} // active anchor
           previousClassName={'leading-[normal]  '}
           previousLinkClassName={'grid place-items-center h-10 w-10 inline-block border border-{#F1F1F1} bg-white rounded-full'}
@@ -108,10 +108,10 @@ const AssociatedProjects: React.FC<ProjectsProps> = ({data, setQuery, mutate}) =
         />
       </div>
       <DeleteDataModal
-      isOpen={isDeleteModalOpen}
-      onClose={() =>setIsDeleteModalOpen(false)}
-      title={t('areYouSureMessage')}
-      handleDelete={handleDelete}
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title={t('areYouSureMessage')}
+        handleDelete={handleDelete}
       />
     </div>
   );
