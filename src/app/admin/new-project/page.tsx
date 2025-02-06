@@ -34,7 +34,7 @@ const Page = () => {
     employeeId: "", 
     progress: 0,
     url: null, // Changed to null for file storage
-    status: [""],
+    status: [],
     notes: [],
   })
 
@@ -122,9 +122,9 @@ const Page = () => {
       //   toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
       // }
      
-        const payload = {
+        const payload: any = {
           projectName: formData.projectName,
-          userId: selectedUser ? selectedUser.value : "", 
+          userId: selectedUser ? selectedUser.value : "",
           projectimageLink: projectImageLink,
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
@@ -132,14 +132,12 @@ const Page = () => {
           progress: formData.progress,
           constructionAddress: formData.constructionAddress,
           homeAddress: formData.homeAddress,
-          attachments: attachementUrl, 
-          status: [formData.status],
-          type: formData.type,
-          notes: formData.notes, 
-          employeeId: employees
-          ? employees.map((associate: any) => associate.value)
-          : undefined
-      }
+          ...(attachementUrl && { attachments: attachementUrl }),
+          ...(formData.status.length > 0 && { status: [formData.status] }),
+          ...(formData.type && { type: formData.type }),
+          notes: formData.notes,
+          ...(employees && { employeeId: employees.map((associate: any) => associate.value) })
+        };
  
         const response = await addNewProject("/admin/projects", payload);
 
