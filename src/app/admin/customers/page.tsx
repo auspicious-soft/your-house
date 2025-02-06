@@ -2,7 +2,6 @@
 import { AddIcon, DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import imgs from '@/assets/images/avatar.png'
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import { deleteUsers, getAllUsers } from '@/services/admin/admin-service';
@@ -24,7 +23,7 @@ const Page: React.FC = () => {
   const h = useTranslations('ToastMessages');
   const router = useRouter();
   const [query, setQuery] = useState('page=1&limit=10');
-  const { data, error, mutate, isLoading } = useSWR(`/admin/users?${query}` , getAllUsers)
+  const { data, error, mutate, isLoading } = useSWR(`/admin/users?${query}`, getAllUsers)
   const usersData = data?.data?.data;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
@@ -45,17 +44,18 @@ const Page: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-       const response = await deleteUsers(`/admin/users/${selectedId}`);
-      if (200 > 100) {
+      const response = await deleteUsers(`/admin/users/${selectedId}`);
+      if (response.status == 200) {
+        selectedProfilePic && await deleteFileFromS3(selectedProfilePic)
         toast.success(h("Client deleted successfully"));
-        await deleteFileFromS3(selectedProfilePic)
-        setIsDeleteModalOpen(false);
         mutate()
+        setIsDeleteModalOpen(false);
       } else {
         toast.error(h("Failed To Delete Client"));
       }
-    } catch (error) { 
-       toast.error(h("an Error Occurred While Deleting The Client"));
+    }
+    catch (error) {
+      toast.error(h("an Error Occurred While Deleting The Client"));
     }
   }
   const openProfile = (id: string) => {
@@ -63,15 +63,15 @@ const Page: React.FC = () => {
   };
 
   const addNewClient = () => {
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   }
 
   return (
     <div>
-       <div className='flex gap-2.5 justify-end '>
-       <SearchBar setQuery={setQuery}/>
-          <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />Tilføj ny Kunde</button>
-        </div>
+      <div className='flex gap-2.5 justify-end '>
+        <SearchBar setQuery={setQuery} />
+        <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />Tilføj ny Kunde</button>
+      </div>
       <div className="table-common overflo-custom mt-[20px] box-shadow">
         <table>
           <thead>
@@ -115,7 +115,7 @@ const Page: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td  colSpan={6} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
+                <td colSpan={6} >{isLoading ? <ReactLoading type={'spin'} color={'#26395e'} height={'20px'} width={'20px'} /> : <p>{t('noDataFound')}</p>}</td>
               </tr>
             )}
           </tbody>
