@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 export default function TimeframeEditor(props: any) {
     const { project, mutate } = props
     const options = {
-        height: (project?.timeframe?.length ?? 0) * 80,
+        height: (project?.timeframe?.length ?? 0) * 90,
         gantt: {
             trackHeight: 50,
             criticalPathEnabled: true,

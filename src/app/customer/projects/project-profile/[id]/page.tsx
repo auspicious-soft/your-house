@@ -10,6 +10,7 @@ import useSWR from "swr";
 import { getClientSingleProject } from "@/services/client/client-service";
 import ClientProjectImages from "@/app/customer/components/ClientProjectImages";
 import DynamicTabs from "@/components/dynamic-tabs";
+import TimeframeEditor from "@/components/timeframe";
 
 interface FileItem {
   name: string;
@@ -138,6 +139,10 @@ const Page = () => {
                 {renderTabContent()}
               </div>
             </div>
+          </div>
+          <div className="p-6 w-full bg-white rounded-3xl mt-5 font-semibold text-[#3c3f88]">
+            <p className="pb-4 text-lg">Projektets tidsramme</p>
+            <TimeframeEditor project={project} mutate={mutate} />
           </div>
         </div>
       </div>
