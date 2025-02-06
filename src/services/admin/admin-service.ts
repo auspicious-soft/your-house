@@ -1,6 +1,6 @@
 import { getAxiosInstance } from "@/utils/axios";
 import { axiosInstance } from "@/utils/axios";
- 
+
 export const loginService = async (payload: any) => await axiosInstance.post(`/login`, { username: payload.username, password: payload.password });
 export const forgotPasswordService = async (payload: any) => await axiosInstance.patch(`/forgot-password`, payload)
 export const sendOtpService = async (payload: any) => await axiosInstance.post(`/verify-otp`, payload)
@@ -13,7 +13,7 @@ export const getDashboardStats = async (route: string) => {
 }
 
 export const deleteProject = async (route: string) => {
-    const axiosInstance = await getAxiosInstance(true) 
+    const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.delete(route)
 }
 export const getSingleProject = async (route: string) => {
@@ -110,6 +110,7 @@ export const deleteTabData = async (route: string) => {
     return axiosInstance.delete(route)
 }
 
+// Timeframe API's
 export const addTimeframe = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance(true);
     return axiosInstance.post(route, payload);
@@ -118,4 +119,9 @@ export const addTimeframe = async (route: string, payload: any) => {
 export const updateTimeframe = async (route: string, payload: any) => {
     const axiosInstance = await getAxiosInstance(true);
     return axiosInstance.patch(route, payload);
+}
+
+export const deleteTimeframe = async (route: string, payload: any) => {
+    const axiosInstance = await getAxiosInstance(true);
+    return axiosInstance.delete(route, { data: payload });
 }

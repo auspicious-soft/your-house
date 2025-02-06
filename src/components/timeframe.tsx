@@ -5,7 +5,8 @@ import Modal from "react-modal";
 import { toast } from "sonner";
 import { HexColorPicker } from "react-colorful";
 import { useParams } from "next/navigation";
-import { addTimeframe, updateTimeframe } from "@/services/admin/admin-service";
+import { addTimeframe, deleteTimeframe, updateTimeframe } from "@/services/admin/admin-service";
+import { useSession } from "next-auth/react";
 
 
 export default function TimeframeEditor(props: any) {
@@ -33,6 +34,9 @@ export default function TimeframeEditor(props: any) {
             },
         }
     }
+    const session = useSession()
+    const role = (session as any)?.data?.user?.role
+    const isClient = role === 'user'
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<any>(null);
     const [formState, setFormState] = useState({ name: '', progress: '', startDate: '', endDate: '' });
@@ -145,11 +149,25 @@ export default function TimeframeEditor(props: any) {
             ...prevState,
             [name]: value
         }));
+    }
+
+    const handleDelete = async () => {
+        if (!selectedTask) return
+        startTransition(async () => {
+            try {
+                await deleteTimeframe(`/admin/project-timeframe/${selectedTask[0]}`, { data: { projectId } });
+                toast.success('Tidsrammen blev slettet', { position: 'top-right' });
+                mutate();
+                setIsModalOpen(false);
+            } catch (error: any) {
+                toast.error('Kunne ikke slette tidsrammen', { position: 'top-right' });
+            }
+        })
     };
 
     return (
         <div className="w-full text-right">
-            <div className="w-full flex justify-end">
+            {!isClient && <div className="w-full flex justify-end">
                 <button
                     onClick={() => {
                         setSelectedTask(null);
@@ -165,7 +183,7 @@ export default function TimeframeEditor(props: any) {
                 >
                     + Tilføj til tidsramme
                 </button>
-            </div>
+            </div>}
 
             {(project.timeframe ?? []).length > 0 && <Chart
                 chartType="Gantt"
@@ -173,7 +191,7 @@ export default function TimeframeEditor(props: any) {
                 height="100%"
                 data={data}
                 options={options}
-                chartEvents={chartEvents}
+                chartEvents={!isClient ? chartEvents:  undefined}
                 className="w-full h-full"
             />}
             {isModalOpen && <Modal
@@ -251,6 +269,7 @@ export default function TimeframeEditor(props: any) {
                             <div className="flex justify-center">
                                 <ReactLoader color='#1657ff' />
                             </div>}
+                        {selectedTask && <button type="button" disabled={isPending} onClick={handleDelete} className={`${isPending ? 'bg-red-400' : 'bg-red-600'}  text-white p-2 rounded-md`}>Slet</button>}
                     </form>
                 </div>
             </Modal>}
