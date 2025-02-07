@@ -34,7 +34,7 @@ const Page = () => {
   const { employeeData } = UseEmployees();
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("Drawings");
+  const [activeTab, setActiveTab] = useState('');
   const handleTabChange = (tab: any) => {
     setActiveTab(tab);
   }
@@ -166,9 +166,9 @@ const Page = () => {
           <div className="py-[30px] px-[15px] md:px-10 w-full">
             <div className="">
               <DynamicTabs onTabChange={handleTabChange} />
-              <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5">
+              {activeTab && <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5">
                 {renderTabContent()}
-              </div>
+              </div>}
             </div>
           </div>
         </div>

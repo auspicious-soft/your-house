@@ -19,7 +19,7 @@ const DynamicTabs = ({ onTabChange, disableAdd = false }: any) => {
     // Fixed tabs that cannot be removed
     const fixedTabs = ['Drawings', 'Progress', 'Notes'];
     // Fetch dynamic tabs
-    const [activeTab, setActiveTab] = useState(fixedTabs[0]);
+    const [activeTab, setActiveTab] = useState('');
     const handleAddTab = async (e: any) => {
         e.preventDefault();
         if (!newTabName.trim()) return;
