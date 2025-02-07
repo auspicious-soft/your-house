@@ -39,7 +39,11 @@ export default function TimeframeEditor(props: any) {
     const isClient = role === 'user'
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<any>(null);
-    const [formState, setFormState] = useState({ name: '', progress: '', startDate: '', endDate: '' });
+    const [formState, setFormState] = useState({
+        name: ''
+        // progress: ''
+        , startDate: '', endDate: ''
+    });
     const [isPending, startTransition] = useTransition();
     const projectId = useParams().id;
 
@@ -63,7 +67,7 @@ export default function TimeframeEditor(props: any) {
             new Date(timeframe.startDate),
             new Date(timeframe.endDate),
             null,
-            timeframe.progress,
+            100,
             null,
             timeframe.color // Ensure this is the correct property for the color
         ];
@@ -81,7 +85,7 @@ export default function TimeframeEditor(props: any) {
             const taskWithColor = [...task, color];
             setFormState({
                 name: task[1],
-                progress: task[6] || '',
+                // progress: task[6],
                 startDate: new Date(task[3]).toISOString().split('T')[0],
                 endDate: new Date(task[4]).toISOString().split('T')[0],
             });
@@ -90,7 +94,7 @@ export default function TimeframeEditor(props: any) {
             setSelectedTask(null);
             setFormState({
                 name: '',
-                progress: '',
+                // progress: '',
                 startDate: '',
                 endDate: ''
             });
@@ -174,7 +178,7 @@ export default function TimeframeEditor(props: any) {
                         setIsModalOpen(true);
                         setFormState({
                             name: '',
-                            progress: '',
+                            // progress: '',
                             startDate: '',
                             endDate: ''
                         });
@@ -191,7 +195,7 @@ export default function TimeframeEditor(props: any) {
                 height="100%"
                 data={data}
                 options={options}
-                chartEvents={!isClient ? chartEvents:  undefined}
+                chartEvents={!isClient ? chartEvents : undefined}
                 className="w-full h-full"
             />}
             {isModalOpen && <Modal
@@ -225,7 +229,7 @@ export default function TimeframeEditor(props: any) {
                             </div>
                         </div> */}
                         {/* add  a progress field a number */}
-                        <div className="flex flex-col">
+                        {/*<div className="flex flex-col">
                             <label className="mb-2 font-medium">Fremskridt (%):</label>
                             <input
                                 type="number"
@@ -237,7 +241,7 @@ export default function TimeframeEditor(props: any) {
                                 max="100"
                                 required
                             />
-                        </div>
+                        </div>*/}
                         <div className="flex gap-2">
                             <div className="flex flex-col">
                                 <label className="mb-2 font-medium">Startdato:</label>
