@@ -253,7 +253,7 @@ const Page = () => {
               ></textarea>
             </div>
           </div>
-          <h2 className="section-projectName">{t('projectProgress')}</h2>
+          <h2 className="section-projectName pb-4">{t('projectProgress')}</h2>
           <div className="grid md:flex flex-wrap gap-5 ">
           <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('Category')}</label>
