@@ -36,7 +36,7 @@ const SFProDisplayThin = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Your House",
+  title: "Dit nye sommerhus",
   description: " ",
 };
 
