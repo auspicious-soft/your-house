@@ -26,9 +26,9 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Dr
 
   const attachments = arrays?.filter((attachment: any) => attachment?.type === type);
 
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [file, setUrl] = useState<any>("");
+  // Updated state to hold multiple files
+  const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
 
   const deleteAttachments = async (id: any, s3Url: string) => {
@@ -50,26 +50,29 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Dr
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (files.length === 0) return;
     setLoading(true)
     try {
-      const { signedUrl: uploadUrl } = await generateSignedUrlOfProjectAttachment(file.name, file.type, userEmail)
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': file.type,
-        },
-      })
-      const url = `projects/${userEmail}/attachments/${file.name as string}`
-      const attachments = { url, type, fullName };
-      const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
-      if (response?.status === 201) {
-        toast.success(h("Note added successfully"));
-        setIsModalOpen(false);
-        mutate()
-      } else {
-        toast.error(h("Failed to add Note"));
+      // Loop through each selected file
+      for (const file of files) {
+        const { signedUrl: uploadUrl } = await generateSignedUrlOfProjectAttachment(file.name, file.type, userEmail)
+        await fetch(uploadUrl, {
+          method: 'PUT',
+          body: file,
+          headers: {
+            'Content-Type': file.type,
+          },
+        })
+        const url = `projects/${userEmail}/attachments/${file.name}`
+        const attachment = { url, type, fullName };
+        const response = await addAttachmentsData(`/admin/attachments/${id}`, attachment)
+        if (response?.status !== 201) {
+          toast.error(h("Failed to add Note"));
+        }
       }
+      toast.success(h("Note added successfully"));
+      setIsModalOpen(false);
+      mutate()
     } catch (error) {
       toast.error('Der opstod en fejl');
     }
@@ -77,6 +80,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Dr
       setLoading(false)
     }
   }
+  
   return (
     <div className=''>
       {attachments?.map((index: any) => {
@@ -103,11 +107,10 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Dr
             </div>
           </div>
         )
-      }
-      )}
+      })}
       <div className="">
-        <button onClick={() => setIsModalOpen(true)} className="w-full button !h-[40px] "> <EditButtonIcon />
-          {t('uploadNewFile')}
+        <button onClick={() => setIsModalOpen(true)} className="w-full button !h-[40px] "> 
+          <EditButtonIcon /> {t('uploadNewFile')}
         </button>
       </div>
       <Modal
@@ -121,10 +124,18 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Dr
         <div className='overflow-y-auto overflow-custom p-5'>
           <h2 className="mb-2 ">{t('addNewAttachment')}</h2>
           <form onSubmit={handleSubmit} className="fomm-wrapper">
-            <input type="file" name="url" required onChange={(e) => {
-              setUrl(e.target.files![0] as any)
-            }} />
-            <button disabled={loading} type="submit" className='button w-full mt-5'>{!loading ? <><AddFileIcon /> {t('addAttachment')}</> : <ReactLoader />}</button>
+            <input 
+              type="file" 
+              name="url" 
+              required 
+              multiple
+              onChange={(e) => {
+                if (e.target.files) setFiles(Array.from(e.target.files));
+              }} 
+            />
+            <button disabled={loading} type="submit" className='button w-full mt-5'>
+              {!loading ? <><AddFileIcon /> {t('addAttachment')}</> : <ReactLoader />}
+            </button>
           </form>
         </div>
       </Modal>

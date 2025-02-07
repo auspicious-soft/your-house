@@ -36,7 +36,7 @@ const Page = () => {
   const userData = data?.data?.data?.userId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [activeTab, setActiveTab] = useState(("Drawings"));
+  const [activeTab, setActiveTab] = useState((""));
   const handleTabChange = (tab: any) => {
     setActiveTab(tab);
   }

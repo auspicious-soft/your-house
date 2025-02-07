@@ -84,7 +84,7 @@ const DynamicTabs = ({ onTabChange, disableAdd = false }: any) => {
                             >
                                 {index < 2 ? t(tab) : tab}
                             </button>
-                            {index > 2 && (
+                            {(index > 2 && !disableAdd) && (
                                 <button
                                     onClick={() => {
                                         setSelectedTabToDelete(tab)

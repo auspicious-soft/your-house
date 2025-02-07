@@ -21,7 +21,7 @@ interface FileItem {
 const Page = () => {
   const t = useTranslations('ProjectsPage');
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState(("Drawings"));
+  const [activeTab, setActiveTab] = useState((""));
   const { data, error, mutate, isLoading } = useSWR(id ? `/user/project/${id}` : null, getClientSingleProject);
   const project = data?.data?.data;
 
@@ -49,8 +49,7 @@ const Page = () => {
   const handleTabChange = (tab: any) => {
     setActiveTab(tab);
   }
-  const session = useSession()
-  const fullName = (session as any).data?.user?.fullName
+
   const renderTabContent = () => {
     switch (activeTab) {
       case ("Drawings"):
@@ -136,7 +135,7 @@ const Page = () => {
           </div>
           <div className="py-[30px] px-[15px] md:px-10">
             <div className="">
-              <DynamicTabs onTabChange={handleTabChange} disableAdd />
+              <DynamicTabs onTabChange={handleTabChange} disableAdd = {true} />
               <div className="p-5 bg-[#F6F6F6] rounded-[20px] mt-5">
                 {renderTabContent()}
               </div>
