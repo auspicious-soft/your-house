@@ -16,8 +16,9 @@ interface OverViewProps {
   id: any;
   userEmail: any;
   type: string;
+  fullName: string;
 }
-const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Drawings' }) => {
+const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Drawings' , fullName}) => {
   const t = useTranslations('ProjectsPage');
   const h = useTranslations('ToastMessages');
   const { data, isLoading, error, mutate } = useSWR(`/admin/attachments/${id}`, getAttachmentsData)
@@ -60,7 +61,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Dr
         },
       })
       const url = `projects/${userEmail}/attachments/${file.name as string}`
-      const attachments = { url, type };
+      const attachments = { url, type, fullName };
       const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
       if (response?.status === 201) {
         toast.success(h("Note added successfully"));
@@ -89,7 +90,7 @@ const OverviewOfProjects: React.FC<OverViewProps> = ({ id, userEmail, type = 'Dr
               <div>
                 <p className="text-[#43527B] text-sm  ">{fileName}</p>
                 <p className="text-[#8B8E98] text-xs mt-1  ">
-                  Uploaded by {index?.createdby?.fullName} <span className='ml-5'>Time: {new Date(index?.createdby?.createdAt).toLocaleString()} </span>
+                Uploaded by {index?.fullName} <span className='ml-5'>Time: {new Date(index?.createdAt).toLocaleString()} </span>
                 </p>
               </div>
             </div>

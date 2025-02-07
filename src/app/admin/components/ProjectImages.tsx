@@ -15,8 +15,9 @@ import ReactLoader from '@/components/react-loading';
 interface OverViewProps {
   id: any;
   userEmail: any;
+  fullName: string;
 }
-const ProjectImages: React.FC<OverViewProps> = ({ id, userEmail }) => {
+const ProjectImages: React.FC<OverViewProps> = ({ id, userEmail, fullName }) => {
   const t = useTranslations('ProjectsPage');
   const h = useTranslations('ToastMessages');
   const { data, isLoading, error, mutate } = useSWR(`/admin/attachments/${id}`, getAttachmentsData)
@@ -58,7 +59,7 @@ const ProjectImages: React.FC<OverViewProps> = ({ id, userEmail }) => {
         },
       })
       const url = `projects/${userEmail}/attachments/${file.name as string}`
-      const attachments = { url, type: "Progress" };
+      const attachments = { url, type: "Progress", fullName };
       const response = await addAttachmentsData(`/admin/attachments/${id}`, attachments)
       if (response?.status === 201) {
         toast.success(h("Note added successfully"));
@@ -87,7 +88,7 @@ const ProjectImages: React.FC<OverViewProps> = ({ id, userEmail }) => {
               <div>
                 <p className="text-[#43527B] text-sm  ">{fileName}</p>
                 <p className="text-[#8B8E98] text-xs mt-1  ">
-                  Uploaded by {index?.createdby?.fullName} <span className='ml-5'>Time: {new Date(index?.createdby?.createdAt).toLocaleString()} </span>
+                  Uploaded by {index?.fullName} <span className='ml-5'>Time: {new Date(index?.createdAt).toLocaleString()} </span>
                 </p>
               </div>
             </div>

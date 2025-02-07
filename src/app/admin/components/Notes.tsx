@@ -9,8 +9,9 @@ import { useTranslations } from 'next-intl';
 
 interface Notes {
   id: any;
+  fullName: string;
 }
-const Notes: React.FC<Notes> = ({id}) => {
+const Notes: React.FC<Notes> = ({id, fullName}) => {
   const t = useTranslations('ProjectsPage'); 
   const h = useTranslations('ToastMessages');
   const {data, isLoading, error, mutate} = useSWR(`/admin/notes/${id}`, getNotesData)
@@ -42,7 +43,7 @@ const Notes: React.FC<Notes> = ({id}) => {
       return;
     }
     try {
-      const notesData = { text };
+      const notesData = { text, fullName };
       const response = await addNotesData(`/admin/notes/${id}`, notesData)
       if (response?.status === 201) { 
         toast.success(h("Note added successfully"));

@@ -11,6 +11,7 @@ import { getClientSingleProject } from "@/services/client/client-service";
 import ClientProjectImages from "@/app/customer/components/ClientProjectImages";
 import DynamicTabs from "@/components/dynamic-tabs";
 import TimeframeEditor from "@/components/timeframe";
+import { useSession } from "next-auth/react";
 
 interface FileItem {
   name: string;
@@ -48,7 +49,8 @@ const Page = () => {
   const handleTabChange = (tab: any) => {
     setActiveTab(tab);
   }
-
+  const session = useSession()
+  const fullName = (session as any).data?.user?.fullName
   const renderTabContent = () => {
     switch (activeTab) {
       case ("Drawings"):

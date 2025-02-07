@@ -48,7 +48,7 @@ const ClientAttachments: React.FC<OverViewProps> = ({ id, type }) => {
               <div>
                 <p className="text-[#43527B] text-sm">{fileName}</p>
                 <p className="text-[#8B8E98] text-xs mt-1">
-                  Uploaded by {attachment?.createdby?.fullName} <span className='ml-5'>Time: {new Date(attachment?.createdby?.createdAt).toLocaleString()} </span>
+                  Uploaded by {attachment?.fullName} <span className='ml-5'>Time: {new Date(attachment?.createdAt).toLocaleString()} </span>
                 </p>
               </div>
             </div>

@@ -14,18 +14,18 @@ interface OverViewProps {
 
 const ClientProjectImages: React.FC<OverViewProps> = ({ id }) => {
   const { data, isLoading, error, mutate } = useSWR(`/user/attachments/${id}`, getClientAttachments);
-  const arrays = data?.data?.data 
+  const arrays = data?.data?.data
 
   const attachments = arrays?.filter((attachment: any) => attachment?.type === "Progress");
 
   const session = useSession();
   const email = (session as any)?.data?.user?.username;
-  const [fileLinks, setFileLinks] = useState<{[key: string]: string}>({});
+  const [fileLinks, setFileLinks] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const fetchLinks = async () => {
       if (attachments) {
-        const links: {[key: string]: string} = {};
+        const links: { [key: string]: string } = {};
         for (const attachment of attachments) {
           const link = await getImageUrl(attachment.url);
           links[attachment._id] = link;
@@ -43,12 +43,11 @@ const ClientProjectImages: React.FC<OverViewProps> = ({ id }) => {
         return (
           <div key={attachment._id} className="flex justify-between items-center mb-5">
             <div className='flex items-center gap-3 '>
-              <div><Image src={doc} alt='' width={35} height={35}/> </div>
+              <div><Image src={doc} alt='' width={35} height={35} /> </div>
               <div>
                 <p className="text-[#43527B] text-sm">{fileName}</p>
                 <p className="text-[#8B8E98] text-xs mt-1">
-                  Uploaded by {attachment?.createdby?.fullName} <span className='ml-5'>Time: {new Date(attachment?.createdby?.createdAt).toLocaleString()} </span>
-                </p>
+                  Uploaded by {attachment?.fullName} <span className='ml-5'>Time: {new Date(attachment?.createdAt).toLocaleString()} </span>                </p>
               </div>
             </div>
             <div className="flex gap-[6px]">
@@ -66,5 +65,5 @@ const ClientProjectImages: React.FC<OverViewProps> = ({ id }) => {
     </div>
   );
 };
- 
+
 export default ClientProjectImages;

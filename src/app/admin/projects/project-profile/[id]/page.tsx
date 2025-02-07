@@ -24,6 +24,7 @@ import UseEmployees from "@/utils/useEmployees";
 import DynamicTabs from "@/components/dynamic-tabs";
 import TimeframeEditor from "@/components/timeframe";
 import ReactLoader from "@/components/react-loading";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -38,24 +39,25 @@ const Page = () => {
   const handleTabChange = (tab: any) => {
     setActiveTab(tab);
   }
-
+  const session = useSession()
+  const fullName = (session as any).data?.user?.fullName
   const renderTabContent = () => {
     switch (activeTab) {
       case ("Drawings"):
         return (
-          <div><OverviewOfProjects id={id} userEmail={userData?.email} type={activeTab} /></div>
+          <div><OverviewOfProjects id={id} userEmail={userData?.email} type={activeTab} fullName={fullName} /></div>
         );
       case ("Progress"):
         return (
-          <div><ProjectImages id={id} userEmail={userData?.email} /></div>
+          <div><ProjectImages id={id} userEmail={userData?.email} fullName={fullName} /></div>
         );
       case ("notes"):
         return (
-          <div><Notes id={id} /></div>
+          <div><Notes id={id} fullName={fullName}  /></div>
         );
       default:
         return (
-          <div><OverviewOfProjects id={id} userEmail={userData?.email} type={activeTab} /></div>
+          <div><OverviewOfProjects id={id} userEmail={userData?.email} type={activeTab} fullName={fullName} /></div>
         );
     }
   };
