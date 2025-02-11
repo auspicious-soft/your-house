@@ -48,21 +48,26 @@ export default function TimeframeEditor(props: any) {
         return [
             timeframe.name,
             timeframe.name,
-            `<div style="padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-family: Arial, sans-serif;">
-           <div style="margin-bottom: 8px; font-weight: bold; font-size: 16px; color: #333;">${timeframe.name}</div>
-                     <div style="font-size: 14px; color: #555;">
-                          <div style="display: flex; align-items: center; gap: 5px;">
-                           <span style="font-weight: bold;">Startdato:</span>
-                           <span>${new Date(timeframe.startDate).toLocaleDateString('da-DK')}</span>
-                            </div>
-                      <div>
-                    <span style="font-weight: bold;">Slutdato:</span> ${new Date(timeframe.endDate).toLocaleDateString('da-DK')}
+            `<div style="padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-family: Arial, sans-serif; max-width: 300px;">
+              <div style="font-weight: bold; font-size: 16px; color: #333; text-align: center; margin-bottom: 8px;">
+                   ${timeframe.name}
                      </div>
-                     <div>
-                  <span style="font-weight: bold;">Varighed:</span> ${Math.ceil((new Date(timeframe.endDate).getTime() - new Date(timeframe.startDate).getTime()) / (1000 * 60 * 60 * 24))} dage
-                </div>
-                </div>
-            </div>`,
+    <div style="font-size: 14px; color: #555;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-weight: bold;">Startdato:</span>
+            <span>${new Date(timeframe.startDate).toLocaleDateString('da-DK')}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-weight: bold;">Slutdato:</span>
+            <span>${new Date(timeframe.endDate).toLocaleDateString('da-DK')}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span style="font-weight: bold;">Varighed:</span>
+            <span>${Math.ceil((new Date(timeframe.endDate).getTime() - new Date(timeframe.startDate).getTime()) / (1000 * 60 * 60 * 24))} dage</span>
+        </div>
+    </div>
+        </div>
+`,
             new Date(timeframe.startDate),
             new Date(timeframe.endDate),
         ];
