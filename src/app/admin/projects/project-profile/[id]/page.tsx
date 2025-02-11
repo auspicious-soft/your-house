@@ -8,7 +8,7 @@ import { Line } from "rc-progress";
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FaCheckCircle } from 'react-icons/fa';
-import imgNew from "@/assets/images/img13.png";
+import imgNew from "@/assets/images/profile.png";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -34,6 +34,7 @@ const Page = () => {
   const project = data?.data?.data;
   const { employeeData } = UseEmployees();
   const userData = data?.data?.data?.userId;
+  const profilePhoto = userData?.profilePic == null || userData?.profilePic == "" ? imgNew : getImageClientS3URL(userData?.profilePic);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('');
   const handleTabChange = (tab: any) => {
@@ -180,7 +181,7 @@ const Page = () => {
               <div className="grid place-items-center h-full">
                 <div>
                   <Image
-                    src={getImageClientS3URL(userData?.profilePic) || imgNew}
+                    src={profilePhoto}
                     alt="upload"
                     width={120}
                     height={120}

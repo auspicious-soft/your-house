@@ -8,93 +8,72 @@ import { useParams } from "next/navigation";
 import { addTimeframe, deleteTimeframe, updateTimeframe } from "@/services/admin/admin-service";
 import { useSession } from "next-auth/react";
 
-
 export default function TimeframeEditor(props: any) {
-    const { project, mutate } = props
+    const { project, mutate } = props;
+    
+    // Timeline chart options. Note: removed the gantt-related settings.
     const options = {
         height: (project?.timeframe?.length ?? 0) * 90,
-        gantt: {
-            trackHeight: 50,
-            criticalPathEnabled: true,
-            criticalPathStyle: {
-                stroke: '#e64a19',
-            },
-            innerGridTrack: {
-                fill: 'white'
-            },
-            innerGridDarkTrack: {
-                fill: '#e6e6e6'
-            },
-            barCornerRadius: 5,
-            barHeight: 30,
-            labelStyle: {
-                fontName: 'Arial',
-                fontSize: 12,
-                color: '#333',
-            },
-        }
-    }
-    const session = useSession()
-    const role = (session as any)?.data?.user?.role
-    const isClient = role === 'user'
+        allowHtml: true,
+        timeline: {
+            barCornerRadius: 10,
+        },
+         backgroundColor: 'white'
+    };
+
+    const session = useSession();
+    const role = (session as any)?.data?.user?.role;
+    const isClient = role === 'user';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<any>(null);
     const [formState, setFormState] = useState({
-        name: ''
-        // progress: ''
-        , startDate: '', endDate: ''
+        name: '',
+        startDate: '',
+        endDate: ''
     });
     const [isPending, startTransition] = useTransition();
     const projectId = useParams().id;
 
+    // Define columns for timeline
     const columns = [
-        { type: "string", label: "Task ID" },
         { type: "string", label: "Task Name" },
-        { type: "string", label: "Resource" },
-        { type: "date", label: "Start Date" },
-        { type: "date", label: "End Date" },
-        { type: "number", label: "Duration" },
-        { type: "number", label: "Percent Complete" },
-        { type: "string", label: "Dependencies" },
-        { type: "string", label: "Color", role: "style" }, // Add this line
+        { type: "string", label: "Label" },
+        { type: "string", role: "tooltip" },
+        { type: "date", label: "Start" },
+        { type: "date", label: "End" },
     ];
 
+    // Build rows from project.timeframe.
     const rowsOfTimeframe = (project?.timeframe ?? []).map((timeframe: any) => {
         return [
-            timeframe._id,
             timeframe.name,
-            Math.random().toString(36).substring(7),
+            timeframe.name,
+            '',
             new Date(timeframe.startDate),
             new Date(timeframe.endDate),
-            null,
-            100,
-            null,
-            timeframe.color // Ensure this is the correct property for the color
         ];
     });
 
     const data = [columns, ...rowsOfTimeframe];
 
+    // Updated event handler that uses the project.timeframe array instead of the built data table.
     const handleChartClick = (chartWrapper: any) => {
         const chart = chartWrapper.getChart();
         const selection = chart.getSelection();
         if (selection.length > 0) {
             const [selectedItem] = selection;
-            const task = data[selectedItem.row + 1];
-            const color = project?.timeframe.find((timeframe: any) => timeframe._id === task[0])?.color;
-            const taskWithColor = [...task, color];
+            const selectedIndex = selectedItem.row;
+            const task = project.timeframe[selectedIndex];
             setFormState({
-                name: task[1],
-                // progress: task[6],
-                startDate: new Date(task[3]).toISOString().split('T')[0],
-                endDate: new Date(task[4]).toISOString().split('T')[0],
+                name: task.name,
+                startDate: new Date(task.startDate).toISOString().split('T')[0],
+                endDate: new Date(task.endDate).toISOString().split('T')[0],
             });
-            setSelectedTask(taskWithColor);
+            setSelectedTask(task);
         } else {
             setSelectedTask(null);
             setFormState({
                 name: '',
-                // progress: '',
                 startDate: '',
                 endDate: ''
             });
@@ -113,36 +92,34 @@ export default function TimeframeEditor(props: any) {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        let flag = 1
         const payload = {
             ...formState,
             projectId,
-        }
+        };
+
         for (const i of project.timeframe) {
-            if (i.name === payload.name && selectedTask && i._id !== selectedTask[0]) {
-                toast.error('Navnet på milepælen skal være unikt', { position: 'top-right', });
+            if (i.name === payload.name && selectedTask && i._id !== selectedTask._id) {
+                toast.error('Navnet på milepælen skal være unikt', { position: 'top-right' });
                 return;
             }
         }
-        if (flag === 0) return
         if (new Date(payload.startDate) > new Date(payload.endDate)) {
-            toast.error('Startdatoen kan ikke være efter slutdatoen', { position: 'top-right', })
+            toast.error('Startdatoen kan ikke være efter slutdatoen', { position: 'top-right' });
             return;
         }
         startTransition(async () => {
             try {
-                const response = !selectedTask ?
-                    await addTimeframe('/admin/project-timeframe', payload)
-                    :
-                    await updateTimeframe(`/admin/project-timeframe/${selectedTask[0]}`, payload)
-                toast.success(response.data.message, { position: 'top-right' });
-                mutate()
-                setIsModalOpen(false)
+                const response = !selectedTask
+                    ? await addTimeframe('/admin/project-timeframe', payload)
+                    : await updateTimeframe(`/admin/project-timeframe/${selectedTask._id}`, payload);
+                toast.success('Tidsramme blev føjet til projektet', { position: 'top-right' });
+                mutate();
+                setIsModalOpen(false);
             } catch (error: any) {
                 if (error.status === 400) {
                     alert(error.response.data.message);
                 }
-                toast.error('Something went wrong, please try again later', { position: 'top-right', });
+                toast.error('Something went wrong, please try again later', { position: 'top-right' });
             }
         });
     };
@@ -153,20 +130,20 @@ export default function TimeframeEditor(props: any) {
             ...prevState,
             [name]: value
         }));
-    }
+    };
 
     const handleDelete = async () => {
-        if (!selectedTask) return
+        if (!selectedTask) return;
         startTransition(async () => {
             try {
-                await deleteTimeframe(`/admin/project-timeframe/${selectedTask[0]}`, { data: { projectId } });
+                await deleteTimeframe(`/admin/project-timeframe/${selectedTask._id}`, { data: { projectId } });
                 toast.success('Tidsrammen blev slettet', { position: 'top-right' });
                 mutate();
                 setIsModalOpen(false);
             } catch (error: any) {
                 toast.error('Kunne ikke slette tidsrammen', { position: 'top-right' });
             }
-        })
+        });
     };
 
     return (
@@ -178,7 +155,6 @@ export default function TimeframeEditor(props: any) {
                         setIsModalOpen(true);
                         setFormState({
                             name: '',
-                            // progress: '',
                             startDate: '',
                             endDate: ''
                         });
@@ -190,7 +166,7 @@ export default function TimeframeEditor(props: any) {
             </div>}
 
             {(project.timeframe ?? []).length > 0 && <Chart
-                chartType="Gantt"
+                chartType="Timeline"
                 width="100%"
                 height="100%"
                 data={data}
@@ -205,7 +181,10 @@ export default function TimeframeEditor(props: any) {
                 className="modal max-w-[360px] outline-none border-none mx-auto rounded-[20px] w-full max-h-[90vh] overflow-auto overflow-custom"
                 overlayClassName="w-full h-full p-3 fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center"
                 ariaHideApp={false}>
-                <div className="bg-white p-6 rounded-lg shadow-lg">
+                <div className="bg-white p-6 rounded-lg shadow-lg relative">
+                    <div className="absolute top-2 right-4">
+                        <button onClick={() => setIsModalOpen(false)} className="text-2xl font-bold text-gray-500">&times;</button>
+                    </div>
                     <h2 className="text-2xl font-semibold mb-4">{selectedTask ? "Rediger tidsramme" : "Tilføj tidsramme"}</h2>
                     <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                         <div className="flex flex-col">
@@ -219,29 +198,6 @@ export default function TimeframeEditor(props: any) {
                                 required
                             />
                         </div>
-                        {/* <div className="space-y-2">
-                            <label className="mb-2 font-medium">Farve:</label>
-                            <div className="flex gap-3 items-end">
-                                <HexColorPicker color={formState.color} onChange={(color) => setFormState(prevState => ({ ...prevState, color }))} className="h-20" />
-                                {formState.color && <div className="font-bold">
-                                    {formState.color}
-                                </div>}
-                            </div>
-                        </div> */}
-                        {/* add  a progress field a number */}
-                        {/*<div className="flex flex-col">
-                            <label className="mb-2 font-medium">Fremskridt (%):</label>
-                            <input
-                                type="number"
-                                name="progress"
-                                value={formState.progress}
-                                onChange={handleInputChange}
-                                className="p-2 border border-gray-300 rounded"
-                                min="0"
-                                max="100"
-                                required
-                            />
-                        </div>*/}
                         <div className="flex gap-2">
                             <div className="flex flex-col">
                                 <label className="mb-2 font-medium">Startdato:</label>

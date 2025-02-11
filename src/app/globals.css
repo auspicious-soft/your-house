@@ -1,44 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-    
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-} 
+}
+
 :root {
   background: #F4F5F7;
 
-}  
-body, p {
+}
+
+body,
+p {
   font-family: var(--font-SF-Pro-Display);
   line-height: normal !important;
 }
-.container { 
-  max-width: 1280px; 
+
+.container {
+  max-width: 1280px;
 }
-h1, h2 { 
+
+h1,
+h2 {
   color: #13233B;
   font-family: var(--font-SF-Pro-Display-Bold);
-} 
+}
+
 .main-heading {
   color: #3C3F88;
   font-size: 30px;
   line-height: normal;
 }
-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #929292;  
-}
-input::-moz-placeholder { /* Firefox 19+ */
+
+input::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
   color: #929292;
 }
-input:-ms-input-placeholder { /* IE 10+ */
+
+input::-moz-placeholder {
+  /* Firefox 19+ */
   color: #929292;
 }
-input:-moz-placeholder { /* Firefox 18- */
+
+input:-ms-input-placeholder {
+  /* IE 10+ */
   color: #929292;
 }
+
+input:-moz-placeholder {
+  /* Firefox 18- */
+  color: #929292;
+}
+
 .login-button {
   color: #FFF;
   font-family: var(--font-SF-Pro-Display-Bold);
@@ -53,6 +69,7 @@ input:-moz-placeholder { /* Firefox 18- */
   padding: 10px 30px;
   height: 50px;
 }
+
 .button {
   color: #FFF;
   font-family: var(--font-SF-Pro-Display);
@@ -67,17 +84,21 @@ input:-moz-placeholder { /* Firefox 18- */
   padding: 10px 30px;
   height: 55px;
 }
+
 .section-title {
-color: #353E6C;
-font-size: 20px;
-line-height: normal;
-text-transform: capitalize;
-margin: 0 0 20px;
+  color: #353E6C;
+  font-size: 20px;
+  line-height: normal;
+  text-transform: capitalize;
+  margin: 0 0 20px;
 }
 
-input:focus-visible, textarea:focus-visible, select:focus-visible {
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
   outline: none;
 }
+
 button:disabled {
   background: #DBDBDB;
 }
@@ -86,28 +107,32 @@ button:disabled {
   width: 270px;
   transition: width 0.3s ease;
   background-color: #ffffff;
-  padding: 40px 0px 40px 40px;  
+  padding: 40px 0px 40px 40px;
   justify-content: space-between;
   display: flex;
   flex-direction: column;
   z-index: 9;
 }
+
 .navList li a {
-    display: flex;
-    align-items: center;
-    padding: 3px 10px 3px 0px;
-    border-radius: 4px;
-    grid-gap: 10px;
-    color: #8B8E98;
-    position: relative;
-    font-size: 16px;
+  display: flex;
+  align-items: center;
+  padding: 3px 10px 3px 0px;
+  border-radius: 4px;
+  grid-gap: 10px;
+  color: #8B8E98;
+  position: relative;
+  font-size: 16px;
 }
+
 .navList li {
   margin-bottom: 30px;
 }
+
 .navList li.active a {
   color: #1657FF;
 }
+
 .navList li.active a::after {
   position: absolute;
   content: "";
@@ -119,25 +144,30 @@ button:disabled {
   border-radius: 20px;
 }
 
-th, td {
+th,
+td {
   padding: 15px 20px;
   color: #8B8E98;
   font-family: var(--font-SF-Pro-Display);
   white-space: nowrap;
 }
+
 .table-common {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: 30px;
 }
+
 .table-common table {
   width: 100%;
   min-width: 800px;
   background: #ffffff;
 }
+
 .table-common table tbody tr:nth-child(odd) {
   background: #F3F6FF;
 }
+
 .table-common table thead tr th {
   color: #3B3F88;
   font-weight: normal;
@@ -146,6 +176,7 @@ th, td {
   font-family: var(--font-SF-Pro-Display-Medium);
   padding: 30px 20px 17px;
 }
+
 .overflo-custom::-webkit-scrollbar-track {
   background-color: #ffffff;
   height: 6px;
@@ -161,23 +192,29 @@ th, td {
   border-radius: 10px;
   background-color: #283c6355;
   height: 6px;
-} 
+}
+
 .card-bg {
   background-image: url(../assets/images/card-bg.png);
   background-repeat: no-repeat;
   background-position: right center;
-  background-size: contain;  
+  background-size: contain;
 }
+
 .fomm-wrapper label {
   color: #707070;
   font-size: 14px;
   line-height: normal;
   margin: 0 0 5px;
 }
+
 textarea {
   height: 75px;
 }
-.fomm-wrapper input, .fomm-wrapper select, .fomm-wrapper textarea {
+
+.fomm-wrapper input,
+.fomm-wrapper select,
+.fomm-wrapper textarea {
   border-radius: 10px;
   border: 1px solid #CDE3F1;
   background: #FFF;
@@ -185,6 +222,7 @@ textarea {
   padding: 12px 15px;
   color: #707070;
 }
+
 .progress-line::after {
   content: "";
   position: absolute;
@@ -195,28 +233,36 @@ textarea {
   width: calc(100% + 80px);
   background: #E9EDF3;
 }
+
 .css-1ll44ll-MuiOutlinedInput-notchedOutline {
   border-radius: 6px;
   border: 1px solid #E9EDF3;
   color: #000 !important;
 }
-.css-1xgnz6y-MuiStack-root>.MuiTextField-root, .css-1xgnz6y-MuiStack-root>.MuiPickersTextField-root {
+
+.css-1xgnz6y-MuiStack-root>.MuiTextField-root,
+.css-1xgnz6y-MuiStack-root>.MuiPickersTextField-root {
   min-width: 170px;
-  max-width: 170px; 
+  max-width: 170px;
 }
+
 .css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
   color: #3C3F88 !important;
 }
+
 .css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
   color: #3C3F88 !important;
   padding-left: 10px !important;
   padding-top: 10px !important;
-  padding-bottom: 10px !important; 
+  padding-bottom: 10px !important;
 }
-.box-shadow{
-box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);
+
+.box-shadow {
+  box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);
 }
-.delete-modal-bg::before, .delete-modal-bg::after {
+
+.delete-modal-bg::before,
+.delete-modal-bg::after {
   content: "";
   position: absolute;
   width: 337px;
@@ -224,116 +270,144 @@ box-shadow: 0px 0px 10px 0px rgba(22, 87, 255, 0.10);
   border-radius: 100%;
   z-index: -1;
 }
+
 .delete-modal-bg::after {
   bottom: -149px;
   right: -106px;
   background: #FFF5FB;
 
 }
+
 .delete-modal-bg::before {
   top: -77px;
   left: -100px;
   background: #EEF3FF;
 }
-.project-card:nth-child(even) .progress-step svg circle{
+
+.project-card:nth-child(even) .progress-step svg circle {
   fill: #fff;
 }
+
 .project-card:nth-child(odd) .progress-step svg circle {
-fill: #F3F6FF;
+  fill: #F3F6FF;
 }
-@media (min-width: 989px) {
-}
+
+@media (min-width: 989px) {}
+
 @media screen and (max-width: 1023px) {
   h2 {
     font-size: 26px;
     line-height: 38px;
   }
+
   h3 {
     font-size: 22px;
     line-height: 30px;
   }
+
   .sideNav {
     position: fixed;
     left: -110%;
     transition: 0.3s ease;
     top: 60px;
     height: calc(100vh - 60px);
-}
+  }
+
   .sideNav.collapsed ul.navList {
     width: 100%;
     margin: 15px auto 0;
   }
+
   .sideNav.collapsed {
     width: 300px;
     padding: 20px 0px 20px 20px;
     left: 0;
   }
+
   .nav-menu {
     gap: 20px;
   }
+
   .nav-menu-list {
     font-size: 15px;
     color: #283C63;
   }
+
   .nav_logo a.nav-logo-link svg {
     max-width: 190px;
+  }
+
+  .nav-menu {
+    display: none;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 40px 18px;
+    background: #d9e0e9;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 2;
+    flex-direction: column;
+  }
+
+  .nav-menu.open {
+    display: block;
+  }
+
+  .menuToggleBtn {
+    display: block;
+  }
+
+  .nav-menu .close-btn {
+    position: absolute;
+    right: 18px;
+    top: 22px;
+    font-size: 20px;
+  }
+
+  .main-heading {
+    font-size: 24px;
+  }
 }
-.nav-menu {
-  display: none;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  padding: 40px 18px;
-  background: #d9e0e9;
-  height: 100vh;
-  overflow-y: auto;
-  z-index: 2;
-  flex-direction: column;
-}
-.nav-menu.open {
-  display: block;
-}
-.menuToggleBtn {
-  display: block;
-}
-.nav-menu .close-btn {
-  position: absolute;
-  right: 18px;
-  top: 22px;
-  font-size: 20px;
-}
-.main-heading {
-  font-size: 24px;
-}
-}
+
 @media (max-width: 767px) {
   .container {
     padding-right: 15px;
     padding-left: 15px;
-}
-.section-title {
-  font-size: 18px;
-  line-height: 30px;
-  margin: 0 0 15px;
-}
-.table-common { 
-  border-radius: 10px;
-}
-.table-common table thead tr th, th, td {
-  font-size: 14px;
-}
-.css-1xgnz6y-MuiStack-root>.MuiTextField-root, .css-1xgnz6y-MuiStack-root>.MuiPickersTextField-root {
-  min-width: 100%;
-  max-width: 100%;
-}
-.progress-step  svg {
-  width: 40px;
-  height: 40px;
-}
-th, td {
-  padding: 10px 15px;
-}
+  }
+
+  .section-title {
+    font-size: 18px;
+    line-height: 30px;
+    margin: 0 0 15px;
+  }
+
+  .table-common {
+    border-radius: 10px;
+  }
+
+  .table-common table thead tr th,
+  th,
+  td {
+    font-size: 14px;
+  }
+
+  .css-1xgnz6y-MuiStack-root>.MuiTextField-root,
+  .css-1xgnz6y-MuiStack-root>.MuiPickersTextField-root {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .progress-step svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  th,
+  td {
+    padding: 10px 15px;
+  }
 
 
 
