@@ -18,9 +18,9 @@ const Page = () => {
   const [isPending, startTransition] = useTransition();
   const [employees, setEmployees] = useState<any>("");
   const { userData, isLoading } = useClients();
-  const {employeeData} = UseEmployees(); 
+  const { employeeData } = UseEmployees();
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  
+
   const [formData, setFormData] = useState<any>({
     projectName: "",
     projectimageLink: null, // Changed to null for file storage
@@ -29,9 +29,9 @@ const Page = () => {
     userId: "",
     description: "",
     homeAddress: "",
-    type: "", 
+    type: "",
     constructionAddress: "",
-    employeeId: "", 
+    employeeId: "",
     progress: 0,
     url: null, // Changed to null for file storage
     status: [],
@@ -93,38 +93,38 @@ const Page = () => {
       return;
     }
 
-    let projectImageLink: string | undefined ;
+    let projectImageLink: string | undefined;
     let attachementUrl: string | undefined;
     startTransition(async () => {
       try {
-      if (formData.projectimageLink instanceof File && formData.url instanceof File) {
-        const { signedUrl, key } = await generateSignedUrlToUploadOn(formData.projectimageLink.name, formData.projectimageLink.type, selectedUser.email)
-        await fetch(signedUrl, {
-          method: 'PUT',
-          body: formData.projectimageLink,
-          headers: {
-            'Content-Type': formData.projectimageLink.type,
-          },
-        })
-        projectImageLink = key
+        if (formData.projectimageLink instanceof File && formData.url instanceof File) {
+          const { signedUrl, key } = await generateSignedUrlToUploadOn(formData.projectimageLink.name, formData.projectimageLink.type, selectedUser.email)
+          await fetch(signedUrl, {
+            method: 'PUT',
+            body: formData.projectimageLink,
+            headers: {
+              'Content-Type': formData.projectimageLink.type,
+            },
+          })
+          projectImageLink = key
 
-        const { signedUrl: attachmentUrl, key: attachmentKey } = await generateSignedUrlOfProjectAttachment(formData.url.name, formData.url.type, selectedUser.email)
-        await fetch(attachmentUrl, {
-          method: 'PUT',
-          body: formData.url,
-          headers: {
-            'Content-Type': formData.url.type,
-          },
-        })
-        attachementUrl = attachmentKey
-      }
-      // else {
-      //   toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
-      // }
-     
+          const { signedUrl: attachmentUrl, key: attachmentKey } = await generateSignedUrlOfProjectAttachment(formData.url.name, formData.url.type, selectedUser.email)
+          await fetch(attachmentUrl, {
+            method: 'PUT',
+            body: formData.url,
+            headers: {
+              'Content-Type': formData.url.type,
+            },
+          })
+          attachementUrl = attachmentKey
+        }
+        // else {
+        //   toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
+        // }
+
         const payload: any = {
           projectName: formData.projectName,
-          userId: selectedUser ? selectedUser.value : "",
+          ...(selectedUser && selectedUser.value && { userId: selectedUser.value }),
           projectimageLink: projectImageLink,
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
@@ -138,8 +138,9 @@ const Page = () => {
           notes: formData.notes,
           ...(employees && { employeeId: employees.map((associate: any) => associate.value) })
         };
- 
+
         const response = await addNewProject("/admin/projects", payload);
+        console.log('response: ', response);
 
         if (response?.status === 201) {
           setNotification(h("Project Added Successfully"))
@@ -210,6 +211,7 @@ const Page = () => {
                 options={userData}
                 onChange={handleUserChange}
                 placeholder={t('selectUser')}
+                required={false}
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
@@ -255,7 +257,7 @@ const Page = () => {
           </div>
           <h2 className="section-projectName pb-4">{t('projectProgress')}</h2>
           <div className="grid md:flex flex-wrap gap-5 ">
-          <div className="md:w-[calc(50%-10px)]">
+            <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('Category')}</label>
               <select name="type" value={formData.type} onChange={handleInputChange}>
                 <option value="" >{t('Select')}</option>
@@ -274,7 +276,7 @@ const Page = () => {
             </div>
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('status')}</label>
-              <input type="text" name="status" value={formData.status}  onChange={handleInputChange} />
+              <input type="text" name="status" value={formData.status} onChange={handleInputChange} />
             </div>
             <div className="md:w-[calc(50%-10px)]">
               <label className="block">{t('Progress')}</label>
