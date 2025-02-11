@@ -13,7 +13,7 @@ export default function TimeframeEditor(props: any) {
 
     // Timeline chart options. Note: removed the gantt-related settings.
     const options = {
-        height: (project?.timeframe?.length ?? 0) * 90,
+        height: (project?.timeframe?.length ?? 0) * 80,
         allowHtml: true,
         timeline: {
             barCornerRadius: 10,
