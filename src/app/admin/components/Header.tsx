@@ -24,7 +24,7 @@ const Header: React.FC = () => {
     "/admin/projects/project-profile/": t("projects"),
     "/admin/employees":  t("Employees"),
     "/employee/dashboard":t("dashboard"),
-    "/employee/myprofile": t("myProfile     "),
+    "/employee/myprofile": t("myProfile"),
     
   };
   const getPageName = (path: string): string => {
