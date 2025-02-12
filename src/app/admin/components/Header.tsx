@@ -22,7 +22,9 @@ const Header: React.FC = () => {
     "/admin/customers": t("customers"),
     "/admin/new-project": t("addNewProject"),
     "/admin/projects/project-profile/": t("projects"),
-    "/admin/employees":  t("Employees")
+    "/admin/employees":  t("Employees"),
+    "/employee/dashboard":t("dashboard"),
+    "/employee/myprofile": t("myProfile     "),
     
   };
   const getPageName = (path: string): string => {
