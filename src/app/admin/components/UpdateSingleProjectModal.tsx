@@ -159,7 +159,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
           constructionAddress: formData.constructionAddress,
           progress: formData.progress,
           status: formData.status,
-          userId: selectedUser?.value || undefined,
+          userId: selectedUser?.value || null,
           employeeId: associates.length > 0 ? associates.map((associate: any) => associate.value) : undefined,
         };
 
@@ -320,6 +320,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
                 options={userData}
                 onChange={handleUserChange}
                 placeholder={t("selectUser")}
+                required =  {false}
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
