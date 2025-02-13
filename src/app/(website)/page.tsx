@@ -82,7 +82,7 @@ export default function Page() {
     } else if (phoneRegex.test(username)) {
       loginFieldType = 'username';
     } else {
-      toast.error('Please enter a valid email or Danish phone number (+45).');
+      toast.error('Please enter a valid email');
       return;
     }
 
