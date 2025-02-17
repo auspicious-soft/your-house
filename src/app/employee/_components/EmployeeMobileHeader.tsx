@@ -47,7 +47,7 @@ const AdminMobileHeader = () => {
       <div className="header min-h-[46px] flex justify-between gap-[10px] py-[15px] px-[15px] bg-white">
 
         <div className="logoContainer">
-          <Link href="/admin/dashboard">
+          <Link href="/employee/dashboard">
           <Image src={NavLogo} alt="animate" className="mx-auto max-w-[130px]"/>
           </Link>
         </div>

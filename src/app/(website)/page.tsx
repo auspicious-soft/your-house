@@ -24,8 +24,11 @@ export default function Page() {
     if (session) {
       if ((session as any)?.user?.role === "user") {
         window.location.href = "/customer/dashboard"
-      } else {
+      } else if ((session as any)?.user?.role === "admin") {
         window.location.href = "/admin/dashboard"
+      }
+      else {
+        window.location.href = "/employee/dashboard"
       }
     }
   }, [router, session]);
