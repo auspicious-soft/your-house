@@ -135,10 +135,11 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
       return;
     }
     let imageUrl = formData.projectimageLink;
+    const emailOfSelectedUser = userData.find((user: any) => user.value === selectedUser?.value)?.email;
     startTransition(async () => {
       try {
         if (selectedFile) {
-          const { signedUrl, key } = await generateSignedUrlToUploadOn(selectedFile.name, selectedFile.type, selectedUser.email);
+          const { signedUrl, key } = await generateSignedUrlToUploadOn(selectedFile.name, selectedFile.type, emailOfSelectedUser);
           await fetch(signedUrl, {
             method: "PUT",
             body: selectedFile,
@@ -163,15 +164,16 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
           employeeId: associates.length > 0 ? associates.map((associate: any) => associate.value) : undefined,
         };
 
-        const response = await updateSingleProjectData(`/admin/project/${id}`, payload)
+        console.log('payload: ', payload);
+        // const response = await updateSingleProjectData(`/admin/project/${id}`, payload)
 
-        if (response?.status === 200) {
-          toast.success(h("Updated successfully"));
-          mutate();
-          onClose();
-        } else {
-          toast.error(h("Failed to add project"));
-        }
+        // if (response?.status === 200) {
+        //   toast.success(h("Updated successfully"));
+        //   mutate();
+        //   onClose();
+        // } else {
+        //   toast.error(h("Failed to add project"));
+        // }
       } catch (error) {
         console.error("Der opstod en fejl", error);
         toast.error("Der opstod en fejl");
@@ -320,7 +322,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
                 options={userData}
                 onChange={handleUserChange}
                 placeholder={t("selectUser")}
-                required =  {false}
+                required={false}
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
