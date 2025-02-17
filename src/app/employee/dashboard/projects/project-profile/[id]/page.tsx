@@ -52,7 +52,7 @@ const Page = () => {
         return (
           <div><ProjectImages id={id} userEmail={userData?.email} fullName={fullName} /></div>
         );
-      case ("notes"):
+      case ("Notes"):
         return (
           <div><Notes id={id} fullName={fullName} /></div>
         );

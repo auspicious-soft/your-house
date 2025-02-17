@@ -65,7 +65,7 @@ const Page = () => {
             <ClientProjectImages id={id} />
           </div>
         );
-      case ("notes"):
+      case ("Notes"):
         return (
           <div>
             <ClientNotes id={id} />

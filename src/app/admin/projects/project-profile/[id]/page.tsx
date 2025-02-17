@@ -43,6 +43,7 @@ const Page = () => {
   const session = useSession()
   const fullName = (session as any).data?.user?.fullName
   const renderTabContent = () => {
+    console.log('activeTab: ', activeTab);
     switch (activeTab) {
       case ("Drawings"):
         return (
@@ -52,7 +53,7 @@ const Page = () => {
         return (
           <div><ProjectImages id={id} userEmail={userData?.email} fullName={fullName} /></div>
         );
-      case ("notes"):
+      case ("Notes"):
         return (
           <div><Notes id={id} fullName={fullName}  /></div>
         );
