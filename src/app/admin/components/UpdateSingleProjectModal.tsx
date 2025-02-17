@@ -164,16 +164,15 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
           employeeId: associates.length > 0 ? associates.map((associate: any) => associate.value) : undefined,
         };
 
-        console.log('payload: ', payload);
-        // const response = await updateSingleProjectData(`/admin/project/${id}`, payload)
+        const response = await updateSingleProjectData(`/admin/project/${id}`, payload)
 
-        // if (response?.status === 200) {
-        //   toast.success(h("Updated successfully"));
-        //   mutate();
-        //   onClose();
-        // } else {
-        //   toast.error(h("Failed to add project"));
-        // }
+        if (response?.status === 200) {
+          toast.success(h("Updated successfully"));
+          mutate();
+          onClose();
+        } else {
+          toast.error(h("Failed to add project"));
+        }
       } catch (error) {
         console.error("Der opstod en fejl", error);
         toast.error("Der opstod en fejl");
