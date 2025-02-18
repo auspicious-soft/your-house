@@ -16,6 +16,12 @@ export const deleteProject = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.delete(route)
 }
+
+export const deleteAStatus = async (route: string) => {
+    const axiosInstance = await getAxiosInstance(true)
+    return axiosInstance.delete(route)
+}
+
 export const getSingleProject = async (route: string) => {
     const axiosInstance = await getAxiosInstance(true)
     return axiosInstance.get(route)

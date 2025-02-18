@@ -2,10 +2,10 @@
 import { FaHourglassEnd } from "react-icons/fa6";
 import Notes from "@/app/admin/components/Notes";
 import OverviewOfProjects from "@/app/admin/components/OverviewOfProjects";
-import { AddIcon, CallIcon, MailIcon, MapIcon, ProgressIcon, } from "@/utils/svgicons";
+import { AddIcon, CallIcon, CrossIcon, MailIcon, MapIcon, ProgressIcon, } from "@/utils/svgicons";
 import Image from "next/image";
 import { Line } from "rc-progress";
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FaCheckCircle } from 'react-icons/fa';
 import imgNew from "@/assets/images/profile.png";
@@ -14,7 +14,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { getSingleProject } from "@/services/admin/admin-service";
+import { deleteAStatus, getSingleProject } from "@/services/admin/admin-service";
 import UpdateSingleProjectModal from "@/app/admin/components/UpdateSingleProjectModal";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
@@ -25,6 +25,7 @@ import DynamicTabs from "@/components/dynamic-tabs";
 import TimeframeEditor from "@/components/timeframe";
 import ReactLoader from "@/components/react-loading";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 const Page = () => {
   const t = useTranslations('ProjectsPage');
@@ -54,7 +55,7 @@ const Page = () => {
         );
       case ("Notes"):
         return (
-          <div><Notes id={id} fullName={fullName}  /></div>
+          <div><Notes id={id} fullName={fullName} /></div>
         );
       default:
         return (
@@ -65,12 +66,12 @@ const Page = () => {
 
   const getEmployeeNames = () => {
     if (!project?.employeeId || !employeeData) return [];
-    
+
     return project.employeeId.map((i: any) => {
       const employee = employeeData.find((emp: any) => emp.value === i._id);
       return employee?.label || '';
     })
-    .filter((name: any) => name !== '');
+      .filter((name: any) => name !== '');
   };
   if (isLoading) return <ReactLoader />
   return (
@@ -141,14 +142,32 @@ const Page = () => {
               <h2 className="section-title"> {t('progress')}</h2>
               <div className="flex gap-x-3 flex-wrap">
 
-                {project?.status.map((status: any, index: any) => (
-                  <div key={index} className={`flex items-center py-2.5 px-5 mb-10 rounded-[50px]  ${index === project.status.length - 1 ? 'text-black bg-[#FFF477]' : 'text-white bg-green-600'}`}
-                  >
-                    {index !== project.status.length - 1 && <FaCheckCircle className="mr-2" />}
-                    {index === project.status.length - 1 && <FaHourglassEnd className="mr-2" />}
-                    {status}
-                  </div>
-                ))}
+                {project?.status.map((status: any, index: any) => {
+                  return (
+                    <div key={index} className={`relative flex items-center py-2.5 px-5 mb-10 rounded-[50px]  ${index === project.status.length - 1 ? 'text-black bg-[#FFF477]' : 'text-white bg-green-600'}`}
+                    >
+                      {index !== project.status.length - 1 && <FaCheckCircle className="mr-2" />}
+                      {index === project.status.length - 1 && <FaHourglassEnd className="mr-2" />}
+                      {status}
+                      <div className="absolute -top-2 -right-2 border rounded-full cursor-pointer" onClick={() => {
+                        startTransition(async () => {
+                          try {
+                            const response = await deleteAStatus(`/user/project/${id}?status=${status}`);
+                            if (response.status !== 200) {
+                              toast.error(h('Status slettet med succes'));
+                            }
+                            mutate();
+                          } catch (error) {
+                            toast.error(h('Status slettet med succes'));
+                          }
+                        })
+                      }
+                      }>
+                        <CrossIcon />
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
               <div className="text-right">
                 {/* <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p> */}
