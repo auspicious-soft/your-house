@@ -65,14 +65,14 @@ const Page = () => {
 
   const getEmployeeNames = () => {
     if (!project?.employeeId || !employeeData) return [];
-
-    return project.employeeId
-      .map((id: any) => {
-        const employee = employeeData.find((emp: any) => emp.value === id);
-        return employee?.label || '';
-      })
-      .filter((name: any) => name !== '');
+    
+    return project.employeeId.map((i: any) => {
+      const employee = employeeData.find((emp: any) => emp.value === i._id);
+      return employee?.label || '';
+    })
+    .filter((name: any) => name !== '');
   };
+  console.log('getEmployeeNames: ', getEmployeeNames());
   if (isLoading) return <ReactLoader />
   return (
     <div>
