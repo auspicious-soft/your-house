@@ -72,7 +72,6 @@ const Page = () => {
     })
     .filter((name: any) => name !== '');
   };
-  console.log('getEmployeeNames: ', getEmployeeNames());
   if (isLoading) return <ReactLoader />
   return (
     <div>
