@@ -72,9 +72,9 @@ const Page: React.FC = () => {
         <SearchBar setQuery={setQuery} />
         <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />Tilføj ny Kunde</button>
       </div>
-      <div className="table-common overflo-custom mt-[20px] box-shadow">
+      <div className="table-common overflo-custom mt-[20px] box-shadow overflow max-h-[calc(100vh-250px)] overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
         <table>
-          <thead>
+          <thead className='sticky top-0 bg-white'>
             <tr>
               <th>{t('image')}</th>
               <th>{t('name')}</th>
@@ -131,7 +131,7 @@ const Page: React.FC = () => {
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={'inline-flex mt-[34px] gap-1'}
+          containerClassName={'inline-flex gap-1'}
           pageClassName={' text-[#3C3F88] border border-{#F1F1F1} bg-white rounded-full'}  // anchor tag
           pageLinkClassName={'grid place-items-center h-10 w-10  inline-block'}
           activeClassName={'!bg-[#1657FF] active rounded-full text-white'} // active anchor

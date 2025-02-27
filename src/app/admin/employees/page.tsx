@@ -2,7 +2,6 @@
 import { AddIcon, DeleteIcon, EditIcon, NextLabel, PreviousLabel } from '@/utils/svgicons';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import imgs from '@/assets/images/avatar.png'
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import { deleteEmployee, getAllEmployees } from '@/services/admin/admin-service';
@@ -10,10 +9,6 @@ import ReactLoading from 'react-loading';
 import DeleteDataModal from '../components/DeleteDataModal';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import TableRowImage from '@/components/table-row-img';
-import { getImageClientS3URL } from '@/utils/axios';
-import { deleteFileFromS3 } from '@/actions'; 
-import profile from "@/assets/images/profile.png";
 import AddNewEmployee from '../components/AddNewEmployee';
 import EmployeeProfile from '../components/EmployeeProfile';
 import SearchBar from '../components/SearchBar';
@@ -75,9 +70,9 @@ const Page: React.FC = () => {
         <SearchBar setQuery={setQuery}/>
           <button className='!rounded-[3px] !h-[37px] button !px-4 ' onClick={addNewClient}><AddIcon className="w-4 h-4" />{t('Add New Employee')}</button>
         </div>
-      <div className="table-common overflo-custom mt-[20px] box-shadow">
+      <div className="table-common overflo-custom mt-[20px] box-shadow overflow max-h-[calc(100vh-250px)] overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
         <table>
-          <thead>
+          <thead className='sticky top-0 bg-white'>
             <tr> 
               <th>{t('Name of the employee')}</th>
               <th>{t('email')}</th>
@@ -130,7 +125,7 @@ const Page: React.FC = () => {
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={'inline-flex mt-[34px] gap-1'}
+          containerClassName={'inline-flex gap-1'}
           pageClassName={' text-[#3C3F88] border border-{#F1F1F1} bg-white rounded-full'}  // anchor tag
           pageLinkClassName={'grid place-items-center h-10 w-10  inline-block'}
           activeClassName={'!bg-[#1657FF] active rounded-full text-white'} // active anchor

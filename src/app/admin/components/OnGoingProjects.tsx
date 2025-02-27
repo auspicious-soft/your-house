@@ -66,45 +66,45 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
   }
   return (
     <div>
-      <div className="table-common overflo-custom mt-[20px] box-shadow">
+      <div className="table-common overflo-custom mt-[20px] box-shadowborder-2 overflow h-[calc(100vh-250px)] overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
         <table>
-          <thead>
-            <tr>
-              <th>{t('projectId')}</th>
-              <th>{t('image')}</th>
-              <th>{t('projectName')}</th>
-              <th>{t('startDate')}</th>
-              <th>{t('expectedEndDate')}</th>
-              <th>{t('Construction Address')}</th>
-              <th>{t('Home Address')}</th>
-              <th>{t('action')}</th>
-            </tr>
+          <thead className='sticky top-0 bg-white'>
+        <tr>
+          <th>{t('projectId')}</th>
+          <th>{t('image')}</th>
+          <th>{t('projectName')}</th>
+          <th>{t('startDate')}</th>
+          <th>{t('expectedEndDate')}</th>
+          <th>{t('Construction Address')}</th>
+          <th>{t('Home Address')}</th>
+          <th>{t('action')}</th>
+        </tr>
           </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan={8} className="">
-                  {t('loading')}...
-                </td>
-              </tr>
-            ) : error ? (
-              <tr>
-                <td colSpan={8} className="text-center text-red-500 ">
-                  {t('errorLoadingData')}.
-                </td>
-              </tr>
-            ) : projects?.length > 0 ? (
-              projects?.map((row: any) => (
-                <tr key={row?._id}>
-                  <td>{row?.identifier}</td>
-                  <td><TableRowImage image={row?.projectimageLink ? getImageClientS3URL(row?.projectimageLink) : profile} /></td>
-                  <td>{row?.projectName}</td>
-                  <td>{row?.projectstartDate}</td>
-                  <td>{row?.projectendDate}</td>
-                  <td>{row?.constructionAddress}</td>
-                  <td>{row?.homeAddress}</td>
-                  <td>
-                    <div className='flex items-center gap-[6px] '>
+          <tbody >
+        {isLoading ? (
+          <tr>
+            <td colSpan={8} className="">
+          {t('loading')}...
+            </td>
+          </tr>
+        ) : error ? (
+          <tr>
+            <td colSpan={8} className="text-center text-red-500 ">
+          {t('errorLoadingData')}.
+            </td>
+          </tr>
+        ) : projects?.length > 0 ? (
+          projects?.map((row: any) => (
+            <tr key={row?._id}>
+          <td>{row?.identifier}</td>
+          <td><TableRowImage image={row?.projectimageLink ? getImageClientS3URL(row?.projectimageLink) : profile} /></td>
+          <td>{row?.projectName}</td>
+          <td>{row?.projectstartDate}</td>
+          <td>{row?.projectendDate}</td>
+          <td>{row?.constructionAddress}</td>
+          <td>{row?.homeAddress}</td>
+          <td>
+            <div className='flex items-center gap-[6px] '>
                       <button onClick={() => EditProjectData(row?._id)}><EditIcon /> </button>
                       <button onClick={() => openDeleteModal(row?._id, row?.projectimageLink)}><DeleteIcon /> </button>
                     </div>
@@ -129,7 +129,7 @@ const OnGoingProjects: React.FC<OnGoingProps> = ({ projectsData, mutate, isLoadi
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={'inline-flex mt-[34px] gap-1'}
+          containerClassName={'inline-flex gap-1'}
           pageClassName={' text-[#3C3F88] border border-{#F1F1F1} bg-white rounded-full'}  // anchor tag
           pageLinkClassName={'grid place-items-center h-10 w-10  inline-block'}
           activeClassName={'!bg-[#1657FF] active rounded-full text-white'} // active anchor

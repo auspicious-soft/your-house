@@ -64,9 +64,9 @@ const CompletedProjects: React.FC<CompleteProps> = ({ projectsData, mutate, isLo
 
   return (
     <div>
-      <div className="table-common overflo-custom mt-[20px] box-shadow">
+      <div className="table-common overflo-custom mt-[20px] box-shadow overflow max-h-[calc(100vh-250px)] overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
         <table>
-          <thead>
+          <thead className='sticky top-0 bg-white'>
             <tr>
               <th>{t('projectId')}</th>
               <th>{t('image')}</th>
