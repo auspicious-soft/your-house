@@ -9,6 +9,7 @@ const useClients = () => {
         label: `${user?.fullName}`,
         value: user._id,
         email: user.email,
+        address: user.address,
     })) || []; 
 
     return {
