@@ -72,7 +72,8 @@ const Page = () => {
       return employee?.label || '';
     })
       .filter((name: any) => name !== '');
-  };
+  }
+  
   if (isLoading) return <ReactLoader />
   return (
     <div>

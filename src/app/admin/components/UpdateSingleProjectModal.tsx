@@ -36,10 +36,10 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
   const [associates, setAssociates] = useState<any>("");
+  const [selectedUsers, setSelectedUsers] = useState<any>([]);
 
   const { userData, isLoading } = useClients();
   const { employeeData } = UseEmployees();
-  const [selectedUser, setSelectedUser] = useState<any>(null);
   const oldProjectImage = data?.projectimageLink;
   const [formData, setFormData] = useState<any>({
     projectName: "",
@@ -76,14 +76,23 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
 
     setImagePreview(getImageClientS3URL(data.projectimageLink));
 
-    // Format the selected user data
+    // Format the selected users data
     if (data.userId) {
-      setSelectedUser({
-        label: data.userId.fullName || "",
-        value: data.userId._id || "",
-      });
+      if (Array.isArray(data.userId)) {
+        const formattedUsers = data.userId.map((user: any) => ({
+          label: user.fullName || user.email || "",
+          value: user._id || "",
+        }));
+        setSelectedUsers(formattedUsers);
+      }
+      else {
+        setSelectedUsers([{
+          label: data.userId.fullName || data.userId.email || "",
+          value: data.userId._id || "",
+        }]);
+      }
     } else {
-      setSelectedUser(null);
+      setSelectedUsers([]);
     }
 
     // Format the associates data
@@ -99,11 +108,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
   }, [data]);
 
   const handleUserChange = (selected: any) => {
-    setSelectedUser(selected);
-    setFormData((prev: any) => ({
-      ...prev,
-      userId: selected ? selected.id : "",
-    }));
+    setSelectedUsers(selected);
   };
 
   const handleSelectChange = (selected: any) => {
@@ -135,7 +140,9 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
       return;
     }
     let imageUrl = formData.projectimageLink;
-    const emailOfSelectedUser = userData.find((user: any) => user.value === selectedUser?.value)?.email;
+    const emailOfSelectedUser = selectedUsers.length > 0 ?
+      userData.find((user: any) => user.value === selectedUsers[0]?.value)?.email : undefined;
+
     startTransition(async () => {
       try {
         if (selectedFile) {
@@ -160,7 +167,7 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
           constructionAddress: formData.constructionAddress,
           progress: formData.progress,
           status: formData.status,
-          userId: selectedUser?.value || null,
+          userId: selectedUsers.length > 0 ? selectedUsers.map((user: any) => user.value) : undefined,
           employeeId: associates.length > 0 ? associates.map((associate: any) => associate.value) : undefined,
         };
 
@@ -317,16 +324,16 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t("assignCustomer")}</label>
               <CustomSelect
-                value={selectedUser}
+                value={selectedUsers}
                 options={userData}
                 onChange={handleUserChange}
                 placeholder={t("selectUser")}
                 required={false}
+                isMulti={true}
               />
             </div>
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t("employeesAssociated")}</label>
-
               <CustomSelect
                 value={associates}
                 required={false}
