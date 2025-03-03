@@ -175,7 +175,8 @@ const Page = () => {
               </div>
               <div className="text-right">
                 {/* <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p> */}
-              </div>              <div className="text-right">
+              </div>
+              <div className="text-right">
                 <p className="text-[#8B8E98] mb-1 text-sm ">{project?.progress}%</p>
                 <Line
                   percent={project?.progress}
