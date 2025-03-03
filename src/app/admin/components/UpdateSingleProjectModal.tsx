@@ -78,18 +78,18 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
 
     // Format the selected users data
     if (data.userId) {
-      if (Array.isArray(data.userId)) {
-        const formattedUsers = data.userId.map((user: any) => ({
-          label: user.fullName || user.email || "",
-          value: user._id || "",
-        }));
-        setSelectedUsers(formattedUsers);
-      }
-      else {
-        setSelectedUsers([{
-          label: data.userId.fullName || data.userId.email || "",
-          value: data.userId._id || "",
-        }]);
+        if (Array.isArray(data.userId)) {
+          const formattedUsers = data.userId.map((user: any) => ({
+            label: user.fullName || user.email || "",
+            value: user._id || "",
+          }));
+          setSelectedUsers(formattedUsers);
+        }
+        else {
+          setSelectedUsers([{
+            label: data.userId.fullName || data.userId.email || "",
+            value: data.userId._id || "",
+          }]);
       }
     } else {
       setSelectedUsers([]);
