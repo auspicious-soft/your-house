@@ -167,8 +167,8 @@ const UpdateSingleProjectModal: React.FC<UpdateProps> = ({ isOpen, onClose, id, 
           constructionAddress: formData.constructionAddress,
           progress: formData.progress,
           status: formData.status,
-          userId: selectedUsers.length > 0 ? selectedUsers.map((user: any) => user.value) : undefined,
-          employeeId: associates.length > 0 ? associates.map((associate: any) => associate.value) : undefined,
+          userId: selectedUsers.length > 0 ? selectedUsers.map((user: any) => user.value) : [],
+          employeeId: associates.length > 0 ? associates.map((associate: any) => associate.value) : [],
         };
 
         const response = await updateSingleProjectData(`/admin/project/${id}`, payload)
