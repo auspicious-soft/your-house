@@ -24,7 +24,6 @@ const customStyles: StylesConfig<any, true> = {
   control: (styles: any) => ({
     ...styles,
     backgroundColor: "white",
-    height: "50px",
     borderColor: "#CDE3F1", // Set the border color
     boxShadow: "none", // Remove default box shadow
     ":hover": {

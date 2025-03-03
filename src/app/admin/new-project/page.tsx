@@ -19,14 +19,14 @@ const Page = () => {
   const [employees, setEmployees] = useState<any>("");
   const { userData, isLoading } = useClients();
   const { employeeData } = UseEmployees();
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUsers, setSelectedUsers] = useState<any>(null);
 
   const [formData, setFormData] = useState<any>({
     projectName: "",
     projectimageLink: null, // Changed to null for file storage
     projectstartDate: "",
     projectendDate: "",
-    userId: "",
+    userId: [],
     description: "",
     homeAddress: "",
     type: "",
@@ -40,12 +40,7 @@ const Page = () => {
 
 
   const handleUserChange = (selected: any) => {
-    setSelectedUser(selected);
-    // Set the userId when a user is selected
-    // setFormData((prev: any) => ({
-    //   ...prev,
-    //   userId: selected ? selected.id : ""
-    // }));
+    setSelectedUsers(selected);
   };
 
   const handleSelectChange = (selected: any) => {
@@ -75,6 +70,8 @@ const Page = () => {
       }));
     }
   };
+
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -97,8 +94,11 @@ const Page = () => {
     let attachementUrl: string | undefined;
     startTransition(async () => {
       try {
+        // Get primary user email for file uploads if available
+        const userEmail = selectedUsers && selectedUsers.length > 0 ? selectedUsers[0].email : 'default@example.com';
+
         if (formData.projectimageLink instanceof File && formData.url instanceof File) {
-          const { signedUrl, key } = await generateSignedUrlToUploadOn(formData.projectimageLink.name, formData.projectimageLink.type, selectedUser.email)
+          const { signedUrl, key } = await generateSignedUrlToUploadOn(formData.projectimageLink.name, formData.projectimageLink.type, userEmail)
           await fetch(signedUrl, {
             method: 'PUT',
             body: formData.projectimageLink,
@@ -108,7 +108,7 @@ const Page = () => {
           })
           projectImageLink = key
 
-          const { signedUrl: attachmentUrl, key: attachmentKey } = await generateSignedUrlOfProjectAttachment(formData.url.name, formData.url.type, selectedUser.email)
+          const { signedUrl: attachmentUrl, key: attachmentKey } = await generateSignedUrlOfProjectAttachment(formData.url.name, formData.url.type, userEmail)
           await fetch(attachmentUrl, {
             method: 'PUT',
             body: formData.url,
@@ -118,13 +118,10 @@ const Page = () => {
           })
           attachementUrl = attachmentKey
         }
-        // else {
-        //   toast.warning("Required fields cannot be empty", { position: 'bottom-left' })
-        // }
 
         const payload: any = {
           projectName: formData.projectName,
-          ...(selectedUser && selectedUser.value && { userId: selectedUser.value }),
+          ...(selectedUsers && selectedUsers.length > 0 && { userId: selectedUsers.map((user: any) => user.value) }),
           projectimageLink: projectImageLink,
           projectstartDate: formData.projectstartDate,
           projectendDate: formData.projectendDate,
@@ -140,7 +137,6 @@ const Page = () => {
         };
 
         const response = await addNewProject("/admin/projects", payload);
-        console.log('response: ', response);
 
         if (response?.status === 201) {
           setNotification(h("Project Added Successfully"))
@@ -207,10 +203,11 @@ const Page = () => {
             <div className="md:w-[calc(33.33%-14px)]">
               <label className="block">{t('assignCustomer')}</label>
               <CustomSelect
-                value={selectedUser}
+                value={selectedUsers}
                 options={userData}
                 onChange={handleUserChange}
                 placeholder={t('selectUser')}
+                isMulti={true}
                 required={false}
               />
             </div>
